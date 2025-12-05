@@ -1,0 +1,7 @@
+*.so
+/scratch/src/openmpi-4.1.6
+/local
+*.so
+/swing-allreduce-sim/benchmarks/allreduce/output
+/swing-allreduce-sim/benchmarks/allreduce/loads
+/swing-allreduce-sim/benchmarks/allreduce/logs

@@ -1,0 +1,3 @@
+../../../external/tinyxml/tinystr.o: \
+ ../../../external/tinyxml/tinystr.cpp /usr/include/stdc-predef.h
+/usr/include/stdc-predef.h:
