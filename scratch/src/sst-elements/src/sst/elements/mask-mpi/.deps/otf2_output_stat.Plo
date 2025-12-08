@@ -1,0 +1,2 @@
+otf2_output_stat.lo: otf2_output_stat.cc /usr/include/stdc-predef.h
+/usr/include/stdc-predef.h:
