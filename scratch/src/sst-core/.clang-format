@@ -1,0 +1,340 @@
+---
+Language:        Cpp
+# BasedOnStyle:  LLVM
+AccessModifierOffset: -4
+# revisit
+AlignAfterOpenBracket: DontAlign
+AlignArrayOfStructures: None
+AlignConsecutiveAssignments:
+  Enabled:         true
+  AcrossEmptyLines: false
+  AcrossComments:  true
+  AlignCompound:   false
+  AlignFunctionDeclarations: false
+  AlignFunctionPointers: false
+  PadOperators:    true
+AlignConsecutiveBitFields:
+  Enabled:         true
+  AcrossEmptyLines: false
+  AcrossComments:  true
+  AlignCompound:   false
+  AlignFunctionDeclarations: false
+  AlignFunctionPointers: false
+  PadOperators:    false
+AlignConsecutiveDeclarations:
+  Enabled:         true
+  AcrossEmptyLines: false
+  AcrossComments:  true
+  AlignCompound:   false
+  AlignFunctionDeclarations: true
+  AlignFunctionPointers: false
+  PadOperators:    false
+AlignConsecutiveMacros:
+  Enabled:         true
+  AcrossEmptyLines: false
+  AcrossComments:  true
+  AlignCompound:   false
+  AlignFunctionDeclarations: false
+  AlignFunctionPointers: false
+  PadOperators:    false
+AlignConsecutiveShortCaseStatements:
+  Enabled:         false
+  AcrossEmptyLines: false
+  AcrossComments:  false
+  AlignCaseArrows: false
+  AlignCaseColons: false
+AlignConsecutiveTableGenBreakingDAGArgColons:
+  Enabled:         false
+  AcrossEmptyLines: false
+  AcrossComments:  false
+  AlignCompound:   false
+  AlignFunctionDeclarations: false
+  AlignFunctionPointers: false
+  PadOperators:    false
+AlignConsecutiveTableGenCondOperatorColons:
+  Enabled:         false
+  AcrossEmptyLines: false
+  AcrossComments:  false
+  AlignCompound:   false
+  AlignFunctionDeclarations: false
+  AlignFunctionPointers: false
+  PadOperators:    false
+AlignConsecutiveTableGenDefinitionColons:
+  Enabled:         false
+  AcrossEmptyLines: false
+  AcrossComments:  false
+  AlignCompound:   false
+  AlignFunctionDeclarations: false
+  AlignFunctionPointers: false
+  PadOperators:    false
+AlignEscapedNewlines: Left
+AlignOperands:   Align
+AlignTrailingComments:
+  Kind:            Always
+  OverEmptyLines:  0
+AllowAllArgumentsOnNextLine: true
+AllowAllConstructorInitializersOnNextLine: false
+AllowAllParametersOfDeclarationOnNextLine: true
+AllowBreakBeforeNoexceptSpecifier: Never
+AllowShortBlocksOnASingleLine: Empty
+AllowShortCaseExpressionOnASingleLine: false
+AllowShortCaseLabelsOnASingleLine: false
+AllowShortCompoundRequirementOnASingleLine: true
+AllowShortEnumsOnASingleLine: true
+AllowShortFunctionsOnASingleLine: Inline
+AllowShortIfStatementsOnASingleLine: WithoutElse
+AllowShortLambdasOnASingleLine: All
+AllowShortLoopsOnASingleLine: false
+AllowShortNamespacesOnASingleLine: false
+AlwaysBreakAfterDefinitionReturnType: None #deprecated
+#AlwaysBreakAfterReturnType: TopLevelDefinitions # deprecated
+AlwaysBreakBeforeMultilineStrings: false
+#AlwaysBreakTemplateDeclarations: Yes #deprecated
+AttributeMacros:
+  - __capability
+BinPackArguments: true
+BinPackParameters: BinPack
+BitFieldColonSpacing: Both
+BraceWrapping:
+  AfterCaseLabel:  true
+  AfterClass:      true
+  AfterControlStatement: Never
+  AfterEnum:       false
+  AfterExternBlock: false
+  AfterFunction:   true
+  AfterNamespace:  false
+  AfterObjCDeclaration: false
+  AfterStruct:     true
+  AfterUnion:      false
+  BeforeCatch:     true
+  BeforeElse:      true
+  BeforeLambdaBody: false
+  BeforeWhile:     false
+  IndentBraces:    false
+  SplitEmptyFunction: false
+  SplitEmptyRecord: false
+  SplitEmptyNamespace: false
+BreakAdjacentStringLiterals: true
+BreakAfterAttributes: Always
+BreakAfterReturnType: TopLevelDefinitions
+BreakArrays:     true # currently json only
+BreakBeforeBinaryOperators: None
+BreakBeforeBraces: Custom #defined in BraceWrapping above
+BreakBeforeConceptDeclarations: Always
+BreakBeforeInlineASMColon: OnlyMultiline
+BreakBeforeInheritanceComma: false
+BreakBeforeTernaryOperators: true
+BreakBinaryOperations: Never
+BreakConstructorInitializers: AfterColon
+BreakFunctionDefinitionParameters: false
+BreakInheritanceList: AfterColon
+BreakStringLiterals: true
+BreakTemplateDeclarations: Yes
+ColumnLimit:     120
+CommentPragmas:  '^ IWYU pragma:'
+CompactNamespaces: false
+#ConstructorInitializerAllOnOneLineOrOnePerLine: true #deprecated
+ConstructorInitializerIndentWidth: 4
+ContinuationIndentWidth: 4
+Cpp11BracedListStyle: false
+#DeriveLineEnding: true #deprecated
+DerivePointerAlignment: false
+DisableFormat:   false
+EmptyLineAfterAccessModifier: Leave
+EmptyLineBeforeAccessModifier: Always
+ExperimentalAutoDetectBinPacking: false
+FixNamespaceComments: true
+ForEachMacros:
+  - foreach
+  - Q_FOREACH
+  - BOOST_FOREACH
+IfMacros:
+  - KJ_IF_MAYBE
+#updated to force the re-sort as specified below in IncludeCategories 
+IncludeBlocks: Regroup
+#sst_config.h always first, so set to negative priority to be above 'main' include (priority 0)
+#main header included after - main include assumed to have no suffix
+#prioritize all headers in "sst/core" next
+#next include other external headers - characterized by headers wrappped with ' " " ' that do NOT have "sst" in the name 
+#finally include all system headers - characterized as headers wrapped with '< >'
+IncludeCategories:
+  - Regex:           '(<.*>)'
+    Priority:        4
+    SortPriority:    4
+  - Regex:           '("[^\(sst\)].*")'
+    Priority:        3
+    SortPriority:    3
+  - Regex:           '("sst/core/testElements/.*")'
+    Priority:        1
+    SortPriority:    1
+  - Regex:           '("sst/core/.*")'
+    Priority:        2
+    SortPriority:    2
+  - Regex:            'sst_config.h'
+    Priority:        -1
+IncludeIsMainRegex: ''
+IncludeIsMainSourceRegex: ''
+IndentAccessModifiers: false
+IndentCaseBlocks: false
+IndentCaseLabels: false
+IndentExportBlock: true
+IndentExternBlock: AfterExternBlock
+IndentGotoLabels: false
+IndentPPDirectives: None
+IndentRequiresClause: true
+IndentWidth:     4
+IndentWrappedFunctionNames: false
+InsertBraces:    false # do not set to true
+InsertNewlineAtEOF: true
+InsertTrailingCommas: None
+IntegerLiteralSeparator:
+  Binary:          0
+  BinaryMinDigits: 0
+  Decimal:         0
+  DecimalMinDigits: 0
+  Hex:             0
+  HexMinDigits:    0
+JavaScriptQuotes: Leave
+JavaScriptWrapImports: true
+KeepEmptyLines:
+  AtEndOfFile:     false
+  AtStartOfBlock:  true
+  AtStartOfFile:   true
+KeepFormFeed:    false
+LambdaBodyIndentation: Signature
+LineEnding:      DeriveLF
+MacroBlockBegin: ''
+MacroBlockEnd:   ''
+MainIncludeChar: Quote
+MaxEmptyLinesToKeep: 2
+NamespaceIndentation: None
+ObjCBinPackProtocolList: Auto
+ObjCBlockIndentWidth: 2
+ObjCBreakBeforeNestedBlockParam: true
+ObjCSpaceAfterProperty: false
+ObjCSpaceBeforeProtocolList: true
+PPIndentWidth:   -1
+PackConstructorInitializers: Never
+PenaltyBreakAssignment: 2
+PenaltyBreakBeforeFirstCallParameter: 19
+PenaltyBreakComment: 300
+PenaltyBreakFirstLessLess: 120
+PenaltyBreakString: 1000
+PenaltyBreakTemplateDeclaration: 10
+PenaltyExcessCharacter: 1000000
+PenaltyReturnTypeOnItsOwnLine: 60
+PointerAlignment: Left
+QualifierAlignment: Leave
+ReferenceAlignment: Pointer
+ReflowComments:  Always
+RemoveBracesLLVM: false
+RemoveEmptyLinesInUnwrappedLines: false
+RemoveParentheses: Leave
+RemoveSemicolon: false
+RequiresClausePosition: OwnLine
+RequiresExpressionIndentation: OuterScope
+SeparateDefinitionBlocks: Leave
+ShortNamespaceLines: 1
+SkipMacroDefinitionBody: false
+SortIncludes:   CaseSensitive    #updated to enable Include files to be Re-sorted
+SortJavaStaticImport: Before
+SortUsingDeclarations: LexicographicNumeric
+SpaceAfterCStyleCast: false
+SpaceAfterLogicalNot: false
+SpaceAfterTemplateKeyword: true
+SpaceAroundPointerQualifiers: Default
+SpaceBeforeAssignmentOperators: true
+SpaceBeforeCaseColon: false
+SpaceBeforeCpp11BracedList: true
+SpaceBeforeCtorInitializerColon: true
+SpaceBeforeInheritanceColon: true
+SpaceBeforeParens: ControlStatements
+SpaceBeforeParensOptions:
+  AfterControlStatements: true
+  AfterForeachMacros: true
+  AfterFunctionDefinitionName: false
+  AfterFunctionDeclarationName: false
+  AfterIfMacros:   true
+  AfterOverloadedOperator: false
+  AfterPlacementOperator: true
+  AfterRequiresInClause: false
+  AfterRequiresInExpression: false
+  BeforeNonEmptyParentheses: false
+SpaceBeforeRangeBasedForLoopColon: true
+SpaceBeforeSquareBrackets: false
+SpaceInEmptyBlock: false
+SpacesBeforeTrailingComments: 1
+SpacesInAngles: Never
+SpacesInContainerLiterals: true
+SpacesInLineCommentPrefix:
+  Minimum:         1
+  Maximum:         -1
+SpacesInParens:  Custom
+SpacesInParensOptions:
+  ExceptDoubleParentheses: false
+  InCStyleCasts:   false
+  InConditionalStatements: true
+  InEmptyParentheses: false
+  Other:           false
+SpacesInSquareBrackets: false
+Standard:        Latest
+#StatementAttributeLikeMacros:
+StatementMacros:
+  - Q_UNUSED
+  - QT_REQUIRE_VERSION
+  - ImplementSerializable
+  - NotSerializable
+TabWidth:        4
+TableGenBreakInsideDAGArg: DontBreak
+UseTab:          Never
+
+# Can't get the ELI macros to format properly,
+# so we'll just leave them untouched
+WhitespaceSensitiveMacros:
+  - DIAG_DISABLE
+  - SST_ELI_DECLARE_BASE
+  - SST_ELI_DECLARE_CTOR_EXTERN
+  - SST_ELI_DECLARE_DEFAULT_INFO
+  - SST_ELI_DECLARE_INFO
+  - SST_ELI_DECLARE_INFO_COMMON
+  - SST_ELI_DECLARE_INFO_EXTERN
+  - SST_ELI_DECLARE_NEW_BASE
+  - SST_ELI_DECLARE_STATISTIC_TEMPLATE
+  - SST_ELI_DOCUMENT_MODEL_SUPPORTED_EXTENSIONS
+  - SST_ELI_DOCUMENT_PARAMS
+  - SST_ELI_DOCUMENT_PORTS
+  - SST_ELI_DOCUMENT_SIMPLE_INFO
+  - SST_ELI_DOCUMENT_STATISTICS
+  - SST_ELI_DOCUMENT_SUBCOMPONENT_SLOTS
+  - SST_ELI_DOCUMENT_ATTRIBUTES
+  - SST_ELI_INTERFACE_INFO
+  - SST_ELI_NEW_BASE_CTOR
+  - SST_ELI_REGISTER_COMPONENT
+  - SST_ELI_REGISTER_DERIVED
+  - SST_ELI_REGISTER_MODEL_DESCRIPTION
+  - SST_ELI_REGISTER_MODULE
+  - SST_ELI_REGISTER_MODULE_DERIVED
+  - SST_ELI_REGISTER_PARTITIONER
+  - SST_ELI_REGISTER_PROFILETOOL_API
+  - SST_ELI_REGISTER_PROFILETOOL_DERIVED_API
+  - SST_ELI_REGISTER_PROFILETOOL
+  - SST_ELI_REGISTER_SUBCOMPONENT_API
+  - SST_ELI_REGISTER_SUBCOMPONENT
+  - SST_ELI_REGISTER_SUBCOMPONENT_DERIVED
+  - SST_ELI_REGISTER_SUBCOMPONENT_DERIVED_API
+  - SST_ELI_REGISTER_REALTIME_ACTION
+  - SST_ELI_REGISTER_PORTMODULE
+  - SST_ELI_REGISTER_INTERACTIVE_CONSOLE
+  - STRINGIZE
+  - PP_STRINGIZE
+  - BOOST_PP_STRINGIZE
+  - NS_SWIFT_NAME
+  - CF_SWIFT_NAME
+  - SST_SER
+  - SST_SER_AS_PTR
+  - SST_TP_VECTORCALL
+  - SST_TP_PRINT_DEP
+  - SST_TP_WATCHED
+  - SST_TP_VERSIONS_USED
+...
+
