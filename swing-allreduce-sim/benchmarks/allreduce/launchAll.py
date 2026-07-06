@@ -1,9 +1,9 @@
-from argparse import ArgumentParser
-import pathlib
-import numpy as np
 import sys
 sys.path.append("../")
 from general_bench import *
+from argparse import ArgumentParser
+import pathlib
+import numpy as np
 shapes_fattree = {}
 shapes_fattree_21 = {}
 shapes_fattree_41 = {}
@@ -47,75 +47,10 @@ def check_if_exist(topo, subpath):
 
 
 def generate_simulations(args, bench):
-    # allreduce_counts_all = [2**3, 2**5, 2**7, 2**9, 2**11, 2**13, 2**15, 2**17, 2**19, 2**21, 2**23, 2**25, 2**27]
-    # allreduce_counts_all = [2**3, 2**5, 2**7, 2**9, 2 **
-    #                         11, 2**13, 2**15, 2**17, 2**19, 2**21, 2**23, 2**25]
-    # allreduce_counts_all = [2**8]
-    # allreduce_counts_all = [3**7]
-    # allreduce_counts_small = [2**3, 2**5, 2**7, 2**9, 2**11, 2**13, 2**15]
-    # allreduce_counts_small = [2**8]
-    # allreduce_counts_small = [3**7]
-    # if args.counts != "All":
-    #     countstmp = args.counts.split(",")
-    #     counts = []
-    #     for c in countstmp:
-    #         counts += [int(c.split("^")[0]) ** int(c.split("^")[1])]
-    # elif bench == "SwingL" or bench == "RecDoubL" or bench == "RecDoubLM":
-    #     counts = allreduce_counts_small
-    # else:
-    #     counts = allreduce_counts_all
 
-    # counts = [2**8, 2**3, 2**5]
-    # 2**19, 2**20,
-    # counts = [522720, 1047618]
+    counts = [2**i for i in range(8, 20)]
+    # counts = [2**i for i in range(4, 8)]
 
-    counts = [2**i for i in range(3, 20)]
-    # counts = [2**28]
-    # counts = [2**i for i in range(28, 30)]
-    # counts = [2**29]
-    # counts = [2**27, 2**28, 2**29]
-    # counts = [2**i for i in range(10, 20)]
-    # counts = [523809]
-    # count 9*9
-    counts_9 = [81] + [162, 243, 486, 1053, 2025, 4131, 8181, 16362, 32805, 65529, 131058, 262116,
-                524313, 1048545, 2097171, 4194342, 8388603, 16777206, 33554412, 67108824, 134217729]
-
-    counts_17 = [289] + [578, 1156, 2023, 4046, 8092, 16473, 32657, 65603, 131206, 262123, 524246,
-                 1048492, 2097273, 4194257, 8388514, 16777317, 33554345, 67108979]
-    counts_33 = [1089, 2178] + [4356, 8712, 16335, 32670, 65340, 130680, 262449, 523809]
-
-
-    # counts = [162,
-    #           289,
-    #           1089,
-    #           567,
-    #           2178,
-    #           2312,
-    #           8262,
-    #           8381,
-    #           33759,
-    #           32805,
-    #           131206,
-    #           131769,
-    #           524313,
-    #           524535,
-    #           2097414,
-    #           2097171,
-    #           8388803,
-    #           8389656,
-    #           33554493,
-    #           33554634,
-    #           134218161,
-    #           134217729,
-    #   536870965,
-    #   536871555,
-    #   2147483664,
-    #   2147483860,
-    #   8589935079,
-    #   8589934656
-
-    # counts = [1089, 2178]
-    # counts = [2**20]
     dimensions_sizes = ','.join(args.job_size.split("x"))
     dimensions = args.job_size.count("x") + 1
     print(dimensions_sizes)
@@ -179,12 +114,29 @@ def generate_simulations(args, bench):
             if bench == "Rings" and int(dimensions) == 1:
                 motif_name = "RingAllreduce05D"
 
+            motif_args = [
+                "[MOTIF]",
+                motif_name,
+                f"count={count}",
+                f"ports={ports}",
+                f"dimensions={dimensions}",
+                f"dimensions_sizes={dimensions_sizes}",
+                f"px={dimensions_sizes.split(',')[-1]}",
+                f"latency_optimal={latency_optimal}",
+                "aggregation_cost_ns=0",
+                "blocking=true",
+                "sync=false",
+            ]
+            if (motif_name == "TreesAllreduce") and (args.route_table_file != ""):
+                motif_args.append(f"route_table_file={args.route_table_file}")
+
+            motif_main_args = " ".join(motif_args) + "\n"
+
             motif_content = ["[JOB_ID] 10\n",
                              "[NID_LIST] generateNidList={}\n".format(
                                  generateNidList),
                              "[MOTIF] Init\n",
-                             "[MOTIF] {} count={} ports={} dimensions={} dimensions_sizes={} px={} latency_optimal={} aggregation_cost_ns=0 blocking=true sync=false\n".format(
-                                 motif_name, count, ports, dimensions, dimensions_sizes, dimensions_sizes.split(",")[-1], latency_optimal),
+                             motif_main_args,
                              "[MOTIF] Fini"]
             # motif_content = ["[JOB_ID] 10\n",
             #                  "[NID_LIST] generateNidList={}\n".format(
@@ -238,10 +190,12 @@ if __name__ == "__main__":
     parser.add_argument("--netBW", type=str,
                         help="Link bandwidth", default="400Gb/s")
     parser.add_argument("--hostBW", type=str,
-                    help="BW NIC<->router (host ports), e.g. 1600Gb/s",
-                    default="")
+                        help="BW NIC<->router (host ports), e.g. 1600Gb/s",
+                        default="")
     parser.add_argument("--torusBW", type=str,
                         help="BW router<->router (torus links), e.g. 400Gb/s",
                         default="")
+    parser.add_argument("--route_table_file", type=str,
+                        help="Route table file", default="")
     args = parser.parse_args()
     main(args)

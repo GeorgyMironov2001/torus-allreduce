@@ -249,7 +249,8 @@ am__libember_la_SOURCES_DIST = embergen.h embergen.cc embermap.h \
 	mpi/motifs/emberallgatherv.h mpi/motifs/emberallgather.cc \
 	mpi/motifs/emberallgather.h mpi/motifs/emberalltoall.cc \
 	mpi/motifs/emberalltoall.h mpi/motifs/emberalltoallv.cc \
-	mpi/motifs/emberalltoallv.h mpi/motifs/emberreduce.cc \
+	mpi/motifs/emberalltoallv.h mpi/motifs/emberalltoallcustome.cc \
+	mpi/motifs/emberalltoallcustome.h mpi/motifs/emberreduce.cc \
 	mpi/motifs/emberbcast.h mpi/motifs/emberbcast.cc \
 	mpi/motifs/emberscatter.h mpi/motifs/emberscatter.cc \
 	mpi/motifs/emberscatterv.h mpi/motifs/emberscatterv.cc \
@@ -389,7 +390,8 @@ am_libember_la_OBJECTS = embergen.lo ember.lo emberengine.lo \
 	mpi/motifs/emberbarrier.lo mpi/motifs/emberallpingpong.lo \
 	mpi/motifs/emberallreduce.lo mpi/motifs/emberallgatherv.lo \
 	mpi/motifs/emberallgather.lo mpi/motifs/emberalltoall.lo \
-	mpi/motifs/emberalltoallv.lo mpi/motifs/emberreduce.lo \
+	mpi/motifs/emberalltoallv.lo \
+	mpi/motifs/emberalltoallcustome.lo mpi/motifs/emberreduce.lo \
 	mpi/motifs/emberbcast.lo mpi/motifs/emberscatter.lo \
 	mpi/motifs/emberscatterv.lo mpi/motifs/emberhalo3d.lo \
 	mpi/motifs/emberlqcd.lo mpi/motifs/emberhalo3dsv.lo \
@@ -477,6 +479,7 @@ am__depfiles_remade = ./$(DEPDIR)/ember.Plo \
 	mpi/motifs/$(DEPDIR)/emberallreduce.Plo \
 	mpi/motifs/$(DEPDIR)/emberalltoall.Plo \
 	mpi/motifs/$(DEPDIR)/emberalltoallallreduce.Plo \
+	mpi/motifs/$(DEPDIR)/emberalltoallcustome.Plo \
 	mpi/motifs/$(DEPDIR)/emberalltoallv.Plo \
 	mpi/motifs/$(DEPDIR)/emberbarrier.Plo \
 	mpi/motifs/$(DEPDIR)/emberbcast.Plo \
@@ -625,7 +628,8 @@ AMTAR = @AMTAR@
 AM_CFLAGS = @AM_CFLAGS@
 AM_CPPFLAGS = @AM_CPPFLAGS@ $(MPI_CPPFLAGS) \
 	-I$(top_srcdir)/src/sst/elements/ember/sirius/include \
-	-I$(top_srcdir)/src $(OTF2_CPPFLAGS)
+	-I$(top_srcdir)/src -I$(top_srcdir)/src/sst/elements/external \
+	$(OTF2_CPPFLAGS)
 AM_CXXFLAGS = @AM_CXXFLAGS@
 AM_DEFAULT_VERBOSITY = @AM_DEFAULT_VERBOSITY@
 AM_LDFLAGS = @AM_LDFLAGS@
@@ -925,7 +929,8 @@ libember_la_SOURCES = embergen.h embergen.cc embermap.h ember.cc \
 	mpi/motifs/emberallgatherv.h mpi/motifs/emberallgather.cc \
 	mpi/motifs/emberallgather.h mpi/motifs/emberalltoall.cc \
 	mpi/motifs/emberalltoall.h mpi/motifs/emberalltoallv.cc \
-	mpi/motifs/emberalltoallv.h mpi/motifs/emberreduce.cc \
+	mpi/motifs/emberalltoallv.h mpi/motifs/emberalltoallcustome.cc \
+	mpi/motifs/emberalltoallcustome.h mpi/motifs/emberreduce.cc \
 	mpi/motifs/emberbcast.h mpi/motifs/emberbcast.cc \
 	mpi/motifs/emberscatter.h mpi/motifs/emberscatter.cc \
 	mpi/motifs/emberscatterv.h mpi/motifs/emberscatterv.cc \
@@ -1303,6 +1308,8 @@ mpi/motifs/emberalltoall.lo: mpi/motifs/$(am__dirstamp) \
 	mpi/motifs/$(DEPDIR)/$(am__dirstamp)
 mpi/motifs/emberalltoallv.lo: mpi/motifs/$(am__dirstamp) \
 	mpi/motifs/$(DEPDIR)/$(am__dirstamp)
+mpi/motifs/emberalltoallcustome.lo: mpi/motifs/$(am__dirstamp) \
+	mpi/motifs/$(DEPDIR)/$(am__dirstamp)
 mpi/motifs/emberreduce.lo: mpi/motifs/$(am__dirstamp) \
 	mpi/motifs/$(DEPDIR)/$(am__dirstamp)
 mpi/motifs/emberbcast.lo: mpi/motifs/$(am__dirstamp) \
@@ -1506,6 +1513,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@mpi/motifs/$(DEPDIR)/emberallreduce.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@mpi/motifs/$(DEPDIR)/emberalltoall.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@mpi/motifs/$(DEPDIR)/emberalltoallallreduce.Plo@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@mpi/motifs/$(DEPDIR)/emberalltoallcustome.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@mpi/motifs/$(DEPDIR)/emberalltoallv.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@mpi/motifs/$(DEPDIR)/emberbarrier.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@mpi/motifs/$(DEPDIR)/emberbcast.Plo@am__quote@ # am--include-marker
@@ -1817,6 +1825,7 @@ distclean: distclean-am
 	-rm -f mpi/motifs/$(DEPDIR)/emberallreduce.Plo
 	-rm -f mpi/motifs/$(DEPDIR)/emberalltoall.Plo
 	-rm -f mpi/motifs/$(DEPDIR)/emberalltoallallreduce.Plo
+	-rm -f mpi/motifs/$(DEPDIR)/emberalltoallcustome.Plo
 	-rm -f mpi/motifs/$(DEPDIR)/emberalltoallv.Plo
 	-rm -f mpi/motifs/$(DEPDIR)/emberbarrier.Plo
 	-rm -f mpi/motifs/$(DEPDIR)/emberbcast.Plo
@@ -1963,6 +1972,7 @@ maintainer-clean: maintainer-clean-am
 	-rm -f mpi/motifs/$(DEPDIR)/emberallreduce.Plo
 	-rm -f mpi/motifs/$(DEPDIR)/emberalltoall.Plo
 	-rm -f mpi/motifs/$(DEPDIR)/emberalltoallallreduce.Plo
+	-rm -f mpi/motifs/$(DEPDIR)/emberalltoallcustome.Plo
 	-rm -f mpi/motifs/$(DEPDIR)/emberalltoallv.Plo
 	-rm -f mpi/motifs/$(DEPDIR)/emberbarrier.Plo
 	-rm -f mpi/motifs/$(DEPDIR)/emberbcast.Plo

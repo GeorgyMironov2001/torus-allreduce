@@ -29,7 +29,7 @@ public:
                     EmberEventTimeStatistic* stat,
             const Hermes::MemAddr& payload,
             uint32_t count, PayloadDataType dtype, RankID dest,
-            uint32_t tag, Communicator group, MessageRequest* req ) :
+            uint32_t tag, Communicator group, MessageRequest* req, int route_id = -1 ) :
         EmberMPIEvent( api, output, stat ),
         m_payload(payload),
         m_count(count),
@@ -37,7 +37,8 @@ public:
         m_dest(dest),
         m_tag(tag),
         m_group(group),
-        m_req(req)
+        m_req(req),
+        m_route_id(route_id)
     {}
 
 	~EmberISendEvent() {}
@@ -49,7 +50,7 @@ public:
         EmberEvent::issue( time );
 
         m_api.isend( m_payload, m_count, m_dtype, m_dest, m_tag,
-                                                    m_group, m_req, functor );
+                                                    m_group, m_req, functor, m_route_id);
     }
 
 protected:
@@ -60,6 +61,7 @@ protected:
     uint32_t        m_tag;
     Communicator    m_group;
     MessageRequest* m_req;
+    int             m_route_id;
 };
 
 }

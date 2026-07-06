@@ -249,7 +249,8 @@ am__libember_la_SOURCES_DIST = embergen.h embergen.cc embermap.h \
 	mpi/motifs/emberallgatherv.h mpi/motifs/emberallgather.cc \
 	mpi/motifs/emberallgather.h mpi/motifs/emberalltoall.cc \
 	mpi/motifs/emberalltoall.h mpi/motifs/emberalltoallv.cc \
-	mpi/motifs/emberalltoallv.h mpi/motifs/emberreduce.cc \
+	mpi/motifs/emberalltoallv.h mpi/motifs/emberalltoallcustome.cc \
+	mpi/motifs/emberalltoallcustome.h mpi/motifs/emberreduce.cc \
 	mpi/motifs/emberbcast.h mpi/motifs/emberbcast.cc \
 	mpi/motifs/emberscatter.h mpi/motifs/emberscatter.cc \
 	mpi/motifs/emberscatterv.h mpi/motifs/emberscatterv.cc \
@@ -389,7 +390,8 @@ am_libember_la_OBJECTS = embergen.lo ember.lo emberengine.lo \
 	mpi/motifs/emberbarrier.lo mpi/motifs/emberallpingpong.lo \
 	mpi/motifs/emberallreduce.lo mpi/motifs/emberallgatherv.lo \
 	mpi/motifs/emberallgather.lo mpi/motifs/emberalltoall.lo \
-	mpi/motifs/emberalltoallv.lo mpi/motifs/emberreduce.lo \
+	mpi/motifs/emberalltoallv.lo \
+	mpi/motifs/emberalltoallcustome.lo mpi/motifs/emberreduce.lo \
 	mpi/motifs/emberbcast.lo mpi/motifs/emberscatter.lo \
 	mpi/motifs/emberscatterv.lo mpi/motifs/emberhalo3d.lo \
 	mpi/motifs/emberlqcd.lo mpi/motifs/emberhalo3dsv.lo \
@@ -477,6 +479,7 @@ am__depfiles_remade = ./$(DEPDIR)/ember.Plo \
 	mpi/motifs/$(DEPDIR)/emberallreduce.Plo \
 	mpi/motifs/$(DEPDIR)/emberalltoall.Plo \
 	mpi/motifs/$(DEPDIR)/emberalltoallallreduce.Plo \
+	mpi/motifs/$(DEPDIR)/emberalltoallcustome.Plo \
 	mpi/motifs/$(DEPDIR)/emberalltoallv.Plo \
 	mpi/motifs/$(DEPDIR)/emberbarrier.Plo \
 	mpi/motifs/$(DEPDIR)/emberbcast.Plo \
@@ -625,7 +628,8 @@ AMTAR = $${TAR-tar}
 AM_CFLAGS =  -fno-omit-frame-pointer 
 AM_CPPFLAGS =  -I/usr/include/python3.10 -I/usr/include/python3.10 -I/home/gera/torus-allreduce/local/sstcore-15.0.0/include/sst/core -I/home/gera/torus-allreduce/local/sstcore-15.0.0/include $(MPI_CPPFLAGS) \
 	-I$(top_srcdir)/src/sst/elements/ember/sirius/include \
-	-I$(top_srcdir)/src $(OTF2_CPPFLAGS)
+	-I$(top_srcdir)/src -I$(top_srcdir)/src/sst/elements/external \
+	$(OTF2_CPPFLAGS)
 AM_CXXFLAGS =  -fno-omit-frame-pointer -std=c++17 
 AM_DEFAULT_VERBOSITY = 0
 AM_LDFLAGS =  -L/usr/lib/python3.10/config-3.10-x86_64-linux-gnu -L/usr/lib/x86_64-linux-gnu -lpython3.10 -lcrypt -ldl  -lm -lm 
@@ -776,7 +780,7 @@ PINTOOL3_RUNTIME =
 PINTOOL_CPPFLAGS = 
 PINTOOL_DIR = 
 PINTOOL_LDFLAGS = 
-PINTOOL_PATH = /home/gera/torus-allreduce/local/sstelements-15.0.0/bin:/home/gera/torus-allreduce/local/sstcore-15.0.0/bin:/home/gera/torus-allreduce/local/packages/OpenMPI-4.1.6/bin:/home/gera/py_env/bin:/home/gera/.cursor-server/bin/56f0a83df8e9eb48585fcc4858a9440db4cc7770/bin/remote-cli:/home/gera/.local/bin:/home/gera/.cursor-server/bin/56f0a83df8e9eb48585fcc4858a9440db4cc7770/bin/remote-cli:/home/gera/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/usr/local/go/bin:/usr/local/go/bin:/home/gera/.cursor-server/extensions/ms-python.debugpy-2025.14.1-linux-x64/bundled/scripts/noConfigScripts
+PINTOOL_PATH = /home/gera/torus-allreduce/local/sstcore-15.0.0/bin:/home/gera/torus-allreduce/local/packages/OpenMPI-4.1.6/bin:/home/gera/py_env/bin:/home/gera/torus-allreduce/local/sstelements-15.0.0/bin:/home/gera/torus-allreduce/local/sstcore-15.0.0/bin:/home/gera/torus-allreduce/local/packages/OpenMPI-4.1.6/bin:/home/gera/.cursor-server/bin/linux-x64/f736016b0aa20ba1f99b7eec1dda48579fa4c290/bin/remote-cli:/home/gera/.local/bin:/home/gera/.cursor-server/bin/linux-x64/f736016b0aa20ba1f99b7eec1dda48579fa4c290/bin/remote-cli:/home/gera/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/usr/local/go/bin:/usr/local/go/bin:/home/gera/.cursor-server/extensions/ms-python.debugpy-2025.18.0-linux-x64/bundled/scripts/noConfigScripts
 PINTOOL_RUNTIME = 
 PIN_CPPFLAGS = -g   -Wall   -Werror   -Wno-unknown-pragmas   -D__PIN__=1 -DPIN_CRT=1   -fno-stack-protector   -fno-exceptions   -funwind-tables   -fasynchronous-unwind-tables   -fomit-frame-pointer   -fno-strict-aliasing   -fno-rtti   -faligned-new   -fpic   -DTARGET_IA32E   -DHOST_IA32E   -DTARGET_LINUX   -DPIN_VERSION_MINOR=
 PIN_CPPFLAGS_COMPILER = -fno-exceptions          -fabi-version=2
@@ -925,7 +929,8 @@ libember_la_SOURCES = embergen.h embergen.cc embermap.h ember.cc \
 	mpi/motifs/emberallgatherv.h mpi/motifs/emberallgather.cc \
 	mpi/motifs/emberallgather.h mpi/motifs/emberalltoall.cc \
 	mpi/motifs/emberalltoall.h mpi/motifs/emberalltoallv.cc \
-	mpi/motifs/emberalltoallv.h mpi/motifs/emberreduce.cc \
+	mpi/motifs/emberalltoallv.h mpi/motifs/emberalltoallcustome.cc \
+	mpi/motifs/emberalltoallcustome.h mpi/motifs/emberreduce.cc \
 	mpi/motifs/emberbcast.h mpi/motifs/emberbcast.cc \
 	mpi/motifs/emberscatter.h mpi/motifs/emberscatter.cc \
 	mpi/motifs/emberscatterv.h mpi/motifs/emberscatterv.cc \
@@ -1303,6 +1308,8 @@ mpi/motifs/emberalltoall.lo: mpi/motifs/$(am__dirstamp) \
 	mpi/motifs/$(DEPDIR)/$(am__dirstamp)
 mpi/motifs/emberalltoallv.lo: mpi/motifs/$(am__dirstamp) \
 	mpi/motifs/$(DEPDIR)/$(am__dirstamp)
+mpi/motifs/emberalltoallcustome.lo: mpi/motifs/$(am__dirstamp) \
+	mpi/motifs/$(DEPDIR)/$(am__dirstamp)
 mpi/motifs/emberreduce.lo: mpi/motifs/$(am__dirstamp) \
 	mpi/motifs/$(DEPDIR)/$(am__dirstamp)
 mpi/motifs/emberbcast.lo: mpi/motifs/$(am__dirstamp) \
@@ -1506,6 +1513,7 @@ include mpi/motifs/$(DEPDIR)/emberallpingpong.Plo # am--include-marker
 include mpi/motifs/$(DEPDIR)/emberallreduce.Plo # am--include-marker
 include mpi/motifs/$(DEPDIR)/emberalltoall.Plo # am--include-marker
 include mpi/motifs/$(DEPDIR)/emberalltoallallreduce.Plo # am--include-marker
+include mpi/motifs/$(DEPDIR)/emberalltoallcustome.Plo # am--include-marker
 include mpi/motifs/$(DEPDIR)/emberalltoallv.Plo # am--include-marker
 include mpi/motifs/$(DEPDIR)/emberbarrier.Plo # am--include-marker
 include mpi/motifs/$(DEPDIR)/emberbcast.Plo # am--include-marker
@@ -1817,6 +1825,7 @@ distclean: distclean-am
 	-rm -f mpi/motifs/$(DEPDIR)/emberallreduce.Plo
 	-rm -f mpi/motifs/$(DEPDIR)/emberalltoall.Plo
 	-rm -f mpi/motifs/$(DEPDIR)/emberalltoallallreduce.Plo
+	-rm -f mpi/motifs/$(DEPDIR)/emberalltoallcustome.Plo
 	-rm -f mpi/motifs/$(DEPDIR)/emberalltoallv.Plo
 	-rm -f mpi/motifs/$(DEPDIR)/emberbarrier.Plo
 	-rm -f mpi/motifs/$(DEPDIR)/emberbcast.Plo
@@ -1963,6 +1972,7 @@ maintainer-clean: maintainer-clean-am
 	-rm -f mpi/motifs/$(DEPDIR)/emberallreduce.Plo
 	-rm -f mpi/motifs/$(DEPDIR)/emberalltoall.Plo
 	-rm -f mpi/motifs/$(DEPDIR)/emberalltoallallreduce.Plo
+	-rm -f mpi/motifs/$(DEPDIR)/emberalltoallcustome.Plo
 	-rm -f mpi/motifs/$(DEPDIR)/emberalltoallv.Plo
 	-rm -f mpi/motifs/$(DEPDIR)/emberbarrier.Plo
 	-rm -f mpi/motifs/$(DEPDIR)/emberbcast.Plo

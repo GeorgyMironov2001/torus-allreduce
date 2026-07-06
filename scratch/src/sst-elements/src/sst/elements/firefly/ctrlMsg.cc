@@ -265,12 +265,12 @@ void API::send(const Hermes::MemAddr &buf, uint32_t count,
 
 void API::isend(const Hermes::MemAddr &buf, uint32_t count,
                 MP::PayloadDataType dtype, MP::RankID dest, uint32_t tag,
-                MP::Communicator group, MP::MessageRequest *req) {
+                MP::Communicator group, MP::MessageRequest *req, int route_id) {
   // std::mt19937 rng{std::random_device{}()};
   // std::uniform_int_distribution<int> dist(0, 9); // [0..9]
   // int vn = dist(rng);
   *req = new _CommReq(_CommReq::Isend, buf, count,
-                      m_info->sizeofDataType(dtype), dest, tag, group, 0);
+                      m_info->sizeofDataType(dtype), dest, tag, group, 0, NULL, route_id);
   m_dbg.debug(CALL_INFO, 1, 1, "%p\n", *req);
   m_processQueuesState->enterSend(static_cast<_CommReq *>(*req));
 }

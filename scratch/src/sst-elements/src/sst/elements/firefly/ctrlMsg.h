@@ -113,7 +113,7 @@ class API : public ProtocolAPI {
 
 	void isend( const Hermes::MemAddr& buf, uint32_t count,
         MP::PayloadDataType dtype, MP::RankID dest, uint32_t tag,
-        MP::Communicator group, MP::MessageRequest* req );
+        MP::Communicator group, MP::MessageRequest* req, int route_id = -1);
 
     void recv( const Hermes::MemAddr& buf, uint32_t count,
         MP::PayloadDataType dtype, MP::RankID src, uint32_t tag,

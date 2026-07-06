@@ -128,7 +128,7 @@ std::vector<SST::Ember::TreeEdge> edges_8x8x8 = {
     {56, 0, 1, 9},    {510, 509, 0, 10}, {509, 508, 1, 9},  {508, 507, 2, 8},
     {507, 451, 3, 7}, {503, 496, 0, 10}, {496, 488, 1, 9},  {447, 440, 0, 10},
     {440, 384, 1, 9}, {511, 504, 0, 11}, {504, 448, 1, 10}};
-int center_8x8 = 219;
+int center_8x8x8 = 219;
 
 std::vector<SST::Ember::TreeEdge> edges_8x8x8_rotate1 = {
     {362, 363, 0, 2}, {363, 364, 1, 1},  {364, 365, 2, 0},  {426, 427, 0, 3},
@@ -259,7 +259,7 @@ std::vector<SST::Ember::TreeEdge> edges_8x8x8_rotate1 = {
     {8, 0, 1, 9},     {74, 75, 0, 10},   {75, 76, 1, 9},    {76, 77, 2, 8},
     {77, 69, 3, 7},   {81, 80, 0, 10},   {80, 88, 1, 9},    {137, 136, 0, 10},
     {136, 128, 1, 9}, {73, 72, 0, 11},   {72, 64, 1, 10}};
-int center_8x8_rotate1 = 219;
+int center_8x8x8_rotate1 = 219;
 
 std::vector<SST::Ember::TreeEdge> edges_8x8x8_rotate2 = {
     {243, 235, 0, 2}, {235, 227, 1, 1},  {227, 219, 2, 0},  {242, 234, 0, 3},
@@ -390,7 +390,7 @@ std::vector<SST::Ember::TreeEdge> edges_8x8x8_rotate2 = {
     {448, 0, 1, 9},   {503, 495, 0, 10}, {495, 487, 1, 9},  {487, 479, 2, 8},
     {479, 31, 3, 7},  {447, 391, 0, 10}, {391, 327, 1, 9},  {510, 454, 0, 10},
     {454, 6, 1, 9},   {511, 455, 0, 11}, {455, 7, 1, 10}};
-int center_8x8_rotate2 = 219;
+int center_8x8x8_rotate2 = 219;
 
 std::vector<SST::Ember::TreeEdge> edges_8x8x8_rotate3 = {
     {341, 349, 0, 2}, {349, 357, 1, 1},  {357, 365, 2, 0},  {342, 350, 0, 3},
@@ -521,7 +521,7 @@ std::vector<SST::Ember::TreeEdge> edges_8x8x8_rotate3 = {
     {64, 0, 1, 9},    {81, 89, 0, 10},   {89, 97, 1, 9},    {97, 105, 2, 8},
     {105, 41, 3, 7},  {137, 129, 0, 10}, {129, 193, 1, 9},  {74, 66, 0, 10},
     {66, 2, 1, 9},    {73, 65, 0, 11},   {65, 1, 1, 10}};
-int center_8x8_rotate3 = 219;
+int center_8x8x8_rotate3 = 219;
 
 std::vector<SST::Ember::TreeEdge> edges_8x8x8_rotate4 = {
     {411, 347, 0, 2}, {347, 283, 1, 1},  {283, 219, 2, 0},  {403, 339, 0, 3},
@@ -652,7 +652,7 @@ std::vector<SST::Ember::TreeEdge> edges_8x8x8_rotate4 = {
     {7, 0, 1, 9},     {447, 383, 0, 10}, {383, 319, 1, 9},  {319, 255, 2, 8},
     {255, 248, 3, 7}, {510, 62, 0, 10},  {62, 61, 1, 9},    {503, 55, 0, 10},
     {55, 48, 1, 9},   {511, 63, 0, 11},  {63, 56, 1, 10}};
-int center_8x8_rotate4 = 219;
+int center_8x8x8_rotate4 = 219;
 
 std::vector<SST::Ember::TreeEdge> edges_8x8x8_rotate5 = {
     {173, 237, 0, 2}, {237, 301, 1, 1},  {301, 365, 2, 0},  {181, 245, 0, 3},
@@ -783,23 +783,23 @@ std::vector<SST::Ember::TreeEdge> edges_8x8x8_rotate5 = {
     {1, 0, 1, 9},     {137, 201, 0, 10}, {201, 265, 1, 9},  {265, 329, 2, 8},
     {329, 328, 3, 7}, {74, 10, 0, 10},   {10, 11, 1, 9},    {81, 17, 0, 10},
     {17, 16, 1, 9},   {73, 9, 0, 11},    {9, 8, 1, 10}};
-int center_8x8_rotate5 = 219;
+int center_8x8x8_rotate5 = 219;
 
-SST::Ember::TreeSpec tree_spec_8x8x8(center_8x8, 8, edges_8x8x8, 3);
+SST::Ember::TreeSpec tree_spec_8x8x8(center_8x8x8, 8, edges_8x8x8, 3);
 
-SST::Ember::TreeSpec tree_spec_8x8x8_rotate1(center_8x8_rotate1, 8,
+SST::Ember::TreeSpec tree_spec_8x8x8_rotate1(center_8x8x8_rotate1, 8,
                                              edges_8x8x8_rotate1, 3);
 
-SST::Ember::TreeSpec tree_spec_8x8x8_rotate2(center_8x8_rotate2, 8,
+SST::Ember::TreeSpec tree_spec_8x8x8_rotate2(center_8x8x8_rotate2, 8,
                                              edges_8x8x8_rotate2, 3);
 
-SST::Ember::TreeSpec tree_spec_8x8x8_rotate3(center_8x8_rotate3, 8,
+SST::Ember::TreeSpec tree_spec_8x8x8_rotate3(center_8x8x8_rotate3, 8,
                                              edges_8x8x8_rotate3, 3);
 
-SST::Ember::TreeSpec tree_spec_8x8x8_rotate4(center_8x8_rotate4, 8,
+SST::Ember::TreeSpec tree_spec_8x8x8_rotate4(center_8x8x8_rotate4, 8,
                                              edges_8x8x8_rotate4, 3);
 
-SST::Ember::TreeSpec tree_spec_8x8x8_rotate5(center_8x8_rotate5, 8,
+SST::Ember::TreeSpec tree_spec_8x8x8_rotate5(center_8x8x8_rotate5, 8,
                                              edges_8x8x8_rotate5, 3);
 
 std::vector<SST::Ember::TreeSpec> tree_specs_8x8x8_hexagonal = {

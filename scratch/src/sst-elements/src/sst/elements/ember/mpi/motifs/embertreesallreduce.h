@@ -3,7 +3,9 @@
 
 #include "embertreescoll.h"
 #include "mpi/embermpigen.h"
-
+#include <fstream>
+#include <sstream>
+#include <nlohmann/json.hpp>
 namespace SST {
 namespace Ember {
 
@@ -41,6 +43,10 @@ public:
   bool generate(std::queue<EmberEvent *> &evQ);
 
 private:
+  std::pair<std::vector<std::vector<int>>,
+            std::map<std::pair<int, int>, int>>
+  parse_route_table(std::string route_table_file);
+
   TreesCollective *m_allreduce;
   int m_recvcount;
   int m_validate;

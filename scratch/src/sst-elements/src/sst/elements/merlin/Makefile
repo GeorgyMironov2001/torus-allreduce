@@ -190,9 +190,10 @@ am_libmerlin_la_OBJECTS = merlin.lo \
 	test/route_test/route_test.lo test/pt2pt/pt2pt_test.lo \
 	test/bisection/bisection_test.lo test/simple_patterns/empty.lo \
 	test/simple_patterns/shift.lo test/simple_patterns/incast.lo \
-	topology/torus.lo topology/mesh.lo topology/fattree.lo \
-	topology/dragonfly.lo topology/singlerouter.lo \
-	topology/hyperx.lo topology/polarfly.lo topology/polarstar.lo \
+	topology/torus.lo topology/torus_trees.lo topology/mesh.lo \
+	topology/fattree.lo topology/dragonfly.lo \
+	topology/singlerouter.lo topology/hyperx.lo \
+	topology/polarfly.lo topology/polarstar.lo topology/graph.lo \
 	hr_router/hr_router.lo trafficgen/trafficgen.lo \
 	inspectors/circuitCounter.lo inspectors/testInspector.lo \
 	interfaces/linkControl.lo interfaces/portControl.lo \
@@ -238,11 +239,13 @@ am__depfiles_remade = ./$(DEPDIR)/merlin.Plo ./$(DEPDIR)/pymodule.Plo \
 	test/simple_patterns/$(DEPDIR)/incast.Plo \
 	test/simple_patterns/$(DEPDIR)/shift.Plo \
 	topology/$(DEPDIR)/dragonfly.Plo \
-	topology/$(DEPDIR)/fattree.Plo topology/$(DEPDIR)/hyperx.Plo \
-	topology/$(DEPDIR)/mesh.Plo topology/$(DEPDIR)/polarfly.Plo \
+	topology/$(DEPDIR)/fattree.Plo topology/$(DEPDIR)/graph.Plo \
+	topology/$(DEPDIR)/hyperx.Plo topology/$(DEPDIR)/mesh.Plo \
+	topology/$(DEPDIR)/polarfly.Plo \
 	topology/$(DEPDIR)/polarstar.Plo \
 	topology/$(DEPDIR)/singlerouter.Plo \
 	topology/$(DEPDIR)/torus.Plo \
+	topology/$(DEPDIR)/torus_trees.Plo \
 	trafficgen/$(DEPDIR)/trafficgen.Plo
 am__mv = mv -f
 COMPILE = $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) \
@@ -312,7 +315,8 @@ DISTFILES = $(DIST_COMMON) $(DIST_SOURCES) $(TEXINFOS) $(EXTRA_DIST)
 ACLOCAL = ${SHELL} '/home/gera/torus-allreduce/scratch/src/sst-elements/config/missing' aclocal-1.17
 AMTAR = $${TAR-tar}
 AM_CFLAGS =  -fno-omit-frame-pointer 
-AM_CPPFLAGS =  -I/usr/include/python3.10 -I/usr/include/python3.10 -I/home/gera/torus-allreduce/local/sstcore-15.0.0/include/sst/core -I/home/gera/torus-allreduce/local/sstcore-15.0.0/include -I$(top_srcdir)/src $(MPI_CPPFLAGS) \
+AM_CPPFLAGS =  -I/usr/include/python3.10 -I/usr/include/python3.10 -I/home/gera/torus-allreduce/local/sstcore-15.0.0/include/sst/core -I/home/gera/torus-allreduce/local/sstcore-15.0.0/include -I$(top_srcdir)/src \
+	-I$(top_srcdir)/src/sst/elements/external $(MPI_CPPFLAGS) \
 	$(PYTHON_CPPFLAGS)
 AM_CXXFLAGS =  -fno-omit-frame-pointer -std=c++17 
 AM_DEFAULT_VERBOSITY = 0
@@ -464,7 +468,7 @@ PINTOOL3_RUNTIME =
 PINTOOL_CPPFLAGS = 
 PINTOOL_DIR = 
 PINTOOL_LDFLAGS = 
-PINTOOL_PATH = /home/gera/torus-allreduce/local/sstelements-15.0.0/bin:/home/gera/torus-allreduce/local/sstcore-15.0.0/bin:/home/gera/torus-allreduce/local/packages/OpenMPI-4.1.6/bin:/home/gera/py_env/bin:/home/gera/.cursor-server/bin/56f0a83df8e9eb48585fcc4858a9440db4cc7770/bin/remote-cli:/home/gera/.local/bin:/home/gera/.cursor-server/bin/56f0a83df8e9eb48585fcc4858a9440db4cc7770/bin/remote-cli:/home/gera/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/usr/local/go/bin:/usr/local/go/bin:/home/gera/.cursor-server/extensions/ms-python.debugpy-2025.14.1-linux-x64/bundled/scripts/noConfigScripts
+PINTOOL_PATH = /home/gera/torus-allreduce/local/sstcore-15.0.0/bin:/home/gera/torus-allreduce/local/packages/OpenMPI-4.1.6/bin:/home/gera/py_env/bin:/home/gera/torus-allreduce/local/sstelements-15.0.0/bin:/home/gera/torus-allreduce/local/sstcore-15.0.0/bin:/home/gera/torus-allreduce/local/packages/OpenMPI-4.1.6/bin:/home/gera/.cursor-server/bin/linux-x64/f736016b0aa20ba1f99b7eec1dda48579fa4c290/bin/remote-cli:/home/gera/.local/bin:/home/gera/.cursor-server/bin/linux-x64/f736016b0aa20ba1f99b7eec1dda48579fa4c290/bin/remote-cli:/home/gera/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/usr/local/go/bin:/usr/local/go/bin:/home/gera/.cursor-server/extensions/ms-python.debugpy-2025.18.0-linux-x64/bundled/scripts/noConfigScripts
 PINTOOL_RUNTIME = 
 PIN_CPPFLAGS = -g   -Wall   -Werror   -Wno-unknown-pragmas   -D__PIN__=1 -DPIN_CRT=1   -fno-stack-protector   -fno-exceptions   -funwind-tables   -fasynchronous-unwind-tables   -fomit-frame-pointer   -fno-strict-aliasing   -fno-rtti   -faligned-new   -fpic   -DTARGET_IA32E   -DHOST_IA32E   -DTARGET_LINUX   -DPIN_VERSION_MINOR=
 PIN_CPPFLAGS_COMPILER = -fno-exceptions          -fabi-version=2
@@ -588,6 +592,8 @@ libmerlin_la_SOURCES = \
 	test/simple_patterns/incast.cc \
 	topology/torus.h \
 	topology/torus.cc \
+	topology/torus_trees.h \
+	topology/torus_trees.cc \
 	topology/mesh.h \
 	topology/mesh.cc \
 	topology/fattree.h \
@@ -602,6 +608,8 @@ libmerlin_la_SOURCES = \
 	topology/polarfly.h \
 	topology/polarstar.cc \
 	topology/polarstar.h \
+	topology/graph.cc \
+	topology/graph.h \
 	hr_router/hr_router.h \
 	hr_router/hr_router.cc \
 	hr_router/xbar_arb_age.h \
@@ -639,7 +647,8 @@ libmerlin_la_SOURCES = \
 	topology/pymerlin-topo-polarstar.py \
 	topology/pymerlin-topo-hyperx.py \
 	topology/pymerlin-topo-fattree.py \
-	topology/pymerlin-topo-mesh.py
+	topology/pymerlin-topo-mesh.py \
+	topology/pymerlin-topo-graph.py
 
 EXTRA_DIST = \
 	tests/testsuite_default_merlin.py \
@@ -690,7 +699,8 @@ BUILT_SOURCES = \
 	topology/pymerlin-topo-polarstar.inc \
 	topology/pymerlin-topo-hyperx.inc \
 	topology/pymerlin-topo-fattree.inc \
-	topology/pymerlin-topo-mesh.inc
+	topology/pymerlin-topo-mesh.inc \
+	topology/pymerlin-topo-graph.inc
 
 all: $(BUILT_SOURCES)
 	$(MAKE) $(AM_MAKEFLAGS) all-am
@@ -836,6 +846,8 @@ topology/$(DEPDIR)/$(am__dirstamp):
 	@: >>topology/$(DEPDIR)/$(am__dirstamp)
 topology/torus.lo: topology/$(am__dirstamp) \
 	topology/$(DEPDIR)/$(am__dirstamp)
+topology/torus_trees.lo: topology/$(am__dirstamp) \
+	topology/$(DEPDIR)/$(am__dirstamp)
 topology/mesh.lo: topology/$(am__dirstamp) \
 	topology/$(DEPDIR)/$(am__dirstamp)
 topology/fattree.lo: topology/$(am__dirstamp) \
@@ -849,6 +861,8 @@ topology/hyperx.lo: topology/$(am__dirstamp) \
 topology/polarfly.lo: topology/$(am__dirstamp) \
 	topology/$(DEPDIR)/$(am__dirstamp)
 topology/polarstar.lo: topology/$(am__dirstamp) \
+	topology/$(DEPDIR)/$(am__dirstamp)
+topology/graph.lo: topology/$(am__dirstamp) \
 	topology/$(DEPDIR)/$(am__dirstamp)
 hr_router/$(am__dirstamp):
 	@$(MKDIR_P) hr_router
@@ -944,12 +958,14 @@ include test/simple_patterns/$(DEPDIR)/incast.Plo # am--include-marker
 include test/simple_patterns/$(DEPDIR)/shift.Plo # am--include-marker
 include topology/$(DEPDIR)/dragonfly.Plo # am--include-marker
 include topology/$(DEPDIR)/fattree.Plo # am--include-marker
+include topology/$(DEPDIR)/graph.Plo # am--include-marker
 include topology/$(DEPDIR)/hyperx.Plo # am--include-marker
 include topology/$(DEPDIR)/mesh.Plo # am--include-marker
 include topology/$(DEPDIR)/polarfly.Plo # am--include-marker
 include topology/$(DEPDIR)/polarstar.Plo # am--include-marker
 include topology/$(DEPDIR)/singlerouter.Plo # am--include-marker
 include topology/$(DEPDIR)/torus.Plo # am--include-marker
+include topology/$(DEPDIR)/torus_trees.Plo # am--include-marker
 include trafficgen/$(DEPDIR)/trafficgen.Plo # am--include-marker
 
 $(am__depfiles_remade):
@@ -1227,12 +1243,14 @@ distclean: distclean-am
 	-rm -f test/simple_patterns/$(DEPDIR)/shift.Plo
 	-rm -f topology/$(DEPDIR)/dragonfly.Plo
 	-rm -f topology/$(DEPDIR)/fattree.Plo
+	-rm -f topology/$(DEPDIR)/graph.Plo
 	-rm -f topology/$(DEPDIR)/hyperx.Plo
 	-rm -f topology/$(DEPDIR)/mesh.Plo
 	-rm -f topology/$(DEPDIR)/polarfly.Plo
 	-rm -f topology/$(DEPDIR)/polarstar.Plo
 	-rm -f topology/$(DEPDIR)/singlerouter.Plo
 	-rm -f topology/$(DEPDIR)/torus.Plo
+	-rm -f topology/$(DEPDIR)/torus_trees.Plo
 	-rm -f trafficgen/$(DEPDIR)/trafficgen.Plo
 	-rm -f Makefile
 distclean-am: clean-am distclean-compile distclean-generic \
@@ -1300,12 +1318,14 @@ maintainer-clean: maintainer-clean-am
 	-rm -f test/simple_patterns/$(DEPDIR)/shift.Plo
 	-rm -f topology/$(DEPDIR)/dragonfly.Plo
 	-rm -f topology/$(DEPDIR)/fattree.Plo
+	-rm -f topology/$(DEPDIR)/graph.Plo
 	-rm -f topology/$(DEPDIR)/hyperx.Plo
 	-rm -f topology/$(DEPDIR)/mesh.Plo
 	-rm -f topology/$(DEPDIR)/polarfly.Plo
 	-rm -f topology/$(DEPDIR)/polarstar.Plo
 	-rm -f topology/$(DEPDIR)/singlerouter.Plo
 	-rm -f topology/$(DEPDIR)/torus.Plo
+	-rm -f topology/$(DEPDIR)/torus_trees.Plo
 	-rm -f trafficgen/$(DEPDIR)/trafficgen.Plo
 	-rm -f Makefile
 maintainer-clean-am: distclean-am maintainer-clean-generic

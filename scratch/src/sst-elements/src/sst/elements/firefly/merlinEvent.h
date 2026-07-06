@@ -30,13 +30,13 @@ class FireflyNetworkEvent : public Event {
 
   public:
 
-    FireflyNetworkEvent( ) : offset(0), bufLen(0), m_isHdr(false), m_isTail(false), m_isCtrl(false), pktOverhead(0) {
+    FireflyNetworkEvent( ) : offset(0), bufLen(0), m_isHdr(false), m_isTail(false), m_isCtrl(false), pktOverhead(0), route_id(-1) {
         buf.reserve( 1000 );
         assert( 0 == buf.size() );
     }
 
     FireflyNetworkEvent( int pktOverhead, size_t reserve = 1000 ) : offset(0), bufLen(0),
-            m_isHdr(false), m_isTail(false), m_isCtrl(false), pktOverhead(pktOverhead) {
+            m_isHdr(false), m_isTail(false), m_isCtrl(false), pktOverhead(pktOverhead), route_id(-1) {
         buf.reserve( reserve );
         assert( 0 == buf.size() );
     }
@@ -67,7 +67,10 @@ class FireflyNetworkEvent : public Event {
         assert( pid < (1 << NUM_PID_BITS) );
         destPid = pid; 
     }
-
+    void setRoute_id( int route_id ) {
+        this->route_id = route_id;
+    }
+    int getRoute_id() { return route_id; }
     int getSrcNode() { return srcNode; }
     int getSrcPid() { return srcPid; }
     int getSrcStream() { return srcStream; }
@@ -116,6 +119,7 @@ class FireflyNetworkEvent : public Event {
         m_isCtrl = me->m_isCtrl;
         offset = me->offset;
         pktOverhead = me->pktOverhead;
+        route_id = me->route_id;
     }
 
     FireflyNetworkEvent(const FireflyNetworkEvent &me) :
@@ -132,6 +136,7 @@ class FireflyNetworkEvent : public Event {
         m_isCtrl = me.m_isCtrl;
         offset = me.offset;
         pktOverhead = me.pktOverhead;
+        route_id = me.route_id;
     }
 
     virtual Event* clone(void) override
@@ -161,6 +166,7 @@ class FireflyNetworkEvent : public Event {
     bool            m_isTail;
     bool            m_isCtrl;
     int             pktOverhead;
+    int             route_id;
 
     size_t          offset;
     size_t          bufLen;
@@ -178,6 +184,7 @@ class FireflyNetworkEvent : public Event {
         SST_SER(srcStream);
         SST_SER(destPid);
         SST_SER(pktOverhead);
+        SST_SER(route_id);
         SST_SER(m_isHdr);
         SST_SER(m_isTail);
         SST_SER(m_isCtrl);

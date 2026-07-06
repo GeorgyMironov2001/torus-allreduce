@@ -140,6 +140,8 @@ void topo_torus::route_packet(int port, int vc, internal_router_event *ev) {
 internal_router_event *topo_torus::process_input(RtrEvent *ev) {
   // assert(ev->getRouteVN() == 0);  
   // output.output("Torus::process_input VN=%d\n", ev->getRouteVN());
+
+  // output.output("Torus::process_input Route ID=%d\n", ev->getRoute_id());
   topo_torus_event *tt_ev = new topo_torus_event(dimensions);
   tt_ev->setEncapsulatedEvent(ev);
   tt_ev->setVC(tt_ev->getVN() * 2);

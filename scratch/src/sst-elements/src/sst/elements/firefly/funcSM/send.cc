@@ -43,7 +43,7 @@ void SendFuncSM::handleStartEvent( SST::Event *e, Retval& retval )
 			m_event->tag, m_event->group );
 	} else {
 		proto()->isend( m_event->buf, m_event->count, m_event->dtype, m_event->dest,
-			m_event->tag, m_event->group, m_event->req );
+			m_event->tag, m_event->group, m_event->req, m_event->route_id );
 	}
 }
 

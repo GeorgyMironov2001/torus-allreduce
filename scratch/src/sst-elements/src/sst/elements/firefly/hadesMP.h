@@ -81,7 +81,7 @@ class HadesMP : public MP::Interface
     virtual void isend(const Hermes::MemAddr&, uint32_t count,
         MP::PayloadDataType dtype, MP::RankID dest, uint32_t tag,
         MP::Communicator group, MP::MessageRequest* req,
-        MP::Functor*);
+        MP::Functor*, int route_id=-1);
 
     virtual void recv(const Hermes::MemAddr&, uint32_t count,
         MP::PayloadDataType dtype, MP::RankID source, uint32_t tag,

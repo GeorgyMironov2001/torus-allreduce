@@ -422,11 +422,42 @@ mpi/motifs/embertreesallreduce.lo: mpi/motifs/embertreesallreduce.cc \
  /usr/include/c++/11/tr1/modified_bessel_func.tcc \
  /usr/include/c++/11/tr1/poly_hermite.tcc \
  /usr/include/c++/11/tr1/poly_laguerre.tcc \
- /usr/include/c++/11/tr1/riemann_zeta.tcc \
- mpi/motifs/embertrees/emberbdmstrees_8_8.h \
+ /usr/include/c++/11/tr1/riemann_zeta.tcc /usr/include/c++/11/fstream \
+ /usr/include/x86_64-linux-gnu/c++/11/bits/basic_file.h \
+ /usr/include/x86_64-linux-gnu/c++/11/bits/c++io.h \
+ /usr/include/c++/11/bits/fstream.tcc \
+ ../../../../src/sst/elements/external/nlohmann/json.hpp \
+ /usr/include/c++/11/iterator /usr/include/c++/11/bits/stream_iterator.h \
+ /usr/include/c++/11/valarray /usr/include/c++/11/bits/valarray_array.h \
+ /usr/include/c++/11/bits/valarray_array.tcc \
+ /usr/include/c++/11/bits/valarray_before.h \
+ /usr/include/c++/11/bits/slice_array.h \
+ /usr/include/c++/11/bits/valarray_after.h \
+ /usr/include/c++/11/bits/gslice.h \
+ /usr/include/c++/11/bits/gslice_array.h \
+ /usr/include/c++/11/bits/mask_array.h \
+ /usr/include/c++/11/bits/indirect_array.h /usr/include/c++/11/version \
+ /usr/include/c++/11/filesystem /usr/include/c++/11/bits/fs_fwd.h \
+ /usr/include/c++/11/bits/fs_path.h /usr/include/c++/11/codecvt \
+ /usr/include/c++/11/bits/fs_dir.h /usr/include/c++/11/bits/fs_ops.h \
+ /usr/include/c++/11/optional /usr/include/c++/11/numeric \
+ /usr/include/c++/11/bits/stl_numeric.h \
+ /usr/include/c++/11/pstl/glue_numeric_defs.h /usr/include/c++/11/any \
+ mpi/motifs/embertrees/emberbdmstrees_8_8d6.h \
  mpi/motifs/embertrees/../embertreescoll.h \
+ mpi/motifs/embertrees/emberbdmstrees_8_8d5.h \
+ mpi/motifs/embertrees/emberbdmstrees_8_8d4.h \
+ mpi/motifs/embertrees/emberbdmstrees_8_8d3.h \
+ mpi/motifs/embertrees/emberbdmstrees_8_8d2.h \
+ mpi/motifs/embertrees/emberbdmstrees_8_8d1.h \
+ mpi/motifs/embertrees/embercycleopt_16_16_4.h \
+ mpi/motifs/embertrees/embercycleopt_16_16_6.h \
+ mpi/motifs/embertrees/embercycleopt_16_16_8.h \
+ mpi/motifs/embertrees/embercycleopt_8_8_4.h \
+ mpi/motifs/embertrees/embercycleopt_8_8_6.h \
  mpi/motifs/embertrees/embertrees_64_64.h \
  mpi/motifs/embertrees/embertrees_8_8_8.h \
+ mpi/motifs/embertrees/embertrees_small_cases.h \
  /home/gera/torus-allreduce/local/sstcore-15.0.0/include/sst/core/sst_config.h
 /usr/include/stdc-predef.h:
 mpi/motifs/embertreesallreduce.h:
@@ -941,8 +972,48 @@ libs/mpi/emberredev.h:
 /usr/include/c++/11/tr1/poly_hermite.tcc:
 /usr/include/c++/11/tr1/poly_laguerre.tcc:
 /usr/include/c++/11/tr1/riemann_zeta.tcc:
-mpi/motifs/embertrees/emberbdmstrees_8_8.h:
+/usr/include/c++/11/fstream:
+/usr/include/x86_64-linux-gnu/c++/11/bits/basic_file.h:
+/usr/include/x86_64-linux-gnu/c++/11/bits/c++io.h:
+/usr/include/c++/11/bits/fstream.tcc:
+../../../../src/sst/elements/external/nlohmann/json.hpp:
+/usr/include/c++/11/iterator:
+/usr/include/c++/11/bits/stream_iterator.h:
+/usr/include/c++/11/valarray:
+/usr/include/c++/11/bits/valarray_array.h:
+/usr/include/c++/11/bits/valarray_array.tcc:
+/usr/include/c++/11/bits/valarray_before.h:
+/usr/include/c++/11/bits/slice_array.h:
+/usr/include/c++/11/bits/valarray_after.h:
+/usr/include/c++/11/bits/gslice.h:
+/usr/include/c++/11/bits/gslice_array.h:
+/usr/include/c++/11/bits/mask_array.h:
+/usr/include/c++/11/bits/indirect_array.h:
+/usr/include/c++/11/version:
+/usr/include/c++/11/filesystem:
+/usr/include/c++/11/bits/fs_fwd.h:
+/usr/include/c++/11/bits/fs_path.h:
+/usr/include/c++/11/codecvt:
+/usr/include/c++/11/bits/fs_dir.h:
+/usr/include/c++/11/bits/fs_ops.h:
+/usr/include/c++/11/optional:
+/usr/include/c++/11/numeric:
+/usr/include/c++/11/bits/stl_numeric.h:
+/usr/include/c++/11/pstl/glue_numeric_defs.h:
+/usr/include/c++/11/any:
+mpi/motifs/embertrees/emberbdmstrees_8_8d6.h:
 mpi/motifs/embertrees/../embertreescoll.h:
+mpi/motifs/embertrees/emberbdmstrees_8_8d5.h:
+mpi/motifs/embertrees/emberbdmstrees_8_8d4.h:
+mpi/motifs/embertrees/emberbdmstrees_8_8d3.h:
+mpi/motifs/embertrees/emberbdmstrees_8_8d2.h:
+mpi/motifs/embertrees/emberbdmstrees_8_8d1.h:
+mpi/motifs/embertrees/embercycleopt_16_16_4.h:
+mpi/motifs/embertrees/embercycleopt_16_16_6.h:
+mpi/motifs/embertrees/embercycleopt_16_16_8.h:
+mpi/motifs/embertrees/embercycleopt_8_8_4.h:
+mpi/motifs/embertrees/embercycleopt_8_8_6.h:
 mpi/motifs/embertrees/embertrees_64_64.h:
 mpi/motifs/embertrees/embertrees_8_8_8.h:
+mpi/motifs/embertrees/embertrees_small_cases.h:
 /home/gera/torus-allreduce/local/sstcore-15.0.0/include/sst/core/sst_config.h:

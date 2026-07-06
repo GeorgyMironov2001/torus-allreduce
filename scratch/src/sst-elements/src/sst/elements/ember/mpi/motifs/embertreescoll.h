@@ -86,7 +86,7 @@ public:
                           uint32_t count, uint32_t vrank, uint32_t numproc,
                           double aggregation_cost_ns, Communicator comm,
                           bool validate, bool latency_optimal, int port_id,
-                          TreesCollective *runner);
+                          TreesCollective *runner, std::vector<std::vector<int>> &route_table, std::map<std::pair<int, int>, int> &route_table_map);
     bool progress(std::queue<EmberEvent *> &evQ);
     bool hasPendingRecv();
     bool hasPendingSend();
@@ -109,6 +109,8 @@ public:
     uint32_t getMr() { return m_r; }
     // uint getCenterId() { return m_center_id; }
     ring_allreduce_state_t getState() { return m_state; }
+    std::pair<int, std::vector<int>> getRouteTableId(int from, int to, int center_block_id);
+
     std::vector<std::map<int, std::vector<int>>> scatter_port_send;
     std::vector<std::map<int, std::vector<int>>> scatter_port_recv;
     std::vector<std::map<int, std::vector<int>>> allgather_port_send;
@@ -117,6 +119,9 @@ public:
     std::vector<std::map<int, std::vector<int>>> allgather_peers_send;
     std::vector<std::map<int, std::vector<int>>> scatter_peers_recv;
     std::vector<std::map<int, std::vector<int>>> allgather_peers_recv;
+
+    std::vector<std::vector<int>> route_table;
+    std::map<std::pair<int, int>, int> route_table_map;
 
   private:
     bool waiting_receive(CollType coll_type);
@@ -241,6 +246,7 @@ public:
                     uint ports, uint32_t count, uint32_t rank,
                     uint32_t comm_size, Communicator comm,
                     std::vector<TreeSpec> tree_specs,
+                    std::vector<std::vector<int>> &route_table, std::map<std::pair<int, int>, int> &route_table_map,
                     double aggregation_cost_ns = 0, bool nb = false,
                     bool sync = true, CollType coll_type = TREES_ALLREDUCE,
                     float *data = NULL, uint *dimensions = NULL,

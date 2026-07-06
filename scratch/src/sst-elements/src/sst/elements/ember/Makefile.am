@@ -6,6 +6,7 @@ AM_CPPFLAGS += \
 	$(MPI_CPPFLAGS) \
 	-I$(top_srcdir)/src/sst/elements/ember/sirius/include \
 	-I$(top_srcdir)/src \
+	-I$(top_srcdir)/src/sst/elements/external \
 	$(OTF2_CPPFLAGS)
 
 compdir = $(pkglibdir)
@@ -131,6 +132,8 @@ libember_la_SOURCES = \
 	mpi/motifs/emberalltoall.h \
 	mpi/motifs/emberalltoallv.cc \
 	mpi/motifs/emberalltoallv.h \
+	mpi/motifs/emberalltoallcustome.cc \
+	mpi/motifs/emberalltoallcustome.h \
 	mpi/motifs/emberreduce.cc \
 	mpi/motifs/emberbcast.h \
 	mpi/motifs/emberbcast.cc \

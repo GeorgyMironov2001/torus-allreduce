@@ -184,6 +184,69 @@ class DragonFlyInfo(TopoInfo):
     def getNumNodes(self):
         return self.numNodes
 
+class GraphInfo(TopoInfo):
+    def __init__(self, graph_file, route_table_file, hosts_per_router, nicsPerNode=1, num_vcs=1):
+        self.graph_file = graph_file
+        self.route_table_file = route_table_file
+        self.hosts_per_router = int(hosts_per_router)
+        self.nicsPerNode = nicsPerNode
+        self.num_vcs = int(num_vcs)
+        num_routers, _edges = self._load_graph()
+        self.numNodes = num_routers * self.hosts_per_router
+        self.params = {
+            "graph_file": self.graph_file,
+            "route_table_file": self.route_table_file,
+            "hosts_per_router": self.hosts_per_router,
+            "total_routers": num_routers,
+            "num_vcs": self.num_vcs,
+        }
+
+    def _load_graph(self):
+        records = []
+        with open(self.graph_file) as fp:
+            for line in fp:
+                line = line.split("#", 1)[0].strip()
+                if not line:
+                    continue
+                parts = line.split()
+                if len(parts) < 2:
+                    continue
+                records.append((int(parts[0]), int(parts[1])))
+
+        if not records:
+            sys.exit("GraphInfo: graph_file is empty")
+
+        num_routers, declared_edges = records[0]
+        if num_routers <= 0:
+            sys.exit("GraphInfo: first line must be '<num_routers> <num_edges>'")
+
+        edges = []
+        for u, v in records[1:]:
+            if u < 0 or v < 0 or u >= num_routers or v >= num_routers:
+                sys.exit("GraphInfo: invalid edge (%d, %d) for %d routers" % (u, v, num_routers))
+            if u == v:
+                continue
+            if u > v:
+                u, v = v, u
+            edges.append((u, v))
+
+        edges = sorted(set(edges))
+        if declared_edges != len(edges):
+            print("GraphInfo: declared %d edges, loaded %d unique non-self edges" %
+                  (declared_edges, len(edges)))
+
+        return num_routers, edges
+
+    def getNetworkParams(self):
+        return self.params
+
+    def getNumNodes(self):
+        return self.numNodes
+
+    def getNicsPerNode(self):
+        return self.nicsPerNode
+
+
 class JSONInfo(TopoInfo):
     def __init__( self, numNodes ):
         self.params = {}

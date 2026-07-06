@@ -27,6 +27,9 @@ class EmberEP( EndPoint ):
     def prepParams( self ):
         pass
 
+    def repParams( self ):
+        self.prepParams()
+
     def build( self, nodeID, extraKeys ):
 
         

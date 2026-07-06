@@ -1,0 +1,5 @@
+[JOB_ID] 0
+[NID_LIST] 0-3
+[MOTIF] Init
+[MOTIF] Alltoall count=4096 iterations=1 compute=0 dimensions=2 dimensions_sizes=4,1
+[MOTIF] Fini

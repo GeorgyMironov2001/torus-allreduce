@@ -124,14 +124,15 @@ class SendStartEvent : public Event {
                 const Hermes::MemAddr& _buf, uint32_t _count,
                 MP::PayloadDataType _dtype, MP::RankID _dest,
                 uint32_t _tag, MP::Communicator _group,
-                MP::MessageRequest* _req ) :
+                MP::MessageRequest* _req, int _route_id=-1) :
         buf( _buf ),
         count( _count ),
         dtype( _dtype ),
         dest( _dest ),
         tag( _tag ),
         group( _group ),
-        req( _req )
+        req( _req ),
+        route_id( _route_id )
     {}
     Hermes::MemAddr         buf;
     uint32_t                count;
@@ -140,7 +141,7 @@ class SendStartEvent : public Event {
     uint32_t                tag;
     MP::Communicator        group;
     MP::MessageRequest*     req;
-
+    int                     route_id;
     NotSerializable(SendStartEvent)
 };
 

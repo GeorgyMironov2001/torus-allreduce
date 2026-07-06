@@ -392,7 +392,8 @@ merlin.lo: merlin.cc /usr/include/stdc-predef.h \
  target_generator/pymerlin-targetgen.inc \
  topology/pymerlin-topo-dragonfly.inc topology/pymerlin-topo-hyperx.inc \
  topology/pymerlin-topo-fattree.inc topology/pymerlin-topo-mesh.inc \
- topology/pymerlin-topo-polarfly.inc topology/pymerlin-topo-polarstar.inc
+ topology/pymerlin-topo-polarfly.inc topology/pymerlin-topo-polarstar.inc \
+ topology/pymerlin-topo-graph.inc
 /usr/include/stdc-predef.h:
 /home/gera/torus-allreduce/local/sstcore-15.0.0/include/sst/core/sst_config.h:
 merlin.h:
@@ -856,3 +857,4 @@ topology/pymerlin-topo-fattree.inc:
 topology/pymerlin-topo-mesh.inc:
 topology/pymerlin-topo-polarfly.inc:
 topology/pymerlin-topo-polarstar.inc:
+topology/pymerlin-topo-graph.inc:

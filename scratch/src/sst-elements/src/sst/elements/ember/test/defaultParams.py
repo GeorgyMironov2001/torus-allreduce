@@ -7,7 +7,7 @@ netConfig = {
 
 networkParams = {
     "packetSize": "8192B",
-    "link_bw": "400Gb/s",
+    "link_bw": "1000000Gb/s",
     "nic_link_bw": "3200Gb/s",
     "xbar_bw": "1000000Gb/s",
     "link_lat": "100ns",
@@ -97,11 +97,11 @@ emberParams = {
 }
 
 if ('SST_NO_MEM' not in os.environ or int(os.environ['SST_NO_MEM']) != 1):
-    valueShort = 2**23
+    valueShort = 2**14
     # valueShort = 1423992
     print("Setting Value for ShortMsgSize to " + str(valueShort))
 else:
-    valueShort = 2**23
+    valueShort = 2**14
     # valueShort = 1423992
     print("Setting Value for ShortMsgSize to " + str(valueShort))
 

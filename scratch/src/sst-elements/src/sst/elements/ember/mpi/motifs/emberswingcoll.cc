@@ -41,8 +41,8 @@ EmberSwingCollGenerator::SwingCollectiveEngine::SwingCollectiveEngine(
       m_latency_optimal(latency_optimal) {
 
   uint32_t block_size = (m_count >= m_p) ? m_count / m_p : m_count;
-  printf("Count1 is %d - m_p is %d - block size %d\n", count, m_p, block_size);
-  fflush(stdout);
+  // printf("Count1 is %d - m_p is %d - block size %d\n", count, m_p, block_size);
+  // fflush(stdout);
   // TODO What if m_count < m_p or not divisible for m_p ???
 
   if (m_validate) {
@@ -91,8 +91,8 @@ EmberSwingCollGenerator::SwingCollectiveEngine::SwingCollectiveEngine(
   }
 
   reset();
-  printf("Count2 is %d - m_p is %d - block size %d\n", count, m_p, block_size);
-  fflush(stdout);
+  // printf("Count2 is %d - m_p is %d - block size %d\n", count, m_p, block_size);
+  // fflush(stdout);
   // assert(count >= m_p);
   // assert((count / m_p) * m_p == count);
 
@@ -452,11 +452,12 @@ bool EmberSwingCollGenerator::SwingCollectiveEngine::collective(
   const int totalStages = 2 * L;
 
   if (m_r == 0 && m_port == 0) {
-    std::cerr << "[r=0] t=" << current_time_ns << " ns"
-              << " dt=" << dt_ns << " ns"
-              << " stage=" << curStage << "/" << totalStages << " ("
-              << (phaseIdx == 0 ? "RS" : "AG") << " step " << stepInPhase << "/"
-              << L << ")" << std::endl;
+    // std::cerr << "[r=0] t=" << current_time_ns << " ns"
+    //           << " dt=" << dt_ns << " ns"
+    //           << " stage=" << curStage << "/" << totalStages << " ("
+    //           << (phaseIdx == 0 ? "RS" : "AG") << " step " << stepInPhase <<
+    //           "/"
+    //           << L << ")" << std::endl;
   }
   // Not to be done on first iteration
   if (m_i > 0) {
@@ -571,6 +572,13 @@ bool EmberSwingCollGenerator::SwingCollectiveEngine::collective(
     m_send_size = 0;
     for (size_t i = 0; i < m_p; i++) {
       if (m_blocks_bitmap_s[i]) {
+        // if (m_port == 0) {
+        //   std::cerr << "Rank " << m_r << " sends to " << peer << " at step "
+        //             << m_i << " phase "
+        //             << (coll_type == SWING_REDUCE_SCATTER ? "REDUCE_SCATTER"
+        //                                                   : "ALL_GATHER")
+        //             << std::endl;
+        // }
         uint32_t send_buff_size = getBlockSize(i);
         if (m_validate) {
           uint32_t send_buff_offset = getBlockOffset(i);
@@ -600,7 +608,13 @@ bool EmberSwingCollGenerator::SwingCollectiveEngine::collective(
         "\n",
         m_gen.rank(), m_send_size, peer, tag, m_port,
         m_gen.getCurrentSimTimeNano());
+
     // Send
+    // std::cerr << "Rank " << m_r << " sends to " << peer << " at step " << m_i
+    //           << " phase "
+    //           << (coll_type == SWING_REDUCE_SCATTER ? "REDUCE_SCATTER"
+    //                                                 : "ALL_GATHER")
+    //           << " size " << m_send_size << std::endl;
     if (m_validate) {
       m_gen.enQ_isend(evQ, &m_send_tmp[0], m_send_size, FLOAT, peer, tag,
                       m_comm, &m_req_send);

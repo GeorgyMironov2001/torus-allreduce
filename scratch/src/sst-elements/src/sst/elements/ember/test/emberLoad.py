@@ -21,6 +21,7 @@ useSimpleMemoryModel = False
 statNodeList = []
 jobid = 0
 loadFile = ''
+routeTableFile = None
 loadFileVars = {}
 workList = []
 workFlow = []
@@ -38,6 +39,7 @@ netBW = ''
 netPktSize = ''
 netTopo = ''
 netShape = ''
+graphFile = ''
 netHostsPerRtr = 1
 netInspect = ''
 rtrArb = ''
@@ -74,9 +76,9 @@ motifDefaults = {
 
 
 try:
-    opts, args = getopt.getopt(sys.argv[1:], "", ["topo=", "shape=", "hostsPerRtr=",
+    opts, args = getopt.getopt(sys.argv[1:], "", ["topo=", "shape=", "graphFile=", "hostsPerRtr=",
                                                   "simConfig=", "platParams=", "debug=", "platform=", "numNodes=",
-                                                  "numCores=", "loadFile=", "loadFileVar=", "cmdLine=", "printStats=", "randomPlacement=",
+                                                  "numCores=", "loadFile=", "routeTableFile=", "loadFileVar=", "cmdLine=", "printStats=", "randomPlacement=",
                                                   "emberVerbose=", "netBW=", "netPktSize=", "netFlitSize=",
                                                   "rtrArb=", "embermotifLog=", "rankmapper=", "motifAPI=",
                                                   "bgPercentage=", "bgMean=", "bgStddev=", "bgMsgSize=", "netInspect=",
@@ -90,6 +92,8 @@ except getopt.GetoptError as err:
 for o, a in opts:
     if o in ("--shape"):
         netShape = a
+    elif o in ("--graphFile"):
+        graphFile = a
     elif o in ("--hostsPerRtr"):
         netHostsPerRtr = int(a)
     elif o in ("--platform"):
@@ -102,6 +106,8 @@ for o, a in opts:
         debug = a
     elif o in ("--loadFile"):
         loadFile = a
+    elif o in ("--routeTableFile"):
+        routeTableFile = a
     elif o in ("--loadFileVar"):
         key, value = a.split("=", 1)
         loadFileVars[key] = value
@@ -165,6 +171,8 @@ for o, a in opts:
         statsFile = a
     else:
         assert False, "unknow option {0}".format(o)
+print("routeTableFile: {0}".format(routeTableFile))
+
 
 sys.path.append(os.getcwd() + '/' + paramDir)
 print('EMBER: using param directory: {0}'.format(paramDir))
@@ -242,10 +250,15 @@ if "" == netTopo:
     if platNetConfig['topology']:
         netTopo = platNetConfig['topology']
     else:
-        sys.exit("What topo? [torus|fattree|dragonfly]")
+        sys.exit("What topo? [torus|fattree|dragonfly|graph|hyperx|json]")
 
 usePlatNetConfig = False
-if "" == netShape:
+if "graph" == netTopo:
+    if graphFile:
+        netShape = graphFile
+    if "" == netShape:
+        sys.exit("Error: graph needs --shape=<graph_file> or --graphFile=<graph_file>")
+elif "" == netShape:
     usePlatNetConfig = True
     if platNetConfig['shape']:
         netShape = platNetConfig['shape']
@@ -283,6 +296,11 @@ elif "hyperx" == netTopo:
         topoInfo = HyperXInfo(netShape, netHostsPerRtr)
 
     topo = topoHyperX()
+
+elif "graph" == netTopo:
+
+    topoInfo = GraphInfo(netShape, routeTableFile, netHostsPerRtr, nicsPerNode)
+    topo = topoGraph()
 
 elif "json" == netTopo:
 
@@ -470,8 +488,14 @@ if "numVNs" in nicParams:
 print("EMBER: network: BW={0} pktSize={1} flitSize={2}".format(
     networkParams['link_bw'], networkParams['packetSize'], networkParams['flitSize']))
 
-if len(params['merlin']) == 0:
-    sst.merlin._params.update(topoInfo.getNetworkParams())
+# if len(params['merlin']) == 0:
+#     sst.merlin._params.update(topoInfo.getNetworkParams())
+for key, value in topoInfo.getNetworkParams().items():
+    sst.merlin._params.setdefault(key, value)
+
+if routeTableFile is not None:
+    sst.merlin._params[f"{netTopo}.route_table_file"] = routeTableFile
+print("sst.merlin._params: {0}".format(sst.merlin._params))
 
 epParams = {}
 epParams.update(emberParams)
@@ -531,7 +555,6 @@ if topo.getName() == "Fat Tree":
     topo.keepEndPointsWithRouter()
 
 topo.prepParams()
-
 topo.setEndPointFunc(loadInfo.setNode)
 topo.build()
 

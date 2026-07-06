@@ -170,13 +170,13 @@ public:
   }
   void isend(Queue &q, const Hermes::MemAddr &payload, uint32_t count,
              PayloadDataType dtype, RankID dest, uint32_t tag,
-             Communicator group, MessageRequest *req) {
+             Communicator group, MessageRequest *req, int route_id = -1) {
     if (!req)
       abort_output.fatal(CALL_INFO, -1,
                          "isend requires nonnull MessageRequest\n");
 
     q.push(new EmberISendEvent(api(), m_output, m_Stats[Isend], payload, count,
-                               dtype, dest, tag, group, req));
+                               dtype, dest, tag, group, req, route_id));
 
     size_t bytes = api().sizeofDataType(dtype);
 

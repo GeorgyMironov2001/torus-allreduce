@@ -131,7 +131,7 @@ class Interface : public Hermes::Interface {
 
     virtual void isend(const Hermes::MemAddr& payload, uint32_t count, PayloadDataType dtype,
         RankID dest, uint32_t tag, Communicator group,
-        MessageRequest* req, Functor* ) { assert(0); }
+        MessageRequest* req, Functor*, int route_id = -1) { assert(0); }
 
     virtual void recv(const Hermes::MemAddr&, uint32_t count, PayloadDataType dtype,
         RankID source, uint32_t tag, Communicator group,

@@ -122,6 +122,7 @@ bool ReorderLinkControl::send(SimpleNetwork::Request* req, int vn) {
     if ( vn >= vns ) return false;
     if ( !link_control->spaceToSend(vn, req->size_in_bits) ) return false;
     ReorderRequest* my_req = new ReorderRequest(req);
+    my_req->setRoute_id(req->getRoute_id());
     delete req;
 
     // Need to put in the sequence number

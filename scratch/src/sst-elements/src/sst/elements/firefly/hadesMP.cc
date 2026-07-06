@@ -78,12 +78,12 @@ void HadesMP::send(const Hermes::MemAddr& buf, uint32_t count,
 
 void HadesMP::isend(const Hermes::MemAddr& buf, uint32_t count, PayloadDataType dtype,
         RankID dest, uint32_t tag, Communicator group,
-        MessageRequest* req, Functor* retFunc )
+        MessageRequest* req, Functor* retFunc, int route_id)
 {
     dbg().debug(CALL_INFO,1,1,"buf=%p count=%d dtype=%d dest=%d tag=%d "
                         "group=%d\n", &buf,count,dtype,dest,tag,group);
     functionSM().start( FunctionSM::Send, retFunc,
-                new SendStartEvent( buf, count, dtype, dest, tag, group, req));
+                new SendStartEvent( buf, count, dtype, dest, tag, group, req, route_id));
 }
 
 void HadesMP::recv(const Hermes::MemAddr& target, uint32_t count, PayloadDataType dtype,

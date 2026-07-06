@@ -132,7 +132,8 @@ public:
     {
         if (request) delete request;
     }
-
+    inline int getRoute_id() { return request->getRoute_id(); }
+    
     inline void setInjectionTime(SimTime_t time) {injectionTime = time;}
     // inline void setTraceID(int id) {traceID = id;}
     // inline void setTraceType(TraceType type) {trace = type;}

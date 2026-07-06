@@ -60,7 +60,7 @@ public:
         bool   head;           /*!< True if this is the head of a stream */
         bool   tail;           /*!< True if this is the tail of a steram */
         bool   allow_adaptive; /*!< Indicates whether adaptive routing is allowed or not. */
-
+        
     private:
         Event* payload; /*!< Payload of the request */
 
@@ -112,10 +112,11 @@ public:
             allow_adaptive(true),
             payload(nullptr),
             trace(NONE),
-            traceID(0)
+            traceID(0),
+            route_id(-1)
         {}
 
-        Request(nid_t dest, nid_t src, size_t size_in_bits, bool head, bool tail, Event* payload = nullptr) :
+        Request(nid_t dest, nid_t src, size_t size_in_bits, bool head, bool tail, Event* payload = nullptr, int route_id = -1) :
             dest(dest),
             src(src),
             size_in_bits(size_in_bits),
@@ -124,7 +125,8 @@ public:
             allow_adaptive(true),
             payload(payload),
             trace(NONE),
-            traceID(0)
+            traceID(0),
+            route_id(route_id)
         {}
 
         virtual ~Request()
@@ -145,7 +147,8 @@ public:
         void      setTraceType(TraceType type) { trace = type; }
         int       getTraceID() { return traceID; }
         TraceType getTraceType() { return trace; }
-
+        void      setRoute_id(int route_id) { this->route_id = route_id; }
+        int       getRoute_id() { return route_id; }
         void serialize_order(SST::Core::Serialization::serializer& ser) override
         {
             SST_SER(dest);
@@ -158,12 +161,13 @@ public:
             SST_SER(trace);
             SST_SER(traceID);
             SST_SER(allow_adaptive);
+            SST_SER(route_id);
         }
 
     protected:
         TraceType trace;
         int       traceID;
-
+        int       route_id;
     private:
         ImplementSerializable(SST::Interfaces::SimpleNetwork::Request)
     };

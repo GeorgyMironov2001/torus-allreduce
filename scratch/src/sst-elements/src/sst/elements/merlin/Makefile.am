@@ -4,6 +4,7 @@
 
 AM_CPPFLAGS += \
 	-I$(top_srcdir)/src \
+	-I$(top_srcdir)/src/sst/elements/external \
 	$(MPI_CPPFLAGS) \
 	$(PYTHON_CPPFLAGS)
 
@@ -40,6 +41,8 @@ libmerlin_la_SOURCES = \
 	test/simple_patterns/incast.cc \
 	topology/torus.h \
 	topology/torus.cc \
+	topology/torus_trees.h \
+	topology/torus_trees.cc \
 	topology/mesh.h \
 	topology/mesh.cc \
 	topology/fattree.h \
@@ -54,6 +57,8 @@ libmerlin_la_SOURCES = \
 	topology/polarfly.h \
 	topology/polarstar.cc \
 	topology/polarstar.h \
+	topology/graph.cc \
+	topology/graph.h \
 	hr_router/hr_router.h \
 	hr_router/hr_router.cc \
 	hr_router/xbar_arb_age.h \
@@ -91,7 +96,8 @@ libmerlin_la_SOURCES = \
 	topology/pymerlin-topo-polarstar.py \
 	topology/pymerlin-topo-hyperx.py \
 	topology/pymerlin-topo-fattree.py \
-	topology/pymerlin-topo-mesh.py
+	topology/pymerlin-topo-mesh.py \
+	topology/pymerlin-topo-graph.py
 
 EXTRA_DIST = \
 	tests/testsuite_default_merlin.py \
@@ -143,7 +149,8 @@ BUILT_SOURCES = \
 	topology/pymerlin-topo-polarstar.inc \
 	topology/pymerlin-topo-hyperx.inc \
 	topology/pymerlin-topo-fattree.inc \
-	topology/pymerlin-topo-mesh.inc
+	topology/pymerlin-topo-mesh.inc \
+	topology/pymerlin-topo-graph.inc
 
 install-exec-hook:
 	$(SST_REGISTER_TOOL) SST_ELEMENT_SOURCE     merlin=$(abs_srcdir)

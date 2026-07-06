@@ -1,0 +1,5 @@
+[JOB_ID] 0
+[NID_LIST] 0-3
+[MOTIF] Init
+[MOTIF] AlltoallCustome count=1024 iterations=1 compute=0 mode=equal validate=1
+[MOTIF] Fini

@@ -67,6 +67,13 @@ static std::vector<int> getCoordFromRank(int rank, int n, int d = 2) {
   return coord;
 }
 
+int getMainCenterId(int n, int d = 2) {
+  std::vector<int> coord(d);
+  for (int i = 0; i < d; i++) {
+    coord[i] = (n - 1) / 2;
+  }
+  return getRankFromCoord(coord, n, d);
+}
 static int getDistanceManhattan(std::pair<int, int> coord1,
                                 std::pair<int, int> coord2, int n) {
   auto [x, y] = coord1;
@@ -175,49 +182,64 @@ bool same_direction(int from, int to, int port_id, int n, int d) {
   return false;
 }
 
+std::pair<int, std::vector<int>>
+EmberTreesCollGenerator::TreesCollectiveEngine::getRouteTableId(
+    int from, int to, int center_block_id) {
+  int D = m_dimensions_num;
+  int n = m_dimensions[0];
+  int center_id = center_block_id / m_runner->allreduce_trees.size();
+  int main_center_id = getMainCenterId(n, D);
+
+  auto O_coord = getCoordFromRank(main_center_id, n, D);
+  auto C_coord = getCoordFromRank(center_id, n, D);
+  auto shift = [=](std::vector<int> point) {
+    std::vector<int> new_coord(D);
+    for (int i = 0; i < D; i++) {
+      new_coord[i] = (point[i] - C_coord[i] + O_coord[i] + n) % n;
+    }
+    return new_coord;
+  };
+
+  auto backward_shift = [=](std::vector<int> point) {
+    std::vector<int> new_coord(D);
+    for (int i = 0; i < D; i++) {
+      new_coord[i] = (point[i] + C_coord[i] - O_coord[i] + n) % n;
+    }
+    return new_coord;
+  };
+  int from_shifted =
+      getRankFromCoord(shift(getCoordFromRank(from, n, D)), n, D);
+  int to_shifted = getRankFromCoord(shift(getCoordFromRank(to, n, D)), n, D);
+  if (route_table_map.find(std::make_pair(from_shifted, to_shifted)) !=
+      route_table_map.end()) {
+    int rid = route_table_map[std::make_pair(from_shifted, to_shifted)];
+    std::vector<int> path_shifted;
+    for (int rank_id : route_table[rid]) {
+      path_shifted.push_back(getRankFromCoord(
+          backward_shift(getCoordFromRank(rank_id, n, D)), n, D));
+    }
+    // return route_table_map[std::make_pair(from_shifted, to_shifted)];
+    return std::make_pair(rid, path_shifted);
+  }
+  return std::make_pair(-1, std::vector<int>());
+}
+
 EmberTreesCollGenerator::TreesCollectiveEngine::TreesCollectiveEngine(
     EmberTreesCollGenerator &gen, CollType coll_type, uint *dimensions,
     uint dimensions_num, float *dst, uint32_t count, uint32_t vrank,
     uint32_t numproc, double aggregation_cost_ns, Communicator comm,
-    bool validate, bool latency_optimal, int port_id, TreesCollective *runner)
+    bool validate, bool latency_optimal, int port_id, TreesCollective *runner,
+    std::vector<std::vector<int>> &route_table,
+    std::map<std::pair<int, int>, int> &route_table_map)
     : m_gen(gen), m_count(count), m_dst(dst), m_r(vrank), m_p(numproc),
       m_aggregation_cost_ns(aggregation_cost_ns), m_data_sent(0), m_comm(comm),
       m_dimensions(dimensions), m_dimensions_num(dimensions_num),
       m_validate(validate), m_enabled(true), m_latency_optimal(latency_optimal),
-      m_port_id(port_id), m_runner(runner), m_data_reduced(0) {
+      m_port_id(port_id), m_runner(runner), m_data_reduced(0),
+      route_table(route_table), route_table_map(route_table_map) {
 
   uint32_t block_size = (m_count >= m_p) ? m_count / m_p : m_count;
 
-  // TODO What if m_count < m_p or not divisible for m_p ???
-
-  // switch (coll_type) {
-  // case TREES_ALLREDUCE:
-  //   m_do_reduce_scatter = true;
-  //   if (m_count >= m_p && !m_latency_optimal) {
-  //     m_do_allgather = true;
-  //   } else {
-  //     if (m_r == 0) {
-  //       DPRINTF(
-  //           "[%d] Skipping allgather (msg too small, or latency optimal "
-  //           "required, \"reducescatter\" will be enough to do allreduce).\n",
-  //           m_r);
-  //     }
-  //     m_do_allgather = false; // No need to do allgather for too small
-  //     messages
-  //                             // (all the data will be sent at each step)
-  //   }
-  //   break;
-  // case TREES_REDUCE_SCATTER:
-  //   m_do_reduce_scatter = true;
-  //   m_do_allgather = false;
-  //   break;
-  // case TREES_ALLGATHER:
-  //   m_do_reduce_scatter = false;
-  //   m_do_allgather = true;
-  //   break;
-  // default:
-  //   assert(0);
-  // }
   int D = m_dimensions_num;
   int n = m_dimensions[0]; // assuming torus (2m+1)X(2m+1)
   // m_stages_num = (n % 2 == 1) ? n - 1 : (n / 2) * D;
@@ -247,6 +269,9 @@ EmberTreesCollGenerator::TreesCollectiveEngine::TreesCollectiveEngine(
   //         n * n, std::vector<std::map<int, std::vector<int>>>(n - 1));
 
   for (int center_id = 0; center_id < m_p; center_id++) {
+    if (m_r == 27 && center_id == 27) {
+      int q = 1;
+    }
     // int center_id = getRankFromCoord(std::make_pair(Ox, Oy), n);
     for (int id = 0; id < m_runner->allreduce_trees.size(); id++) {
       int center_block_id = center_id * m_runner->allreduce_trees.size() + id;
@@ -259,18 +284,32 @@ EmberTreesCollGenerator::TreesCollectiveEngine::TreesCollectiveEngine(
         // if (e.to == m_port_id) {
         //   scatter_port_send[e.rsStage][m_port_id].push_back(center_block_id);
         // }
-        if (same_direction(e.from, e.to, m_port_id, n, D)) {
+
+        auto p = getRouteTableId(e.from, e.to, center_block_id);
+        int rid = p.first;
+        std::vector<int> path_shifted = p.second;
+        const bool take =
+            (rid == -1 && same_direction(e.from, e.to, m_port_id, n, D)) ||
+            (rid != -1 && m_port_id == path_shifted[1]);
+        if (take) {
           scatter_port_send[e.rsStage][e.to].push_back(center_block_id);
         }
+
+        // if (same_direction(e.from, e.to, m_port_id, n, D)) {
+        //   scatter_port_send[e.rsStage][e.to].push_back(center_block_id);
+        // }
 
         // if (outside_peers.empty() && e.to == m_port_id) {
         //   allgather_port_recv[e.agStage][m_port_id].push_back(
         //       center_block_id);
         // }
-        if (outside_peers.empty() &&
-            same_direction(e.from, e.to, m_port_id, n, D)) {
+        if (outside_peers.empty() && take) {
           allgather_port_recv[e.agStage][e.to].push_back(center_block_id);
         }
+        // if (outside_peers.empty() &&
+        //     same_direction(e.from, e.to, m_port_id, n, D)) {
+        //   allgather_port_recv[e.agStage][e.to].push_back(center_block_id);
+        // }
       }
       for (auto e : outside_peers) {
         scatter_peers_recv[e.rsStage][e.from].push_back(center_block_id);
@@ -282,9 +321,18 @@ EmberTreesCollGenerator::TreesCollectiveEngine::TreesCollectiveEngine(
         //   allgather_port_send[e.agStage][m_port_id].push_back(
         //       center_block_id);
         // }
-        if (same_direction(e.to, e.from, m_port_id, n, D)) {
+        auto p = getRouteTableId(e.from, e.to, center_block_id);
+        int rid = p.first;
+        std::vector<int> path_shifted = p.second;
+        const bool take =
+            (rid == -1 && same_direction(e.to, e.from, m_port_id, n, D)) ||
+            (rid != -1 && m_port_id == path_shifted[path_shifted.size() - 2]);
+        if (take) {
           allgather_port_send[e.agStage][e.from].push_back(center_block_id);
         }
+        // if (same_direction(e.to, e.from, m_port_id, n, D)) {
+        //   allgather_port_send[e.agStage][e.from].push_back(center_block_id);
+        // }
       }
     }
   }
@@ -310,10 +358,20 @@ EmberTreesCollGenerator::TreesCollectiveEngine::TreesCollectiveEngine(
           //   scatter_port_recv[stage][neighbour_id].push_back(center_block_id);
           //   break;
           // }
-          if (same_direction(e.from, e.to, m_port_id, n, D)) {
+          auto p = getRouteTableId(e.from, e.to, center_block_id);
+          int rid = p.first;
+          std::vector<int> path_shifted = p.second;
+          const bool take =
+              (rid == -1 && same_direction(e.from, e.to, m_port_id, n, D)) ||
+              (rid != -1 && m_port_id == path_shifted[1]);
+          if (take) {
             scatter_port_recv[stage][neighbour_id].push_back(center_block_id);
             break;
           }
+          // if (same_direction(e.from, e.to, m_port_id, n, D)) {
+          //   scatter_port_recv[stage][neighbour_id].push_back(center_block_id);
+          //   break;
+          // }
         }
       }
     }
@@ -338,10 +396,21 @@ EmberTreesCollGenerator::TreesCollectiveEngine::TreesCollectiveEngine(
           //   allgather_port_recv[stage][neighbour_id].push_back(center_block_id);
           //   break;
           // }
-          if (same_direction(e.to, e.from, m_port_id, n, D)) {
+          auto p = getRouteTableId(e.from, e.to, center_block_id);
+          int rid = p.first;
+          std::vector<int> path_shifted = p.second;
+          const bool take =
+              (rid == -1 && same_direction(e.to, e.from, m_port_id, n, D)) ||
+              (rid != -1 && m_port_id == path_shifted[path_shifted.size() - 2]);
+          if (take) {
             allgather_port_recv[stage][neighbour_id].push_back(center_block_id);
             break;
           }
+
+          // if (same_direction(e.to, e.from, m_port_id, n, D)) {
+          //   allgather_port_recv[stage][neighbour_id].push_back(center_block_id);
+          //   break;
+          // }
         }
       }
     }
@@ -362,7 +431,9 @@ EmberTreesCollGenerator::TreesCollectiveEngine::TreesCollectiveEngine(
   sort_centers(allgather_port_send), sort_centers(allgather_peers_send);
   sort_centers(scatter_port_recv), sort_centers(scatter_peers_recv);
   sort_centers(allgather_port_recv), sort_centers(allgather_peers_recv);
-
+  if (m_r == 27) {
+    int q = 1;
+  }
   reset();
 }
 
@@ -518,15 +589,52 @@ void EmberTreesCollGenerator::TreesCollectiveEngine::notifyRecv(
   if (m_r == 0 && m_port_id == 4 && chunk_stage == 1) {
     int q = 1;
   }
-  for (int come_center_id :
-       recv_peers[(chunk_stage < m_stages_num ? chunk_stage
-                                              : chunk_stage - (m_stages_num))]
-                 [m_port_id]) {
-    // if (m_r == 0 && global_stage == 3) {
-    //   int q = 1;
+  int stage =
+      (chunk_stage < m_stages_num ? chunk_stage : chunk_stage - (m_stages_num));
+  int prev_peer_counter = 0;
+  for (auto &[prev_peer, prev_centers] : recv_peers[stage]) {
+    int rid = -1;
+    bool skip = false;
+    if (coll_type == TREES_REDUCE_SCATTER) {
+      auto p = getRouteTableId(prev_peer, m_r, prev_centers[0]);
+      rid = p.first;
+      std::vector<int> path_shifted = p.second;
+      skip = (rid == -1 && !same_direction(m_r, prev_peer, m_port_id, n,
+                                           m_dimensions_num)) ||
+             (rid != -1 && m_port_id != path_shifted[path_shifted.size() - 2]);
+    } else {
+      auto p = getRouteTableId(m_r, prev_peer, prev_centers[0]);
+      rid = p.first;
+      std::vector<int> path_shifted = p.second;
+      skip = (rid == -1 && !same_direction(m_r, prev_peer, m_port_id, n,
+                                           m_dimensions_num)) ||
+             (rid != -1 && m_port_id != path_shifted[1]);
+    }
+    if (skip) {
+      continue;
+    }
+    // if (!same_direction(m_r, prev_peer, m_port_id, n, m_dimensions_num)) {
+    //   continue;
     // }
-    m_runner->stages_waiting_centers[chunk_stage][come_center_id]--;
+    if (chunk_id != prev_peer_counter) {
+      prev_peer_counter++;
+      continue;
+    }
+    for (int come_center_id : prev_centers) {
+      m_runner->stages_waiting_centers[chunk_stage][come_center_id]--;
+    }
+    break;
   }
+  // for (int come_center_id :
+  //      recv_peers[(chunk_stage < m_stages_num ? chunk_stage
+  //                                             : chunk_stage -
+  //                                             (m_stages_num))]
+  //                [m_port_id]) {
+  //   // if (m_r == 0 && global_stage == 3) {
+  //   //   int q = 1;
+  //   // }
+  //   m_runner->stages_waiting_centers[chunk_stage][come_center_id]--;
+  // }
   // m_ready_to_recv = waiting_receive();
   // m_req_recv = 0;
   m_req_recv[chunk_stage][chunk_id] = 0;
@@ -556,13 +664,41 @@ void EmberTreesCollGenerator::TreesCollectiveEngine::processReceivedData(
   if (m_validate) {
     int peer_id = 0;
     for (auto &[peer, centers] : recv_peers[small_stage]) {
-      if (peer != m_port_id) {
+      // if (peer != m_port_id) {
+      //   continue;
+      // }
+      int rid = -1;
+      bool skip = false;
+      if (coll_type == TREES_REDUCE_SCATTER) {
+        auto p = getRouteTableId(peer, m_r, centers[0]);
+        rid = p.first;
+        std::vector<int> path_shifted = p.second;
+        skip =
+            (rid == -1 &&
+             !same_direction(m_r, peer, m_port_id, n, m_dimensions_num)) ||
+            (rid != -1 && m_port_id != path_shifted[path_shifted.size() - 2]);
+      } else {
+        auto p = getRouteTableId(m_r, peer, centers[0]);
+        rid = p.first;
+        std::vector<int> path_shifted = p.second;
+        skip = (rid == -1 &&
+                !same_direction(m_r, peer, m_port_id, n, m_dimensions_num)) ||
+               (rid != -1 && m_port_id != path_shifted[1]);
+      }
+      if (skip) {
+        continue;
+      }
+      // if (!same_direction(m_r, peer, m_port_id, n, m_dimensions_num)) {
+      //   continue;
+      // }
+      if (chunk_id != peer_id) {
+        peer_id++;
         continue;
       }
       if (m_r == 27) {
         int q = 1;
       }
-      auto chunk = m_recv_epoch[chunk_stage].chunks[peer_id++];
+      auto chunk = m_recv_epoch[chunk_stage].chunks[chunk_id];
       std::vector<float> received_data(chunk.ptr, chunk.ptr + chunk.size);
       for (int i = 0; i < centers.size(); i++) {
         int center_id = centers[i];
@@ -580,6 +716,7 @@ void EmberTreesCollGenerator::TreesCollectiveEngine::processReceivedData(
           }
         }
       }
+      break;
     }
     // for (auto chunk : m_recv_epoch.chunks) {
     //   std::vector<float> received_data(chunk.ptr, chunk.ptr + chunk.size);
@@ -691,7 +828,8 @@ bool EmberTreesCollGenerator::TreesCollectiveEngine::collective(
                                                        : allgather_peers_send;
   auto &recv_peers = coll_type == TREES_REDUCE_SCATTER ? scatter_peers_recv
                                                        : allgather_peers_recv;
-
+  auto &send_ports = coll_type == TREES_REDUCE_SCATTER ? scatter_port_send
+                                                       : allgather_port_send;
   auto &recv_ports = coll_type == TREES_REDUCE_SCATTER ? scatter_port_recv
                                                        : allgather_port_recv;
   int n = m_dimensions[0];
@@ -710,6 +848,10 @@ bool EmberTreesCollGenerator::TreesCollectiveEngine::collective(
   if (m_i == 5 && coll_type == TREES_ALLGATHER) {
     int q = 1;
   }
+  if (m_i == 1 && coll_type == TREES_REDUCE_SCATTER) {
+    int q = 1;
+  }
+
   if (coll_type == TREES_REDUCE_SCATTER) {
     // printf("[Stage Marker][rank %d][stage %d] Time: %lu ns | Первая стадия "
     //        "reduce-scatter "
@@ -755,36 +897,89 @@ bool EmberTreesCollGenerator::TreesCollectiveEngine::collective(
     // recv//
     int total = 0;
     int recv_block_size = getBlockSize(0);
+    int total_prev_peers = 0;
     for (auto &[prev_peer, prev_centers] : recv_peers[m_i]) {
-      if (prev_peer != m_port_id) {
+      // if (prev_peer != m_port_id) {
+      //   continue;
+      // }
+
+      int rid = -1;
+      bool skip = false;
+      if (coll_type == TREES_REDUCE_SCATTER) {
+        auto p = getRouteTableId(prev_peer, m_r, prev_centers[0]);
+        rid = p.first;
+        std::vector<int> path_shifted = p.second;
+        skip =
+            (rid == -1 &&
+             !same_direction(m_r, prev_peer, m_port_id, n, m_dimensions_num)) ||
+            (rid != -1 && m_port_id != path_shifted[path_shifted.size() - 2]);
+      } else {
+        auto p = getRouteTableId(m_r, prev_peer, prev_centers[0]);
+        rid = p.first;
+        std::vector<int> path_shifted = p.second;
+        skip = (rid == -1 && !same_direction(m_r, prev_peer, m_port_id, n,
+                                             m_dimensions_num)) ||
+               (rid != -1 && m_port_id != path_shifted[1]);
+      }
+      if (skip) {
         continue;
       }
+
+      // if (!same_direction(m_r, prev_peer, m_port_id, n, m_dimensions_num)) {
+      //   continue;
+      // }
+      total_prev_peers++;
+      m_runner->addWaitingCenters(m_i, recv_peers[m_i][prev_peer], coll_type);
       for (int prev_center : prev_centers) {
         total += getBlockSize(prev_center);
       }
     }
+
     m_recv_epoch[global_stage].chunks.clear();
     m_recv_epoch[global_stage].slab.resize(total);
-    // m_waiting_recv.assign(recv_peers[m_i].size(), true);
-    m_waiting_recv_centers = recv_peers[m_i][m_port_id];
-    m_runner->addWaitingCenters(m_i, recv_peers[m_i][m_port_id], coll_type);
-    m_req_recv[global_stage].assign(1, MessageRequest());
+    m_req_recv[global_stage].assign(total_prev_peers, MessageRequest());
     if (total != 0) {
       // m_req_recv.assign(recv_peers[m_i].size(), MessageRequest());
-      int prev_peer_counter = -1;
+      int prev_peer_counter = 0;
       m_recv_size = 0;
       for (auto &[prev_peer, prev_centers] : recv_peers[m_i]) {
-        if (prev_peer != m_port_id) {
+        // if (prev_peer != m_port_id) {
+        //   continue;
+        // }
+
+        int rid = -1;
+        bool skip = false;
+        if (coll_type == TREES_REDUCE_SCATTER) {
+          auto p = getRouteTableId(prev_peer, m_r, prev_centers[0]);
+          rid = p.first;
+          std::vector<int> path_shifted = p.second;
+          skip =
+              (rid == -1 && !same_direction(m_r, prev_peer, m_port_id, n,
+                                            m_dimensions_num)) ||
+              (rid != -1 && m_port_id != path_shifted[path_shifted.size() - 2]);
+        } else {
+          auto p = getRouteTableId(m_r, prev_peer, prev_centers[0]);
+          rid = p.first;
+          std::vector<int> path_shifted = p.second;
+          skip = (rid == -1 && !same_direction(m_r, prev_peer, m_port_id, n,
+                                               m_dimensions_num)) ||
+                 (rid != -1 && m_port_id != path_shifted[1]);
+        }
+        if (skip) {
           continue;
         }
-        prev_peer_counter++;
+
+        // if (!same_direction(m_r, prev_peer, m_port_id, n, m_dimensions_num))
+        // {
+        //   continue;
+        // }
         m_recv_epoch[global_stage].chunks.push_back(
             {m_recv_epoch[global_stage].slab.data() + m_recv_size,
              recv_block_size * prev_centers.size(), prev_peer});
         m_gen.enQ_irecv(evQ, m_recv_epoch[global_stage].chunks.back().ptr,
                         recv_block_size * prev_centers.size(), FLOAT, prev_peer,
                         tag, m_comm,
-                        &m_req_recv[global_stage][prev_peer_counter]);
+                        &m_req_recv[global_stage][prev_peer_counter++]);
         m_recv_size += recv_block_size * prev_centers.size();
         std::string peers_str = "[";
         for (size_t k = 0; k < prev_centers.size(); ++k) {
@@ -808,11 +1003,39 @@ bool EmberTreesCollGenerator::TreesCollectiveEngine::collective(
       int q = 1;
     }
     total = 0;
+    int total_next_peers = 0;
     int send_block_size = getBlockSize(0);
     for (auto &[next_peer, next_centers] : send_peers[m_i]) {
-      if (next_peer != m_port_id) {
+      // if (next_peer != m_port_id) {
+      //   continue;
+      // }
+
+      int rid = -1;
+      bool skip = false;
+      if (coll_type == TREES_REDUCE_SCATTER) {
+        auto p = getRouteTableId(m_r, next_peer, next_centers[0]);
+        rid = p.first;
+        std::vector<int> path_shifted = p.second;
+        skip = (rid == -1 && !same_direction(m_r, next_peer, m_port_id, n,
+                                             m_dimensions_num)) ||
+               (rid != -1 && m_port_id != path_shifted[1]);
+      } else {
+        auto p = getRouteTableId(next_peer, m_r, next_centers[0]);
+        rid = p.first;
+        std::vector<int> path_shifted = p.second;
+        skip =
+            (rid == -1 &&
+             !same_direction(m_r, next_peer, m_port_id, n, m_dimensions_num)) ||
+            (rid != -1 && m_port_id != path_shifted[path_shifted.size() - 2]);
+      }
+      if (skip) {
         continue;
       }
+
+      // if (!same_direction(m_r, next_peer, m_port_id, n, m_dimensions_num)) {
+      //   continue;
+      // }
+      total_next_peers++;
       for (int next_center : next_centers) {
         total += getBlockSize(next_center);
       }
@@ -820,14 +1043,41 @@ bool EmberTreesCollGenerator::TreesCollectiveEngine::collective(
     m_send_epoch.chunks.clear();
     m_send_epoch.slab.resize(total);
     // m_req_send[m_i].assign(send_peers[m_i].size(), MessageRequest());
-    m_req_send[global_stage].assign(1, MessageRequest());
+    m_req_send[global_stage].assign(total_next_peers, MessageRequest());
     if (total != 0) {
       m_send_size = 0;
-      size_t peer_idx = 0;
+      size_t next_peer_counter = 0;
       for (auto &[next_peer, next_centers] : send_peers[m_i]) {
-        if (next_peer != m_port_id) {
+        // if (next_peer != m_port_id) {
+        //   continue;
+        // }
+
+        int rid = -1;
+        bool skip = false;
+        if (coll_type == TREES_REDUCE_SCATTER) {
+          auto p = getRouteTableId(m_r, next_peer, next_centers[0]);
+          rid = p.first;
+          std::vector<int> path_shifted = p.second;
+          skip = (rid == -1 && !same_direction(m_r, next_peer, m_port_id, n,
+                                               m_dimensions_num)) ||
+                 (rid != -1 && m_port_id != path_shifted[1]);
+        } else {
+          auto p = getRouteTableId(next_peer, m_r, next_centers[0]);
+          rid = p.first;
+          std::vector<int> path_shifted = p.second;
+          skip =
+              (rid == -1 && !same_direction(m_r, next_peer, m_port_id, n,
+                                            m_dimensions_num)) ||
+              (rid != -1 && m_port_id != path_shifted[path_shifted.size() - 2]);
+        }
+        if (skip) {
           continue;
         }
+
+        // if (!same_direction(m_r, next_peer, m_port_id, n, m_dimensions_num))
+        // {
+        //   continue;
+        // }
         const int count = send_block_size * next_centers.size();
         float *out = m_send_epoch.slab.data() + m_send_size;
 
@@ -849,10 +1099,14 @@ bool EmberTreesCollGenerator::TreesCollectiveEngine::collective(
             cur += send_block_size;
           }
         }
-
+        int route_id = rid;
+        if (route_id != -1 && coll_type == TREES_ALLGATHER) {
+          route_id += route_table.size();
+        }
         m_send_epoch.chunks.emplace_back(out, count, next_peer);
         m_gen.enQ_isend(evQ, out, count, FLOAT, next_peer, tag, m_comm,
-                        &m_req_send[global_stage][peer_idx++]);
+                        &m_req_send[global_stage][next_peer_counter++],
+                        route_id);
         m_send_size += count;
         std::string peers_str = "[";
         for (size_t k = 0; k < next_centers.size(); ++k) {
@@ -889,29 +1143,83 @@ bool EmberTreesCollGenerator::TreesCollectiveEngine::collective(
         int q = 1;
       }
       int total = 0;
+      int total_prev_peers = 0;
       int recv_block_size = getBlockSize(0);
       for (auto &[prev_peer, prev_centers] : recv_peers[m_i]) {
-        if (prev_peer != m_port_id) {
+        // if (prev_peer != m_port_id) {
+        //   continue;
+        // }
+
+        int rid = -1;
+        bool skip = false;
+        if (coll_type == TREES_REDUCE_SCATTER) {
+          auto p = getRouteTableId(prev_peer, m_r, prev_centers[0]);
+          rid = p.first;
+          std::vector<int> path_shifted = p.second;
+          skip =
+              (rid == -1 && !same_direction(m_r, prev_peer, m_port_id, n,
+                                            m_dimensions_num)) ||
+              (rid != -1 && m_port_id != path_shifted[path_shifted.size() - 2]);
+        } else {
+          auto p = getRouteTableId(m_r, prev_peer, prev_centers[0]);
+          rid = p.first;
+          std::vector<int> path_shifted = p.second;
+          skip = (rid == -1 && !same_direction(m_r, prev_peer, m_port_id, n,
+                                               m_dimensions_num)) ||
+                 (rid != -1 && m_port_id != path_shifted[1]);
+        }
+        if (skip) {
           continue;
         }
+
+        // if (!same_direction(m_r, prev_peer, m_port_id, n, m_dimensions_num))
+        // {
+        //   continue;
+        // }
+        total_prev_peers++;
+        m_runner->addWaitingCenters(m_i, recv_peers[m_i][prev_peer], coll_type);
         for (int prev_center : prev_centers) {
           total += getBlockSize(prev_center);
         }
       }
       m_recv_epoch[global_stage].chunks.clear();
       m_recv_epoch[global_stage].slab.resize(total);
-      // m_waiting_recv.assign(recv_peers[m_i].size(), true);
-      m_waiting_recv_centers = recv_peers[m_i][m_port_id];
-      m_runner->addWaitingCenters(m_i, recv_peers[m_i][m_port_id], coll_type);
-      // m_req_recv.assign(recv_peers[m_i].size(), MessageRequest());
-      m_req_recv[global_stage].assign(1, MessageRequest());
+
+      m_req_recv[global_stage].assign(total_prev_peers, MessageRequest());
       if (total != 0) {
         int prev_peer_counter = 0;
         m_recv_size = 0;
         for (auto &[prev_peer, prev_centers] : recv_peers[m_i]) {
-          if (prev_peer != m_port_id) {
+          // if (prev_peer != m_port_id) {
+          //   continue;
+          // }
+
+          int rid = -1;
+          bool skip = false;
+          if (coll_type == TREES_REDUCE_SCATTER) {
+            auto p = getRouteTableId(prev_peer, m_r, prev_centers[0]);
+            rid = p.first;
+            std::vector<int> path_shifted = p.second;
+            skip = (rid == -1 && !same_direction(m_r, prev_peer, m_port_id, n,
+                                                 m_dimensions_num)) ||
+                   (rid != -1 &&
+                    m_port_id != path_shifted[path_shifted.size() - 2]);
+          } else {
+            auto p = getRouteTableId(m_r, prev_peer, prev_centers[0]);
+            rid = p.first;
+            std::vector<int> path_shifted = p.second;
+            skip = (rid == -1 && !same_direction(m_r, prev_peer, m_port_id, n,
+                                                 m_dimensions_num)) ||
+                   (rid != -1 && m_port_id != path_shifted[1]);
+          }
+          if (skip) {
             continue;
           }
+
+          // if (!same_direction(m_r, prev_peer, m_port_id, n,
+          // m_dimensions_num)) {
+          //   continue;
+          // }
           m_recv_epoch[global_stage].chunks.push_back(
               {m_recv_epoch[global_stage].slab.data() + m_recv_size,
                recv_block_size * prev_centers.size(), prev_peer});
@@ -949,11 +1257,40 @@ bool EmberTreesCollGenerator::TreesCollectiveEngine::collective(
         int q = 1;
       }
       total = 0;
+      int total_next_peers = 0;
       int send_block_size = getBlockSize(0);
       for (auto &[next_peer, next_centers] : send_peers[m_i]) {
-        if (next_peer != m_port_id) {
+        // if (next_peer != m_port_id) {
+        //   continue;
+        // }
+
+        int rid = -1;
+        bool skip = false;
+        if (coll_type == TREES_REDUCE_SCATTER) {
+          auto p = getRouteTableId(m_r, next_peer, next_centers[0]);
+          rid = p.first;
+          std::vector<int> path_shifted = p.second;
+          skip = (rid == -1 && !same_direction(m_r, next_peer, m_port_id, n,
+                                               m_dimensions_num)) ||
+                 (rid != -1 && m_port_id != path_shifted[1]);
+        } else {
+          auto p = getRouteTableId(next_peer, m_r, next_centers[0]);
+          rid = p.first;
+          std::vector<int> path_shifted = p.second;
+          skip =
+              (rid == -1 && !same_direction(m_r, next_peer, m_port_id, n,
+                                            m_dimensions_num)) ||
+              (rid != -1 && m_port_id != path_shifted[path_shifted.size() - 2]);
+        }
+        if (skip) {
           continue;
         }
+
+        // if (!same_direction(m_r, next_peer, m_port_id, n, m_dimensions_num))
+        // {
+        //   continue;
+        // }
+        total_next_peers++;
         for (int next_center : next_centers) {
           total += getBlockSize(next_center);
         }
@@ -961,14 +1298,41 @@ bool EmberTreesCollGenerator::TreesCollectiveEngine::collective(
       m_send_epoch.chunks.clear();
       m_send_epoch.slab.resize(total);
       // m_req_send[m_i].assign(send_peers[m_i].size(), MessageRequest());
-      m_req_send[global_stage].assign(1, MessageRequest());
+      m_req_send[global_stage].assign(total_next_peers, MessageRequest());
       if (total != 0) {
         m_send_size = 0;
-        size_t peer_idx = 0;
+        size_t next_peer_counter = 0;
         for (auto &[next_peer, next_centers] : send_peers[m_i]) {
-          if (next_peer != m_port_id) {
+          // if (next_peer != m_port_id) {
+          //   continue;
+          // }
+
+          int rid = -1;
+          bool skip = false;
+          if (coll_type == TREES_REDUCE_SCATTER) {
+            auto p = getRouteTableId(m_r, next_peer, next_centers[0]);
+            rid = p.first;
+            std::vector<int> path_shifted = p.second;
+            skip = (rid == -1 && !same_direction(m_r, next_peer, m_port_id, n,
+                                                 m_dimensions_num)) ||
+                   (rid != -1 && m_port_id != path_shifted[1]);
+          } else {
+            auto p = getRouteTableId(next_peer, m_r, next_centers[0]);
+            rid = p.first;
+            std::vector<int> path_shifted = p.second;
+            skip = (rid == -1 && !same_direction(m_r, next_peer, m_port_id, n,
+                                                 m_dimensions_num)) ||
+                   (rid != -1 &&
+                    m_port_id != path_shifted[path_shifted.size() - 2]);
+          }
+          if (skip) {
             continue;
           }
+
+          // if (!same_direction(m_r, next_peer, m_port_id, n,
+          // m_dimensions_num)) {
+          //   continue;
+          // }
           const int count = send_block_size * next_centers.size();
           float *out = m_send_epoch.slab.data() + m_send_size;
 
@@ -989,10 +1353,14 @@ bool EmberTreesCollGenerator::TreesCollectiveEngine::collective(
               cur += send_block_size;
             }
           }
-
+          int route_id = rid;
+          if (route_id != -1 && coll_type == TREES_ALLGATHER) {
+            route_id += route_table.size();
+          }
           m_send_epoch.chunks.emplace_back(out, count, next_peer);
           m_gen.enQ_isend(evQ, out, count, FLOAT, next_peer, tag, m_comm,
-                          &m_req_send[global_stage][peer_idx++]);
+                          &m_req_send[global_stage][next_peer_counter++],
+                          route_id);
           m_send_size += count;
           std::string peers_str = "[";
           for (size_t k = 0; k < next_centers.size(); ++k) {
@@ -1118,9 +1486,11 @@ void EmberTreesCollGenerator::TreesCollectiveRunner::printStats() {
 EmberTreesCollGenerator::TreesCollective::TreesCollective(
     EmberTreesCollGenerator &gen, uint dimensions_num, uint ports,
     uint32_t count, uint32_t rank, uint32_t comm_size, Communicator comm,
-    std::vector<TreeSpec> tree_specs, double aggregation_cost_ns, bool nb,
-    bool sync, CollType coll_type, float *data, uint *dimensions,
-    bool latency_optimal)
+    std::vector<TreeSpec> tree_specs,
+    std::vector<std::vector<int>> &route_table,
+    std::map<std::pair<int, int>, int> &route_table_map,
+    double aggregation_cost_ns, bool nb, bool sync, CollType coll_type,
+    float *data, uint *dimensions, bool latency_optimal)
     : TreesCollectiveRunner(gen, 4, count, rank, comm_size, nb, sync),
       m_state(INIT), m_coll_type(coll_type), m_dimensions(dimensions),
       allreduce_trees(tree_specs) {
@@ -1176,7 +1546,7 @@ EmberTreesCollGenerator::TreesCollective::TreesCollective(
       m_allreduces.push_back(TreesCollectiveEngine(
           m_gen, coll_type, dimensions, dimensions_num, data, m_count, m_r, m_p,
           aggregation_cost_ns, comm, data != NULL, latency_optimal, port_id,
-          this));
+          this, route_table, route_table_map));
     }
   }
 }
