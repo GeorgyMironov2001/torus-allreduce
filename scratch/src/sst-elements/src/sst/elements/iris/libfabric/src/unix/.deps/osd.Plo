@@ -22,12 +22,15 @@ src/unix/osd.lo: src/unix/osd.c /usr/include/stdc-predef.h \
  /usr/include/x86_64-linux-gnu/bits/types/cookie_io_functions_t.h \
  /usr/include/x86_64-linux-gnu/bits/stdio_lim.h \
  /usr/include/x86_64-linux-gnu/bits/floatn.h \
- /usr/include/x86_64-linux-gnu/bits/floatn-common.h /usr/include/unistd.h \
+ /usr/include/x86_64-linux-gnu/bits/floatn-common.h \
+ /usr/include/x86_64-linux-gnu/bits/stdio.h \
+ /usr/include/x86_64-linux-gnu/bits/stdio2.h /usr/include/unistd.h \
  /usr/include/x86_64-linux-gnu/bits/posix_opt.h \
  /usr/include/x86_64-linux-gnu/bits/environments.h \
  /usr/include/x86_64-linux-gnu/bits/confname.h \
  /usr/include/x86_64-linux-gnu/bits/getopt_posix.h \
  /usr/include/x86_64-linux-gnu/bits/getopt_core.h \
+ /usr/include/x86_64-linux-gnu/bits/unistd.h \
  /usr/include/x86_64-linux-gnu/bits/unistd_ext.h \
  /usr/include/linux/close_range.h /usr/include/fcntl.h \
  /usr/include/x86_64-linux-gnu/bits/fcntl.h \
@@ -39,7 +42,8 @@ src/unix/osd.lo: src/unix/osd.c /usr/include/stdc-predef.h \
  /usr/include/x86_64-linux-gnu/bits/endianness.h \
  /usr/include/x86_64-linux-gnu/bits/types/time_t.h \
  /usr/include/x86_64-linux-gnu/bits/stat.h \
- /usr/include/x86_64-linux-gnu/bits/struct_stat.h /usr/include/errno.h \
+ /usr/include/x86_64-linux-gnu/bits/struct_stat.h \
+ /usr/include/x86_64-linux-gnu/bits/fcntl2.h /usr/include/errno.h \
  /usr/include/x86_64-linux-gnu/bits/errno.h /usr/include/linux/errno.h \
  /usr/include/x86_64-linux-gnu/asm/errno.h \
  /usr/include/asm-generic/errno.h /usr/include/asm-generic/errno-base.h \
@@ -69,6 +73,8 @@ src/unix/osd.lo: src/unix/osd.c /usr/include/stdc-predef.h \
  /usr/include/x86_64-linux-gnu/bits/types/struct___jmp_buf_tag.h \
  /usr/include/x86_64-linux-gnu/bits/pthread_stack_min-dynamic.h \
  /usr/include/string.h /usr/include/strings.h \
+ /usr/include/x86_64-linux-gnu/bits/strings_fortified.h \
+ /usr/include/x86_64-linux-gnu/bits/string_fortified.h \
  /usr/include/x86_64-linux-gnu/sys/mman.h \
  /usr/include/x86_64-linux-gnu/bits/mman.h \
  /usr/include/x86_64-linux-gnu/bits/mman-map-flags-generic.h \
@@ -91,6 +97,7 @@ src/unix/osd.lo: src/unix/osd.c /usr/include/stdc-predef.h \
  /usr/include/x86_64-linux-gnu/sys/select.h \
  /usr/include/x86_64-linux-gnu/bits/select.h \
  /usr/include/x86_64-linux-gnu/bits/types/sigset_t.h \
+ /usr/include/x86_64-linux-gnu/bits/select2.h \
  ../../../../../src/sst/elements/iris/libfabric/include/ofi.h \
  /usr/include/assert.h /usr/include/stdlib.h \
  /usr/include/x86_64-linux-gnu/bits/waitflags.h \
@@ -99,7 +106,10 @@ src/unix/osd.lo: src/unix/osd.c /usr/include/stdc-predef.h \
  /usr/include/x86_64-linux-gnu/bits/stdint-intn.h /usr/include/endian.h \
  /usr/include/x86_64-linux-gnu/bits/byteswap.h \
  /usr/include/x86_64-linux-gnu/bits/uintn-identity.h \
- /usr/include/alloca.h /usr/include/x86_64-linux-gnu/bits/stdlib-float.h \
+ /usr/include/alloca.h \
+ /usr/include/x86_64-linux-gnu/bits/stdlib-bsearch.h \
+ /usr/include/x86_64-linux-gnu/bits/stdlib-float.h \
+ /usr/include/x86_64-linux-gnu/bits/stdlib.h \
  /usr/include/x86_64-linux-gnu/sys/param.h \
  /usr/lib/gcc/x86_64-linux-gnu/11/include/limits.h \
  /usr/lib/gcc/x86_64-linux-gnu/11/include/syslimits.h \
@@ -143,6 +153,7 @@ src/unix/osd.lo: src/unix/osd.c /usr/include/stdc-predef.h \
  /usr/include/x86_64-linux-gnu/asm/sockios.h \
  /usr/include/asm-generic/sockios.h \
  /usr/include/x86_64-linux-gnu/bits/types/struct_osockaddr.h \
+ /usr/include/x86_64-linux-gnu/bits/socket2.h \
  /usr/include/x86_64-linux-gnu/bits/in.h /usr/include/ifaddrs.h \
  ../../../../../src/sst/elements/iris/libfabric/include/ofi_abi.h \
  ../../../../../src/sst/elements/iris/libfabric/include/ofi_osd.h \
@@ -186,6 +197,7 @@ src/unix/osd.lo: src/unix/osd.c /usr/include/stdc-predef.h \
  ../../../../../src/sst/elements/iris/libfabric/include/ofi_epoll.h \
  /usr/include/poll.h /usr/include/x86_64-linux-gnu/sys/poll.h \
  /usr/include/x86_64-linux-gnu/bits/poll.h \
+ /usr/include/x86_64-linux-gnu/bits/poll2.h \
  ../../../../../src/sst/elements/iris/libfabric/include/ofi_proto.h \
  ../../../../../src/sst/elements/iris/libfabric/include/ofi_bitmask.h \
  ../../../../../src/sst/elements/iris/libfabric/include/rbtree.h \
@@ -216,12 +228,15 @@ src/unix/osd.lo: src/unix/osd.c /usr/include/stdc-predef.h \
 /usr/include/x86_64-linux-gnu/bits/stdio_lim.h:
 /usr/include/x86_64-linux-gnu/bits/floatn.h:
 /usr/include/x86_64-linux-gnu/bits/floatn-common.h:
+/usr/include/x86_64-linux-gnu/bits/stdio.h:
+/usr/include/x86_64-linux-gnu/bits/stdio2.h:
 /usr/include/unistd.h:
 /usr/include/x86_64-linux-gnu/bits/posix_opt.h:
 /usr/include/x86_64-linux-gnu/bits/environments.h:
 /usr/include/x86_64-linux-gnu/bits/confname.h:
 /usr/include/x86_64-linux-gnu/bits/getopt_posix.h:
 /usr/include/x86_64-linux-gnu/bits/getopt_core.h:
+/usr/include/x86_64-linux-gnu/bits/unistd.h:
 /usr/include/x86_64-linux-gnu/bits/unistd_ext.h:
 /usr/include/linux/close_range.h:
 /usr/include/fcntl.h:
@@ -235,6 +250,7 @@ src/unix/osd.lo: src/unix/osd.c /usr/include/stdc-predef.h \
 /usr/include/x86_64-linux-gnu/bits/types/time_t.h:
 /usr/include/x86_64-linux-gnu/bits/stat.h:
 /usr/include/x86_64-linux-gnu/bits/struct_stat.h:
+/usr/include/x86_64-linux-gnu/bits/fcntl2.h:
 /usr/include/errno.h:
 /usr/include/x86_64-linux-gnu/bits/errno.h:
 /usr/include/linux/errno.h:
@@ -270,6 +286,8 @@ src/unix/osd.lo: src/unix/osd.c /usr/include/stdc-predef.h \
 /usr/include/x86_64-linux-gnu/bits/pthread_stack_min-dynamic.h:
 /usr/include/string.h:
 /usr/include/strings.h:
+/usr/include/x86_64-linux-gnu/bits/strings_fortified.h:
+/usr/include/x86_64-linux-gnu/bits/string_fortified.h:
 /usr/include/x86_64-linux-gnu/sys/mman.h:
 /usr/include/x86_64-linux-gnu/bits/mman.h:
 /usr/include/x86_64-linux-gnu/bits/mman-map-flags-generic.h:
@@ -296,6 +314,7 @@ src/unix/osd.lo: src/unix/osd.c /usr/include/stdc-predef.h \
 /usr/include/x86_64-linux-gnu/sys/select.h:
 /usr/include/x86_64-linux-gnu/bits/select.h:
 /usr/include/x86_64-linux-gnu/bits/types/sigset_t.h:
+/usr/include/x86_64-linux-gnu/bits/select2.h:
 ../../../../../src/sst/elements/iris/libfabric/include/ofi.h:
 /usr/include/assert.h:
 /usr/include/stdlib.h:
@@ -307,7 +326,9 @@ src/unix/osd.lo: src/unix/osd.c /usr/include/stdc-predef.h \
 /usr/include/x86_64-linux-gnu/bits/byteswap.h:
 /usr/include/x86_64-linux-gnu/bits/uintn-identity.h:
 /usr/include/alloca.h:
+/usr/include/x86_64-linux-gnu/bits/stdlib-bsearch.h:
 /usr/include/x86_64-linux-gnu/bits/stdlib-float.h:
+/usr/include/x86_64-linux-gnu/bits/stdlib.h:
 /usr/include/x86_64-linux-gnu/sys/param.h:
 /usr/lib/gcc/x86_64-linux-gnu/11/include/limits.h:
 /usr/lib/gcc/x86_64-linux-gnu/11/include/syslimits.h:
@@ -355,6 +376,7 @@ src/unix/osd.lo: src/unix/osd.c /usr/include/stdc-predef.h \
 /usr/include/x86_64-linux-gnu/asm/sockios.h:
 /usr/include/asm-generic/sockios.h:
 /usr/include/x86_64-linux-gnu/bits/types/struct_osockaddr.h:
+/usr/include/x86_64-linux-gnu/bits/socket2.h:
 /usr/include/x86_64-linux-gnu/bits/in.h:
 /usr/include/ifaddrs.h:
 ../../../../../src/sst/elements/iris/libfabric/include/ofi_abi.h:
@@ -402,6 +424,7 @@ src/unix/osd.lo: src/unix/osd.c /usr/include/stdc-predef.h \
 /usr/include/poll.h:
 /usr/include/x86_64-linux-gnu/sys/poll.h:
 /usr/include/x86_64-linux-gnu/bits/poll.h:
+/usr/include/x86_64-linux-gnu/bits/poll2.h:
 ../../../../../src/sst/elements/iris/libfabric/include/ofi_proto.h:
 ../../../../../src/sst/elements/iris/libfabric/include/ofi_bitmask.h:
 ../../../../../src/sst/elements/iris/libfabric/include/rbtree.h:

@@ -18,20 +18,20 @@
 
 #include <cmath>
 #include <list>
-#include <queue>
-#include <sst/core/component.h>
-#include <sst/core/link.h>
-#include <sst/core/module.h>
-#include <sst/core/output.h>
 #include <sstream>
+#include <queue>
+#include <sst/core/module.h>
+#include <sst/core/component.h>
+#include <sst/core/output.h>
+#include <sst/core/link.h>
 
-#include "ioVec.h"
-#include "merlinEvent.h"
 #include "sst/elements/hermes/shmemapi.h"
 #include "sst/elements/thornhill/detailedCompute.h"
+#include "ioVec.h"
+#include "merlinEvent.h"
 // #include "memoryModel/trivialMemoryModel.h"
-#include "memoryModel/detailedInterface.h"
 #include "memoryModel/simpleMemoryModel.h"
+#include "memoryModel/detailedInterface.h"
 
 #define CALL_INFO_LAMBDA __LINE__, __FILE__
 
@@ -329,17 +329,17 @@ private:
     T m_data;
   };
 
-#include "nicArbitrateDMA.h"
-#include "nicEntryBase.h"
-#include "nicRecvEntry.h"
-#include "nicRecvMachine.h"
-#include "nicSendEntry.h"
-#include "nicSendMachine.h"
+#include "nicVirtNic.h"
 #include "nicShmem.h"
 #include "nicShmemMove.h"
+#include "nicEntryBase.h"
+#include "nicSendEntry.h"
 #include "nicShmemSendEntry.h"
+#include "nicRecvEntry.h"
+#include "nicSendMachine.h"
+#include "nicRecvMachine.h"
+#include "nicArbitrateDMA.h"
 #include "nicUnitPool.h"
-#include "nicVirtNic.h"
 
   struct RecvCtxData {
     std::unordered_map<int, DmaRecvEntry *> m_getOrgnM;

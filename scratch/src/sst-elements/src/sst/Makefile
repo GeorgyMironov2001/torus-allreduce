@@ -246,10 +246,10 @@ AWK = mawk
 CC = gcc
 CCAS = gcc
 CCASDEPMODE = depmode=gcc3
-CCASFLAGS = -g3 -O0 -fno-omit-frame-pointer
+CCASFLAGS = -g -O2
 CCDEPMODE = depmode=gcc3
 CC_VERSION = gcc (Ubuntu 11.4.0-1ubuntu1~22.04) 11.4.0
-CFLAGS = -g3 -O0 -fno-omit-frame-pointer
+CFLAGS = -g -O2
 CPP = gcc
 CPPFLAGS = 
 CSCOPE = cscope
@@ -261,7 +261,7 @@ CUDA_LIBS =
 CXX = g++ -std=c++17
 CXXCPP = g++ -E
 CXXDEPMODE = depmode=gcc3
-CXXFLAGS = -g3 -O0 -fno-omit-frame-pointer
+CXXFLAGS = -g -O2
 CYGPATH_W = echo
 DEFS = -DHAVE_CONFIG_H
 DEPDIR = .deps
@@ -381,7 +381,7 @@ PINTOOL3_RUNTIME =
 PINTOOL_CPPFLAGS = 
 PINTOOL_DIR = 
 PINTOOL_LDFLAGS = 
-PINTOOL_PATH = /home/gera/torus-allreduce/local/sstcore-15.0.0/bin:/home/gera/torus-allreduce/local/packages/OpenMPI-4.1.6/bin:/home/gera/py_env/bin:/home/gera/torus-allreduce/local/sstelements-15.0.0/bin:/home/gera/torus-allreduce/local/sstcore-15.0.0/bin:/home/gera/torus-allreduce/local/packages/OpenMPI-4.1.6/bin:/home/gera/.cursor-server/bin/linux-x64/f736016b0aa20ba1f99b7eec1dda48579fa4c290/bin/remote-cli:/home/gera/.local/bin:/home/gera/.cursor-server/bin/linux-x64/f736016b0aa20ba1f99b7eec1dda48579fa4c290/bin/remote-cli:/home/gera/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/usr/local/go/bin:/usr/local/go/bin:/home/gera/.cursor-server/extensions/ms-python.debugpy-2025.18.0-linux-x64/bundled/scripts/noConfigScripts
+PINTOOL_PATH = /home/gera/torus-allreduce/local/sstelements-15.0.0/bin:/home/gera/torus-allreduce/local/sstcore-15.0.0/bin:/home/gera/torus-allreduce/local/packages/OpenMPI-4.1.6/bin:/home/gera/py_env/bin:/home/gera/.cursor-server/bin/linux-x64/042b3c1a4c53f2c3808067f519fbfc67b72cad80/bin/remote-cli:/home/gera/.local/bin:/home/gera/.cursor-server/bin/linux-x64/042b3c1a4c53f2c3808067f519fbfc67b72cad80/bin/remote-cli:/home/gera/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/usr/local/go/bin:/usr/local/go/bin
 PINTOOL_RUNTIME = 
 PIN_CPPFLAGS = -g   -Wall   -Werror   -Wno-unknown-pragmas   -D__PIN__=1 -DPIN_CRT=1   -fno-stack-protector   -fno-exceptions   -funwind-tables   -fasynchronous-unwind-tables   -fomit-frame-pointer   -fno-strict-aliasing   -fno-rtti   -faligned-new   -fpic   -DTARGET_IA32E   -DHOST_IA32E   -DTARGET_LINUX   -DPIN_VERSION_MINOR=
 PIN_CPPFLAGS_COMPILER = -fno-exceptions          -fabi-version=2

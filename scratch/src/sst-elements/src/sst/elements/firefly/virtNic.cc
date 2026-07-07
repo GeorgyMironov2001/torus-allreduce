@@ -15,10 +15,10 @@
 
 #include "sst_config.h"
 
-#include "nic.h"
-#include "virtNic.h"
 #include <sst/core/link.h>
 #include <sst/core/params.h>
+#include "virtNic.h"
+#include "nic.h"
 
 using namespace SST::Firefly;
 using namespace SST;

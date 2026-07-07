@@ -4,7 +4,7 @@
 #include <sst/core/rng/xorshift.h>
 #include <sst_config.h>
 
-// #define DEBUG
+#define DEBUG
 
 #define NO_PEER -1
 #define MAX_SUPPORTED_DIMENSIONS 8 // We support up to 8D torus
