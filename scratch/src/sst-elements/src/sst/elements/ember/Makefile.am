@@ -246,6 +246,10 @@ libember_la_SOURCES = \
 	mpi/motifs/embertreescoll.cc \
 	mpi/motifs/embertreesallreduce.h \
 	mpi/motifs/embertreesallreduce.cc \
+	mpi/motifs/emberoverlaycoll.h \
+	mpi/motifs/emberoverlaycoll.cc \
+	mpi/motifs/emberoverlayallreduce.h \
+	mpi/motifs/emberoverlayallreduce.cc \
 	mpi/motifs/emberalltoallallreduce.h \
 	mpi/motifs/emberalltoallallreduce.cc \
 	libs/emberShmemLib.h \

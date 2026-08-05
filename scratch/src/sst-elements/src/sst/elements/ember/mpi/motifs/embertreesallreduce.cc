@@ -1,10 +1,15 @@
 #include "embertreesallreduce.h"
-#include "embertrees/emberbdmstrees_8_8d6.h"
-#include "embertrees/emberbdmstrees_8_8d5.h"
-#include "embertrees/emberbdmstrees_8_8d4.h"
-#include "embertrees/emberbdmstrees_8_8d3.h"
-#include "embertrees/emberbdmstrees_8_8d2.h"
+#include "embertrees/emberbdmstrees_16_16d4.h"
+#include "embertrees/emberbdmstrees_8_4d4.h"
 #include "embertrees/emberbdmstrees_8_8d1.h"
+#include "embertrees/emberbdmstrees_8_8d2.h"
+#include "embertrees/emberbdmstrees_8_8d3.h"
+#include "embertrees/emberbdmstrees_8_8d4.h"
+#include "embertrees/emberbdmstrees_8_8d5.h"
+#include "embertrees/emberbdmstrees_8_8d6.h"
+#include "embertrees/emberbdmstrees_8_8d7.h"
+#include "embertrees/emberbdmstrees_8_8d8.h"
+#include "embertrees/emberbdmstrees_hyperx_8_8_2.h"
 #include "embertrees/embercycleopt_16_16_4.h"
 #include "embertrees/embercycleopt_16_16_6.h"
 #include "embertrees/embercycleopt_16_16_8.h"
@@ -17,8 +22,7 @@
 #include <sst_config.h>
 using namespace SST::Ember;
 
-std::pair<std::vector<std::vector<int>>,
-          std::map<std::pair<int, int>, int>>
+std::pair<std::vector<std::vector<int>>, std::map<std::pair<int, int>, int>>
 EmberTreesAllreduceGenerator::parse_route_table(std::string route_table_file) {
   std::vector<std::vector<int>> route_table;
   std::map<std::pair<int, int>, int> route_table_map;
@@ -26,12 +30,9 @@ EmberTreesAllreduceGenerator::parse_route_table(std::string route_table_file) {
   std::ifstream file(route_table_file);
   nlohmann::json j;
   file >> j;
-  int id = 0;
   for (const auto &entry : j) {
-    std::pair<int, int> key = std::make_pair(entry[0][0], entry[0][1]);
-    route_table_map[key] = id++;
     std::vector<int> path;
-    for (int rank : entry[1]) {
+    for (int rank : entry) {
       path.push_back(rank);
     }
     route_table.push_back(path);
@@ -66,8 +67,9 @@ EmberTreesAllreduceGenerator::EmberTreesAllreduceGenerator(
       if (i >= dimensions) {
         std::cerr << "Too many dimensions sizes specified" << std::endl;
       }
-      size_t index =
-          dimensions - i - 1; // Dimensions are numbered in the reverse order
+      // size_t index =
+      //     dimensions - i - 1; // Dimensions are numbered in the reverse order
+      size_t index = i;
       dimensions_sizes[index] = std::stoul(tmp);
       ++i;
     }
@@ -94,30 +96,33 @@ EmberTreesAllreduceGenerator::EmberTreesAllreduceGenerator(
     }
     for (size_t i = 0; i < recvcount; i++) {
       m_data[i] = rand() % 1024;
-      // m_data[i] = 1;
+      // m_data[i] = 1.0;
+      // m_data[i] = rand() % 10;
       m_data_validation_send[i] = m_data[i];
-      printf("%f ", m_data[i]);
+      // printf("%f ", m_data[i]);
     }
     printf("\n");
     m_validation_reduce_executed = false;
   }
-  
+
   std::string route_table_file =
       params.find<std::string>("arg.route_table_file", "");
   std::vector<std::vector<int>> route_table;
   std::map<std::pair<int, int>, int> route_table_map;
   if (route_table_file != "") {
-    std::pair<std::vector<std::vector<int>>,
-              std::map<std::pair<int, int>, int>>
+    std::pair<std::vector<std::vector<int>>, std::map<std::pair<int, int>, int>>
         p = parse_route_table(route_table_file);
     route_table = p.first;
     route_table_map = p.second;
   }
-  //bdms_tree_specs_8x8_6_quadruple
+  // bdms_tree_specs_bdms_16x16_4_quadruple
+  // bdms_tree_specs_8x4_4_double
+  // bdms_tree_specs_bdms_hyperx_8x8_2_quadruple
   m_allreduce = new TreesCollective(
       *this, dimensions, ports, recvcount, rank(), size(), GroupWorld,
-      bdms_tree_specs_8x8_5_quadruple, route_table, route_table_map, aggregation_cost_ns, !blocking, sync,
-      TREES_ALLREDUCE, m_data, dimensions_sizes, latency_optimal);
+      bdms_tree_specs_bdms_hyperx_8x8_2_quadruple, route_table, route_table_map,
+      aggregation_cost_ns, !blocking, sync, TREES_ALLREDUCE, m_data,
+      dimensions_sizes, latency_optimal);
 }
 
 EmberTreesAllreduceGenerator::~EmberTreesAllreduceGenerator() {

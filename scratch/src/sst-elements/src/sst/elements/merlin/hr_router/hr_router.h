@@ -68,7 +68,8 @@ public:
         {"num_vns",            "Number of VNs.","2"},
         {"vn_remap",           "Array that specifies the vn remapping for each node in the systsm."},
         {"vn_remap_shm",       "Name of shared memory region for vn remapping.  If empty, no remapping is done", ""},
-        {"debug",              "Turn on debugging for router. Set to 1 for on, 0 for off.", "0"}
+        {"debug",              "Turn on debugging for router. Set to 1 for on, 0 for off.", "0"},
+        {"print_port_bw",      "If true, print per-port logical group and resolved link_bw at init.", "false"}
     )
 
     SST_ELI_DOCUMENT_STATISTICS(

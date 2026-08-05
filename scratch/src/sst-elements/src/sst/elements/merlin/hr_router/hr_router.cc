@@ -235,6 +235,7 @@ hr_router::hr_router(ComponentId_t cid, Params& params) :
 
     bool oql_track_port = params.find<bool>("oql_track_port","false");
     bool oql_track_remote = params.find<bool>("oql_track_remote","false");
+    const bool print_port_bw = params.find<bool>("print_port_bw", false);
 
     params.enableVerify(false);
 
@@ -258,8 +259,12 @@ hr_router::hr_router(ComponentId_t cid, Params& params) :
         // by logical group parameters (link_bw, input_buf_size,
         // output_buf_size, input_latency, output_latency).
 
+        const std::string port_group = topo->getPortLogicalGroup(i);
+        const std::string port_link_bw =
+            getLogicalGroupParam(params, topo, i, "link_bw");
+
         pc_params.insert("port_name", port_name.str());
-        pc_params.insert("link_bw", getLogicalGroupParam(params,topo,i,"link_bw") );
+        pc_params.insert("link_bw", port_link_bw);
         pc_params.insert("input_latency", getLogicalGroupParam(params,topo,i,"input_latency","0ns"));
         pc_params.insert("output_latency", getLogicalGroupParam(params,topo,i,"output_latency","0ns"));
         pc_params.insert("input_buf_size", getLogicalGroupParam(params,topo,i,"input_buf_size"));
@@ -268,6 +273,13 @@ hr_router::hr_router(ComponentId_t cid, Params& params) :
         pc_params.insert("vn_remap_shm", vn_remap_shm);
         pc_params.insert("vn_remap_shm_size", std::to_string(vn_remap_shm_size));
         pc_params.insert("num_vns", std::to_string(num_vns));
+
+        if ( print_port_bw ) {
+            output.output(
+                "hr_router id=%d port=%d group=%s link_bw=%s\n", id, i,
+                port_group.empty() ? "(default)" : port_group.c_str(),
+                port_link_bw.c_str());
+        }
 
         ports[i] = loadAnonymousSubComponent<PortInterface>
             ("merlin.portcontrol","portcontrol", i, ComponentInfo::SHARE_PORTS | ComponentInfo::SHARE_STATS | ComponentInfo::INSERT_STATS,

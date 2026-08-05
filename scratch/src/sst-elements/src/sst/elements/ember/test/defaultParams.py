@@ -62,8 +62,8 @@ nicParams = {
     "simpleMemoryModel.busBandwidth_Gbs": 7.8,
     "simpleMemoryModel.busNumLinks": 8,
     "simpleMemoryModel.detailedModel.name": "firefly.detailedInterface",
-    "maxRecvMachineQsize": 1000,
-    "maxSendMachineQsize": 1000,
+    "maxRecvMachineQsize": 2**30,
+    "maxSendMachineQsize": 2**30,
 
     # "numVNs": 10,
 
@@ -97,11 +97,13 @@ emberParams = {
 }
 
 if ('SST_NO_MEM' not in os.environ or int(os.environ['SST_NO_MEM']) != 1):
-    valueShort = 2**14
+    valueShort = 2**23
+    # valueShort = 16000000
     # valueShort = 1423992
     print("Setting Value for ShortMsgSize to " + str(valueShort))
 else:
-    valueShort = 2**14
+    valueShort = 2**23
+    # valueShort = 16000000
     # valueShort = 1423992
     print("Setting Value for ShortMsgSize to " + str(valueShort))
 
@@ -116,7 +118,11 @@ hermesParams = {
     "hermesParams.functionSM.defaultReturnLatency": 1,
 
 
-
+    # Full alltoall / depth-1 overlay: up to (n-1) eager msgs can race posted irecv.
+    # Firefly default maxUnexpectedMsg=32 is too small for n=64.
+    "hermesParams.ctrlMsg.pqs.maxUnexpectedMsg": 128,
+    # "hermesParams.ctrlMsg.pqs.maxPostedShortBuffers": 1,
+    # "hermesParams.ctrlMsg.pqs.minPostedShortBuffers": 1,
     # "hermesParams.functionSM.smallCollectiveVN" : 1,
     # "hermesParams.functionSM.smallCollectiveSize" : 8,
 

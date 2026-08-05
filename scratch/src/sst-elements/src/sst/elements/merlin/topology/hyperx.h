@@ -224,6 +224,7 @@ public:
     virtual internal_router_event* process_UntimedData_input(RtrEvent* ev);
 
     virtual PortState getPortState(int port) const;
+    virtual std::string getPortLogicalGroup(int port) const override;
     virtual int getEndpointID(int port);
 
     virtual void setOutputBufferCreditArray(int const* array, int vcs);

@@ -100,6 +100,12 @@ public:
 
     virtual PortState getPortState(int port) const;
 
+    // Logical groups for per-port link_bw / latency / buf (hr_router):
+    //   host      — R2N (leaf down)
+    //   networkK  — R2R on the boundary between level K and K+1
+    //               (leaf up and spine down both use network0)
+    virtual std::string getPortLogicalGroup(int port) const override;
+
     virtual void setOutputBufferCreditArray(int const* array, int vcs);
 
     virtual void getVCsPerVN(std::vector<int>& vcs_per_vn) {
@@ -110,6 +116,8 @@ public:
 
 private:
     void route_deterministic(int port, int vc, internal_router_event* ev);
+    // Overlay SL: spine index in Request::route_id; -1 = default fabric.
+    int getPacketRouteId(internal_router_event* ev) const;
 };
 
 

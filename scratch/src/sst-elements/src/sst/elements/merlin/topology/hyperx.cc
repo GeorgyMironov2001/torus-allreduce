@@ -283,6 +283,18 @@ topo_hyperx::getPortState(int port) const
     return R2R;
 }
 
+std::string
+topo_hyperx::getPortLogicalGroup(int port) const
+{
+    if (port >= local_port_start && port < (local_port_start + num_local_ports)) {
+        return "host";
+    } else if (port < local_port_start) {
+        return "hyperx";
+    } else {
+        return "unconn";
+    }
+}
+
 // rtr_id is a router id
 void
 topo_hyperx::idToLocation(int rtr_id, int *location) const

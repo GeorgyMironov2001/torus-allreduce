@@ -319,6 +319,9 @@ am__libember_la_SOURCES_DIST = embergen.h embergen.cc embermap.h \
 	mpi/motifs/emberduplexpp.cc mpi/motifs/embertreescoll.h \
 	mpi/motifs/embertreescoll.cc mpi/motifs/embertreesallreduce.h \
 	mpi/motifs/embertreesallreduce.cc \
+	mpi/motifs/emberoverlaycoll.h mpi/motifs/emberoverlaycoll.cc \
+	mpi/motifs/emberoverlayallreduce.h \
+	mpi/motifs/emberoverlayallreduce.cc \
 	mpi/motifs/emberalltoallallreduce.h \
 	mpi/motifs/emberalltoallallreduce.cc libs/emberShmemLib.h \
 	libs/shmem/emberFamEvent.h libs/shmem/emberFamAddEv.h \
@@ -424,6 +427,7 @@ am_libember_la_OBJECTS = embergen.lo ember.lo emberengine.lo \
 	mpi/motifs/emberdlrm_swing.lo mpi/motifs/embergpt3_moe.lo \
 	mpi/motifs/embercosmoflow.lo mpi/motifs/emberduplexpp.lo \
 	mpi/motifs/embertreescoll.lo mpi/motifs/embertreesallreduce.lo \
+	mpi/motifs/emberoverlaycoll.lo mpi/motifs/emberoverlayallreduce.lo \
 	mpi/motifs/emberalltoallallreduce.lo shmem/emberShmemGen.lo \
 	$(am__objects_1) $(am__objects_2)
 libember_la_OBJECTS = $(am_libember_la_OBJECTS)
@@ -547,6 +551,8 @@ am__depfiles_remade = ./$(DEPDIR)/ember.Plo \
 	mpi/motifs/$(DEPDIR)/embertoruscoll.Plo \
 	mpi/motifs/$(DEPDIR)/embertreeallreduce.Plo \
 	mpi/motifs/$(DEPDIR)/embertreesallreduce.Plo \
+	mpi/motifs/$(DEPDIR)/emberoverlayallreduce.Plo \
+	mpi/motifs/$(DEPDIR)/emberoverlaycoll.Plo \
 	mpi/motifs/$(DEPDIR)/embertreescoll.Plo \
 	mpi/motifs/$(DEPDIR)/embertricount.Plo \
 	mpi/motifs/$(DEPDIR)/emberunstructured.Plo \
@@ -999,6 +1005,9 @@ libember_la_SOURCES = embergen.h embergen.cc embermap.h ember.cc \
 	mpi/motifs/emberduplexpp.cc mpi/motifs/embertreescoll.h \
 	mpi/motifs/embertreescoll.cc mpi/motifs/embertreesallreduce.h \
 	mpi/motifs/embertreesallreduce.cc \
+	mpi/motifs/emberoverlaycoll.h mpi/motifs/emberoverlaycoll.cc \
+	mpi/motifs/emberoverlayallreduce.h \
+	mpi/motifs/emberoverlayallreduce.cc \
 	mpi/motifs/emberalltoallallreduce.h \
 	mpi/motifs/emberalltoallallreduce.cc libs/emberShmemLib.h \
 	libs/shmem/emberFamEvent.h libs/shmem/emberFamAddEv.h \
@@ -1418,6 +1427,10 @@ mpi/motifs/embertreescoll.lo: mpi/motifs/$(am__dirstamp) \
 	mpi/motifs/$(DEPDIR)/$(am__dirstamp)
 mpi/motifs/embertreesallreduce.lo: mpi/motifs/$(am__dirstamp) \
 	mpi/motifs/$(DEPDIR)/$(am__dirstamp)
+mpi/motifs/emberoverlaycoll.lo: mpi/motifs/$(am__dirstamp) \
+	mpi/motifs/$(DEPDIR)/$(am__dirstamp)
+mpi/motifs/emberoverlayallreduce.lo: mpi/motifs/$(am__dirstamp) \
+	mpi/motifs/$(DEPDIR)/$(am__dirstamp)
 mpi/motifs/emberalltoallallreduce.lo: mpi/motifs/$(am__dirstamp) \
 	mpi/motifs/$(DEPDIR)/$(am__dirstamp)
 shmem/$(am__dirstamp):
@@ -1581,6 +1594,8 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@mpi/motifs/$(DEPDIR)/embertoruscoll.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@mpi/motifs/$(DEPDIR)/embertreeallreduce.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@mpi/motifs/$(DEPDIR)/embertreesallreduce.Plo@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@mpi/motifs/$(DEPDIR)/emberoverlayallreduce.Plo@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@mpi/motifs/$(DEPDIR)/emberoverlaycoll.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@mpi/motifs/$(DEPDIR)/embertreescoll.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@mpi/motifs/$(DEPDIR)/embertricount.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@mpi/motifs/$(DEPDIR)/emberunstructured.Plo@am__quote@ # am--include-marker
@@ -1893,6 +1908,8 @@ distclean: distclean-am
 	-rm -f mpi/motifs/$(DEPDIR)/embertoruscoll.Plo
 	-rm -f mpi/motifs/$(DEPDIR)/embertreeallreduce.Plo
 	-rm -f mpi/motifs/$(DEPDIR)/embertreesallreduce.Plo
+	-rm -f mpi/motifs/$(DEPDIR)/emberoverlayallreduce.Plo
+	-rm -f mpi/motifs/$(DEPDIR)/emberoverlaycoll.Plo
 	-rm -f mpi/motifs/$(DEPDIR)/embertreescoll.Plo
 	-rm -f mpi/motifs/$(DEPDIR)/embertricount.Plo
 	-rm -f mpi/motifs/$(DEPDIR)/emberunstructured.Plo
@@ -2040,6 +2057,8 @@ maintainer-clean: maintainer-clean-am
 	-rm -f mpi/motifs/$(DEPDIR)/embertoruscoll.Plo
 	-rm -f mpi/motifs/$(DEPDIR)/embertreeallreduce.Plo
 	-rm -f mpi/motifs/$(DEPDIR)/embertreesallreduce.Plo
+	-rm -f mpi/motifs/$(DEPDIR)/emberoverlayallreduce.Plo
+	-rm -f mpi/motifs/$(DEPDIR)/emberoverlaycoll.Plo
 	-rm -f mpi/motifs/$(DEPDIR)/embertreescoll.Plo
 	-rm -f mpi/motifs/$(DEPDIR)/embertricount.Plo
 	-rm -f mpi/motifs/$(DEPDIR)/emberunstructured.Plo

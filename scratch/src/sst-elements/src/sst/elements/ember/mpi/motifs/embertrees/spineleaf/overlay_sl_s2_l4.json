@@ -1,0 +1,450 @@
+{
+  "version": 1,
+  "n": 8,
+  "mode": "reduce_bcast",
+  "chunking": "equal_by_tree",
+  "spines": 2,
+  "leaves": 4,
+  "trees": [
+    {
+      "id": 0,
+      "root": 0,
+      "edges": [
+        {
+          "from": 1,
+          "to": 0,
+          "rsStage": 0,
+          "agStage": 0,
+          "route_class": -1
+        },
+        {
+          "from": 2,
+          "to": 0,
+          "rsStage": 0,
+          "agStage": 0,
+          "route_class": 0
+        },
+        {
+          "from": 3,
+          "to": 0,
+          "rsStage": 0,
+          "agStage": 0,
+          "route_class": 0
+        },
+        {
+          "from": 4,
+          "to": 0,
+          "rsStage": 0,
+          "agStage": 0,
+          "route_class": 0
+        },
+        {
+          "from": 5,
+          "to": 0,
+          "rsStage": 0,
+          "agStage": 0,
+          "route_class": 0
+        },
+        {
+          "from": 6,
+          "to": 0,
+          "rsStage": 0,
+          "agStage": 0,
+          "route_class": 0
+        },
+        {
+          "from": 7,
+          "to": 0,
+          "rsStage": 0,
+          "agStage": 0,
+          "route_class": 0
+        }
+      ]
+    },
+    {
+      "id": 1,
+      "root": 1,
+      "edges": [
+        {
+          "from": 0,
+          "to": 1,
+          "rsStage": 0,
+          "agStage": 0,
+          "route_class": -1
+        },
+        {
+          "from": 2,
+          "to": 1,
+          "rsStage": 0,
+          "agStage": 0,
+          "route_class": 1
+        },
+        {
+          "from": 3,
+          "to": 1,
+          "rsStage": 0,
+          "agStage": 0,
+          "route_class": 1
+        },
+        {
+          "from": 4,
+          "to": 1,
+          "rsStage": 0,
+          "agStage": 0,
+          "route_class": 1
+        },
+        {
+          "from": 5,
+          "to": 1,
+          "rsStage": 0,
+          "agStage": 0,
+          "route_class": 1
+        },
+        {
+          "from": 6,
+          "to": 1,
+          "rsStage": 0,
+          "agStage": 0,
+          "route_class": 1
+        },
+        {
+          "from": 7,
+          "to": 1,
+          "rsStage": 0,
+          "agStage": 0,
+          "route_class": 1
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "root": 2,
+      "edges": [
+        {
+          "from": 0,
+          "to": 2,
+          "rsStage": 0,
+          "agStage": 0,
+          "route_class": 0
+        },
+        {
+          "from": 1,
+          "to": 2,
+          "rsStage": 0,
+          "agStage": 0,
+          "route_class": 0
+        },
+        {
+          "from": 3,
+          "to": 2,
+          "rsStage": 0,
+          "agStage": 0,
+          "route_class": -1
+        },
+        {
+          "from": 4,
+          "to": 2,
+          "rsStage": 0,
+          "agStage": 0,
+          "route_class": 0
+        },
+        {
+          "from": 5,
+          "to": 2,
+          "rsStage": 0,
+          "agStage": 0,
+          "route_class": 0
+        },
+        {
+          "from": 6,
+          "to": 2,
+          "rsStage": 0,
+          "agStage": 0,
+          "route_class": 0
+        },
+        {
+          "from": 7,
+          "to": 2,
+          "rsStage": 0,
+          "agStage": 0,
+          "route_class": 0
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "root": 3,
+      "edges": [
+        {
+          "from": 0,
+          "to": 3,
+          "rsStage": 0,
+          "agStage": 0,
+          "route_class": 1
+        },
+        {
+          "from": 1,
+          "to": 3,
+          "rsStage": 0,
+          "agStage": 0,
+          "route_class": 1
+        },
+        {
+          "from": 2,
+          "to": 3,
+          "rsStage": 0,
+          "agStage": 0,
+          "route_class": -1
+        },
+        {
+          "from": 4,
+          "to": 3,
+          "rsStage": 0,
+          "agStage": 0,
+          "route_class": 1
+        },
+        {
+          "from": 5,
+          "to": 3,
+          "rsStage": 0,
+          "agStage": 0,
+          "route_class": 1
+        },
+        {
+          "from": 6,
+          "to": 3,
+          "rsStage": 0,
+          "agStage": 0,
+          "route_class": 1
+        },
+        {
+          "from": 7,
+          "to": 3,
+          "rsStage": 0,
+          "agStage": 0,
+          "route_class": 1
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "root": 4,
+      "edges": [
+        {
+          "from": 0,
+          "to": 4,
+          "rsStage": 0,
+          "agStage": 0,
+          "route_class": 0
+        },
+        {
+          "from": 1,
+          "to": 4,
+          "rsStage": 0,
+          "agStage": 0,
+          "route_class": 0
+        },
+        {
+          "from": 2,
+          "to": 4,
+          "rsStage": 0,
+          "agStage": 0,
+          "route_class": 0
+        },
+        {
+          "from": 3,
+          "to": 4,
+          "rsStage": 0,
+          "agStage": 0,
+          "route_class": 0
+        },
+        {
+          "from": 5,
+          "to": 4,
+          "rsStage": 0,
+          "agStage": 0,
+          "route_class": -1
+        },
+        {
+          "from": 6,
+          "to": 4,
+          "rsStage": 0,
+          "agStage": 0,
+          "route_class": 0
+        },
+        {
+          "from": 7,
+          "to": 4,
+          "rsStage": 0,
+          "agStage": 0,
+          "route_class": 0
+        }
+      ]
+    },
+    {
+      "id": 5,
+      "root": 5,
+      "edges": [
+        {
+          "from": 0,
+          "to": 5,
+          "rsStage": 0,
+          "agStage": 0,
+          "route_class": 1
+        },
+        {
+          "from": 1,
+          "to": 5,
+          "rsStage": 0,
+          "agStage": 0,
+          "route_class": 1
+        },
+        {
+          "from": 2,
+          "to": 5,
+          "rsStage": 0,
+          "agStage": 0,
+          "route_class": 1
+        },
+        {
+          "from": 3,
+          "to": 5,
+          "rsStage": 0,
+          "agStage": 0,
+          "route_class": 1
+        },
+        {
+          "from": 4,
+          "to": 5,
+          "rsStage": 0,
+          "agStage": 0,
+          "route_class": -1
+        },
+        {
+          "from": 6,
+          "to": 5,
+          "rsStage": 0,
+          "agStage": 0,
+          "route_class": 1
+        },
+        {
+          "from": 7,
+          "to": 5,
+          "rsStage": 0,
+          "agStage": 0,
+          "route_class": 1
+        }
+      ]
+    },
+    {
+      "id": 6,
+      "root": 6,
+      "edges": [
+        {
+          "from": 0,
+          "to": 6,
+          "rsStage": 0,
+          "agStage": 0,
+          "route_class": 0
+        },
+        {
+          "from": 1,
+          "to": 6,
+          "rsStage": 0,
+          "agStage": 0,
+          "route_class": 0
+        },
+        {
+          "from": 2,
+          "to": 6,
+          "rsStage": 0,
+          "agStage": 0,
+          "route_class": 0
+        },
+        {
+          "from": 3,
+          "to": 6,
+          "rsStage": 0,
+          "agStage": 0,
+          "route_class": 0
+        },
+        {
+          "from": 4,
+          "to": 6,
+          "rsStage": 0,
+          "agStage": 0,
+          "route_class": 0
+        },
+        {
+          "from": 5,
+          "to": 6,
+          "rsStage": 0,
+          "agStage": 0,
+          "route_class": 0
+        },
+        {
+          "from": 7,
+          "to": 6,
+          "rsStage": 0,
+          "agStage": 0,
+          "route_class": -1
+        }
+      ]
+    },
+    {
+      "id": 7,
+      "root": 7,
+      "edges": [
+        {
+          "from": 0,
+          "to": 7,
+          "rsStage": 0,
+          "agStage": 0,
+          "route_class": 1
+        },
+        {
+          "from": 1,
+          "to": 7,
+          "rsStage": 0,
+          "agStage": 0,
+          "route_class": 1
+        },
+        {
+          "from": 2,
+          "to": 7,
+          "rsStage": 0,
+          "agStage": 0,
+          "route_class": 1
+        },
+        {
+          "from": 3,
+          "to": 7,
+          "rsStage": 0,
+          "agStage": 0,
+          "route_class": 1
+        },
+        {
+          "from": 4,
+          "to": 7,
+          "rsStage": 0,
+          "agStage": 0,
+          "route_class": 1
+        },
+        {
+          "from": 5,
+          "to": 7,
+          "rsStage": 0,
+          "agStage": 0,
+          "route_class": 1
+        },
+        {
+          "from": 6,
+          "to": 7,
+          "rsStage": 0,
+          "agStage": 0,
+          "route_class": -1
+        }
+      ]
+    }
+  ]
+}

@@ -27,7 +27,6 @@ uname -v = #38~22.04.1-Ubuntu SMP PREEMPT_DYNAMIC Thu Nov  2 18:01:13 UTC 2
 /usr/bin/oslevel       = unknown
 /bin/universe          = unknown
 
-PATH: /home/gera/torus-allreduce/local/sstelements-15.0.0/bin/
 PATH: /home/gera/torus-allreduce/local/sstcore-15.0.0/bin/
 PATH: /home/gera/torus-allreduce/local/packages/OpenMPI-4.1.6/bin/
 PATH: /home/gera/py_env/bin/
@@ -144,27 +143,27 @@ gcc: fatal error: no input files
 compilation terminated.
 configure:4913: $? = 1
 configure:4933: checking whether the C compiler works
-configure:4955: gcc    conftest.c  >&5
+configure:4955: gcc -g3 -O0 -fno-omit-frame-pointer   conftest.c  >&5
 configure:4959: $? = 0
 configure:5010: result: yes
 configure:5014: checking for C compiler default output file name
 configure:5016: result: a.out
 configure:5022: checking for suffix of executables
-configure:5029: gcc -o conftest    conftest.c  >&5
+configure:5029: gcc -o conftest -g3 -O0 -fno-omit-frame-pointer   conftest.c  >&5
 configure:5033: $? = 0
 configure:5057: result: 
 configure:5081: checking whether we are cross compiling
-configure:5089: gcc -o conftest    conftest.c  >&5
+configure:5089: gcc -o conftest -g3 -O0 -fno-omit-frame-pointer   conftest.c  >&5
 configure:5093: $? = 0
 configure:5100: ./conftest
 configure:5104: $? = 0
 configure:5119: result: no
 configure:5125: checking for suffix of object files
-configure:5148: gcc -c   conftest.c >&5
+configure:5148: gcc -c -g3 -O0 -fno-omit-frame-pointer  conftest.c >&5
 configure:5152: $? = 0
 configure:5176: result: o
 configure:5180: checking whether the compiler supports GNU C
-configure:5200: gcc -c   conftest.c >&5
+configure:5200: gcc -c -g3 -O0 -fno-omit-frame-pointer  conftest.c >&5
 configure:5200: $? = 0
 configure:5212: result: yes
 configure:5223: checking whether gcc accepts -g
@@ -172,7 +171,7 @@ configure:5244: gcc -c -g  conftest.c >&5
 configure:5244: $? = 0
 configure:5291: result: yes
 configure:5311: checking for gcc option to enable C11 features
-configure:5326: gcc  -c -g -O2  conftest.c >&5
+configure:5326: gcc  -c -g3 -O0 -fno-omit-frame-pointer  conftest.c >&5
 configure:5326: $? = 0
 configure:5345: result: none needed
 configure:5469: checking whether gcc understands -c and -o together
@@ -234,7 +233,7 @@ configure:6589: result: yes
 configure:6608: checking dependency style of gcc
 configure:6721: result: gcc3
 configure:6739: checking for inline
-configure:6756: gcc -c -g -O2  conftest.c >&5
+configure:6756: gcc -c -g3 -O0 -fno-omit-frame-pointer  conftest.c >&5
 configure:6756: $? = 0
 configure:6766: result: inline
 configure:6784: checking whether make sets $(MAKE)
@@ -274,7 +273,7 @@ g++: fatal error: no input files
 compilation terminated.
 configure:6968: $? = 1
 configure:6972: checking whether the compiler supports GNU C++
-configure:6992: g++ -c   conftest.cpp >&5
+configure:6992: g++ -c -g3 -O0 -fno-omit-frame-pointer  conftest.cpp >&5
 configure:6992: $? = 0
 configure:7004: result: yes
 configure:7015: checking whether g++ accepts -g
@@ -282,7 +281,7 @@ configure:7036: g++ -c -g  conftest.cpp >&5
 configure:7036: $? = 0
 configure:7083: result: yes
 configure:7103: checking for g++ option to enable C++11 features
-configure:7118: g++  -c -g -O2  conftest.cpp >&5
+configure:7118: g++  -c -g3 -O0 -fno-omit-frame-pointer  conftest.cpp >&5
 conftest.cpp: In function 'int main(int, char**)':
 conftest.cpp:175:25: warning: empty parentheses were disambiguated as a function declaration [-Wvexing-parse]
   175 |   cxx11test::delegate d2();
@@ -355,10 +354,12 @@ configure:8248: result: yes
 configure:8260: checking for BSD- or MS-compatible name lister (nm)
 configure:8316: result: /usr/bin/nm -B
 configure:8458: checking the name lister (/usr/bin/nm -B) interface
-configure:8466: gcc -c -g -O2  conftest.c >&5
+configure:8466: gcc -c -g3 -O0 -fno-omit-frame-pointer  conftest.c >&5
 configure:8469: /usr/bin/nm -B "conftest.o"
 configure:8472: output
 0000000000000000 B some_variable
+0000000000000000 n wm4.0.3b9ef5c4ac77985394dd1c2bc5ebbebd
+0000000000000000 n wm4.stdcpredef.h.19.88fdbfd5cf6f83ed579effc3e425f09b
 configure:8480: result: BSD nm
 configure:8483: checking whether ln -s works
 configure:8487: result: yes
@@ -383,7 +384,7 @@ configure:9362: checking for ar
 configure:9383: found /usr/bin/ar
 configure:9395: result: ar
 configure:9432: checking for archiver @FILE support
-configure:9450: gcc -c -g -O2  conftest.c >&5
+configure:9450: gcc -c -g3 -O0 -fno-omit-frame-pointer  conftest.c >&5
 configure:9450: $? = 0
 configure:9454: ar cr libconftest.a @conftest.lst >&5
 configure:9457: $? = 0
@@ -398,10 +399,10 @@ configure:9653: checking for ranlib
 configure:9674: found /usr/bin/ranlib
 configure:9686: result: ranlib
 configure:9788: checking command to parse /usr/bin/nm -B output from gcc object
-configure:9942: gcc -c -g -O2  conftest.c >&5
+configure:9942: gcc -c -g3 -O0 -fno-omit-frame-pointer  conftest.c >&5
 configure:9945: $? = 0
 configure:9949: /usr/bin/nm -B conftest.o | sed -n -e 's/^.*[	 ]\([ABCDGIRSTW][ABCDGIRSTW]*\)[	 ][	 ]*\([_A-Za-z][_A-Za-z0-9]*\)$/\1 \2 \2/p' | sed '/ __gnu_lto/d' > conftest.nm
-configure:10015: gcc -o conftest -g -O2   conftest.c conftstm.o >&5
+configure:10015: gcc -o conftest -g3 -O0 -fno-omit-frame-pointer   conftest.c conftstm.o >&5
 configure:10018: $? = 0
 configure:10057: result: ok
 configure:10104: checking for sysroot
@@ -410,7 +411,7 @@ configure:10143: checking for a working dd
 configure:10188: result: /usr/bin/dd
 configure:10192: checking how to truncate binary pipes
 configure:10209: result: /usr/bin/dd bs=4096 count=1
-configure:10346: gcc -c -g -O2  conftest.c >&5
+configure:10346: gcc -c -g3 -O0 -fno-omit-frame-pointer  conftest.c >&5
 configure:10349: $? = 0
 configure:10549: checking for mt
 configure:10570: found /usr/bin/mt
@@ -419,62 +420,62 @@ configure:10605: checking if mt is a manifest tool
 configure:10612: mt '-?'
 configure:10621: result: no
 configure:11365: checking for stdio.h
-configure:11365: gcc -c -g -O2  conftest.c >&5
+configure:11365: gcc -c -g3 -O0 -fno-omit-frame-pointer  conftest.c >&5
 configure:11365: $? = 0
 configure:11365: result: yes
 configure:11365: checking for stdlib.h
-configure:11365: gcc -c -g -O2  conftest.c >&5
+configure:11365: gcc -c -g3 -O0 -fno-omit-frame-pointer  conftest.c >&5
 configure:11365: $? = 0
 configure:11365: result: yes
 configure:11365: checking for string.h
-configure:11365: gcc -c -g -O2  conftest.c >&5
+configure:11365: gcc -c -g3 -O0 -fno-omit-frame-pointer  conftest.c >&5
 configure:11365: $? = 0
 configure:11365: result: yes
 configure:11365: checking for inttypes.h
-configure:11365: gcc -c -g -O2  conftest.c >&5
+configure:11365: gcc -c -g3 -O0 -fno-omit-frame-pointer  conftest.c >&5
 configure:11365: $? = 0
 configure:11365: result: yes
 configure:11365: checking for stdint.h
-configure:11365: gcc -c -g -O2  conftest.c >&5
+configure:11365: gcc -c -g3 -O0 -fno-omit-frame-pointer  conftest.c >&5
 configure:11365: $? = 0
 configure:11365: result: yes
 configure:11365: checking for strings.h
-configure:11365: gcc -c -g -O2  conftest.c >&5
+configure:11365: gcc -c -g3 -O0 -fno-omit-frame-pointer  conftest.c >&5
 configure:11365: $? = 0
 configure:11365: result: yes
 configure:11365: checking for sys/stat.h
-configure:11365: gcc -c -g -O2  conftest.c >&5
+configure:11365: gcc -c -g3 -O0 -fno-omit-frame-pointer  conftest.c >&5
 configure:11365: $? = 0
 configure:11365: result: yes
 configure:11365: checking for sys/types.h
-configure:11365: gcc -c -g -O2  conftest.c >&5
+configure:11365: gcc -c -g3 -O0 -fno-omit-frame-pointer  conftest.c >&5
 configure:11365: $? = 0
 configure:11365: result: yes
 configure:11365: checking for unistd.h
-configure:11365: gcc -c -g -O2  conftest.c >&5
+configure:11365: gcc -c -g3 -O0 -fno-omit-frame-pointer  conftest.c >&5
 configure:11365: $? = 0
 configure:11365: result: yes
 configure:11390: checking for dlfcn.h
-configure:11390: gcc -c -g -O2  conftest.c >&5
+configure:11390: gcc -c -g3 -O0 -fno-omit-frame-pointer  conftest.c >&5
 configure:11390: $? = 0
 configure:11390: result: yes
 configure:11663: checking for objdir
 configure:11680: result: .libs
 configure:11946: checking if gcc supports -fno-rtti -fno-exceptions
-configure:11965: gcc -c -g -O2  -fno-rtti -fno-exceptions conftest.c >&5
+configure:11965: gcc -c -g3 -O0 -fno-omit-frame-pointer  -fno-rtti -fno-exceptions conftest.c >&5
 cc1: warning: command-line option '-fno-rtti' is valid for C++/D/ObjC++ but not for C
 configure:11969: $? = 0
 configure:11983: result: no
 configure:12347: checking for gcc option to produce PIC
 configure:12356: result: -fPIC -DPIC
 configure:12364: checking if gcc PIC flag -fPIC -DPIC works
-configure:12383: gcc -c -g -O2  -fPIC -DPIC -DPIC conftest.c >&5
+configure:12383: gcc -c -g3 -O0 -fno-omit-frame-pointer  -fPIC -DPIC -DPIC conftest.c >&5
 configure:12387: $? = 0
 configure:12401: result: yes
 configure:12430: checking if gcc static flag -static works
 configure:12460: result: yes
 configure:12475: checking if gcc supports -c -o file.o
-configure:12497: gcc -c -g -O2  -o out/conftest2.o conftest.c >&5
+configure:12497: gcc -c -g3 -O0 -fno-omit-frame-pointer  -o out/conftest2.o conftest.c >&5
 configure:12501: $? = 0
 configure:12524: result: yes
 configure:12532: checking if gcc supports -c -o file.o
@@ -482,20 +483,20 @@ configure:12581: result: yes
 configure:12614: checking whether the gcc linker (/usr/bin/ld -m elf_x86_64) supports shared libraries
 configure:13889: result: yes
 configure:13926: checking whether -lc should be explicitly linked in
-configure:13935: gcc -c -g -O2  conftest.c >&5
+configure:13935: gcc -c -g3 -O0 -fno-omit-frame-pointer  conftest.c >&5
 configure:13938: $? = 0
 configure:13953: gcc -shared  -fPIC -DPIC conftest.o  -v -Wl,-soname -Wl,conftest -o conftest 2\>\&1 \| /usr/bin/grep  -lc  \>/dev/null 2\>\&1
 configure:13956: $? = 0
 configure:13971: result: no
 configure:14131: checking dynamic linker characteristics
-configure:14713: gcc -o conftest -g -O2   -Wl,-rpath -Wl,/foo conftest.c  >&5
+configure:14713: gcc -o conftest -g3 -O0 -fno-omit-frame-pointer   -Wl,-rpath -Wl,/foo conftest.c  >&5
 configure:14713: $? = 0
 configure:14965: result: GNU/Linux ld.so
 configure:15087: checking how to hardcode library paths into programs
 configure:15112: result: immediate
 configure:15223: checking for shl_load
-configure:15223: gcc -o conftest -g -O2   conftest.c  >&5
-/usr/bin/ld: /tmp/cc6uNzUH.o: in function `main':
+configure:15223: gcc -o conftest -g3 -O0 -fno-omit-frame-pointer   conftest.c  >&5
+/usr/bin/ld: /tmp/ccUg0Nt8.o: in function `main':
 /home/gera/torus-allreduce/scratch/src/sst-elements/conftest.c:48: undefined reference to `shl_load'
 collect2: error: ld returned 1 exit status
 configure:15223: $? = 1
@@ -553,7 +554,7 @@ configure: failed program was:
 | }
 configure:15223: result: no
 configure:15228: checking for shl_load in -ldld
-configure:15257: gcc -o conftest -g -O2   conftest.c -ldld   >&5
+configure:15257: gcc -o conftest -g3 -O0 -fno-omit-frame-pointer   conftest.c -ldld   >&5
 /usr/bin/ld: cannot find -ldld: No such file or directory
 collect2: error: ld returned 1 exit status
 configure:15257: $? = 1
@@ -598,16 +599,16 @@ configure: failed program was:
 | }
 configure:15269: result: no
 configure:15275: checking for dlopen
-configure:15275: gcc -o conftest -g -O2   conftest.c  >&5
+configure:15275: gcc -o conftest -g3 -O0 -fno-omit-frame-pointer   conftest.c  >&5
 configure:15275: $? = 0
 configure:15275: result: yes
 configure:15462: checking whether a program can dlopen itself
-configure:15543: gcc -o conftest -g -O2  -DHAVE_DLFCN_H  -Wl,--export-dynamic conftest.c   >&5
+configure:15543: gcc -o conftest -g3 -O0 -fno-omit-frame-pointer  -DHAVE_DLFCN_H  -Wl,--export-dynamic conftest.c   >&5
 configure:15546: $? = 0
 configure:15565: result: yes
 configure:15570: checking whether a statically linked program can dlopen itself
-configure:15651: gcc -o conftest -g -O2  -DHAVE_DLFCN_H  -Wl,--export-dynamic -static conftest.c   >&5
-/usr/bin/ld: /tmp/cc0s94HI.o: in function `main':
+configure:15651: gcc -o conftest -g3 -O0 -fno-omit-frame-pointer  -DHAVE_DLFCN_H  -Wl,--export-dynamic -static conftest.c   >&5
+/usr/bin/ld: /tmp/cc1Pxwba.o: in function `main':
 /home/gera/torus-allreduce/scratch/src/sst-elements/configure:15630: warning: Using 'dlopen' in statically linked applications requires at runtime the shared libraries from the glibc version used for linking
 configure:15654: $? = 0
 conftest: undefined symbol: _fnord
@@ -688,18 +689,18 @@ configure:16153: checking if the linker (/usr/bin/ld -m elf_x86_64) is GNU ld
 configure:16170: result: yes
 configure:16225: checking whether the g++ linker (/usr/bin/ld -m elf_x86_64) supports shared libraries
 configure:17304: result: yes
-configure:17340: g++ -c -g -O2  conftest.cpp >&5
+configure:17340: g++ -c -g3 -O0 -fno-omit-frame-pointer  conftest.cpp >&5
 configure:17343: $? = 0
 configure:17824: checking for g++ option to produce PIC
 configure:17833: result: -fPIC -DPIC
 configure:17841: checking if g++ PIC flag -fPIC -DPIC works
-configure:17860: g++ -c -g -O2  -fPIC -DPIC -DPIC conftest.cpp >&5
+configure:17860: g++ -c -g3 -O0 -fno-omit-frame-pointer  -fPIC -DPIC -DPIC conftest.cpp >&5
 configure:17864: $? = 0
 configure:17878: result: yes
 configure:17901: checking if g++ static flag -static works
 configure:17931: result: yes
 configure:17943: checking if g++ supports -c -o file.o
-configure:17965: g++ -c -g -O2  -o out/conftest2.o conftest.cpp >&5
+configure:17965: g++ -c -g3 -O0 -fno-omit-frame-pointer  -o out/conftest2.o conftest.cpp >&5
 configure:17969: $? = 0
 configure:17992: result: yes
 configure:17997: checking if g++ supports -c -o file.o
@@ -711,7 +712,7 @@ configure:19023: result: GNU/Linux ld.so
 configure:19088: checking how to hardcode library paths into programs
 configure:19113: result: immediate
 configure:19174: checking for gcc options needed to detect all undeclared functions
-configure:19196: gcc -c -g -O2   conftest.c >&5
+configure:19196: gcc -c -g3 -O0 -fno-omit-frame-pointer   conftest.c >&5
 conftest.c: In function 'main':
 conftest.c:25:8: error: 'strchr' undeclared (first use in this function)
    25 | (void) strchr;
@@ -751,7 +752,7 @@ configure: failed program was:
 |   ;
 |   return 0;
 | }
-configure:19223: gcc -c -g -O2   conftest.c >&5
+configure:19223: gcc -c -g3 -O0 -fno-omit-frame-pointer   conftest.c >&5
 configure:19223: $? = 0
 configure:19243: result: none needed
 configure:19257: checking what extension is used for runtime loadable modules
@@ -761,11 +762,11 @@ configure:19298: result: LD_LIBRARY_PATH
 configure:19306: checking for the default library search path
 configure:19315: result: /lib /usr/lib /usr/local/cuda/targets/x86_64-linux/lib /usr/local/cuda-12/targets/x86_64-linux/lib /usr/lib/x86_64-linux-gnu/libfakeroot /usr/local/cuda-12.3/targets/x86_64-linux/lib /usr/local/lib/i386-linux-gnu /lib/i386-linux-gnu /usr/lib/i386-linux-gnu /usr/local/lib/i686-linux-gnu /lib/i686-linux-gnu /usr/lib/i686-linux-gnu /usr/local/lib /usr/local/lib/x86_64-linux-gnu /lib/x86_64-linux-gnu /usr/lib/x86_64-linux-gnu /lib32 /usr/lib32 
 configure:19344: checking for library containing dlopen
-configure:19380: gcc -o conftest -g -O2   conftest.c  >&5
+configure:19380: gcc -o conftest -g3 -O0 -fno-omit-frame-pointer   conftest.c  >&5
 configure:19380: $? = 0
 configure:19402: result: none required
 configure:19502: checking for dlerror
-configure:19502: gcc -o conftest -g -O2   conftest.c   >&5
+configure:19502: gcc -o conftest -g3 -O0 -fno-omit-frame-pointer   conftest.c   >&5
 configure:19502: $? = 0
 configure:19502: result: yes
 configure:19514: checking for shl_load
@@ -773,7 +774,7 @@ configure:19514: result: no
 configure:19522: checking for shl_load in -ldld
 configure:19563: result: no
 configure:19611: checking for dld_link in -ldld
-configure:19640: gcc -o conftest -g -O2   conftest.c -ldld   >&5
+configure:19640: gcc -o conftest -g3 -O0 -fno-omit-frame-pointer   conftest.c -ldld   >&5
 /usr/bin/ld: cannot find -ldld: No such file or directory
 collect2: error: ld returned 1 exit status
 configure:19640: $? = 1
@@ -823,7 +824,7 @@ configure: failed program was:
 | }
 configure:19652: result: no
 configure:19688: checking for _ prefix in compiled symbols
-configure:19699: gcc -c -g -O2  conftest.c >&5
+configure:19699: gcc -c -g3 -O0 -fno-omit-frame-pointer  conftest.c >&5
 configure:19702: $? = 0
 configure:19706: /usr/bin/nm -B conftest.o \| sed -n -e 's/^.*[	 ]\([ABCDGIRSTW][ABCDGIRSTW]*\)[	 ][	 ]*\([_A-Za-z][_A-Za-z0-9]*\)$/\1 \2 \2/p' | sed '/ __gnu_lto/d' \> conftest.nm
 configure:19709: $? = 0
@@ -831,13 +832,13 @@ configure:19732: result: no
 configure:19851: checking whether deplibs are loaded by dlopen
 configure:19950: result: yes
 configure:19959: checking for argz.h
-configure:19959: gcc -c -g -O2  conftest.c >&5
+configure:19959: gcc -c -g3 -O0 -fno-omit-frame-pointer  conftest.c >&5
 configure:19959: $? = 0
 configure:19959: result: yes
 configure:19968: checking for error_t
-configure:19968: gcc -c -g -O2  conftest.c >&5
+configure:19968: gcc -c -g3 -O0 -fno-omit-frame-pointer  conftest.c >&5
 configure:19968: $? = 0
-configure:19968: gcc -c -g -O2  conftest.c >&5
+configure:19968: gcc -c -g3 -O0 -fno-omit-frame-pointer  conftest.c >&5
 conftest.c: In function 'main':
 conftest.c:35:22: error: expected expression before ')' token
    35 | if (sizeof ((error_t)))
@@ -885,31 +886,31 @@ configure: failed program was:
 | }
 configure:19968: result: yes
 configure:19994: checking for argz_add
-configure:19994: gcc -o conftest -g -O2   conftest.c  >&5
+configure:19994: gcc -o conftest -g3 -O0 -fno-omit-frame-pointer   conftest.c  >&5
 configure:19994: $? = 0
 configure:19994: result: yes
 configure:19994: checking for argz_append
-configure:19994: gcc -o conftest -g -O2   conftest.c  >&5
+configure:19994: gcc -o conftest -g3 -O0 -fno-omit-frame-pointer   conftest.c  >&5
 configure:19994: $? = 0
 configure:19994: result: yes
 configure:19994: checking for argz_count
-configure:19994: gcc -o conftest -g -O2   conftest.c  >&5
+configure:19994: gcc -o conftest -g3 -O0 -fno-omit-frame-pointer   conftest.c  >&5
 configure:19994: $? = 0
 configure:19994: result: yes
 configure:19994: checking for argz_create_sep
-configure:19994: gcc -o conftest -g -O2   conftest.c  >&5
+configure:19994: gcc -o conftest -g3 -O0 -fno-omit-frame-pointer   conftest.c  >&5
 configure:19994: $? = 0
 configure:19994: result: yes
 configure:19994: checking for argz_insert
-configure:19994: gcc -o conftest -g -O2   conftest.c  >&5
+configure:19994: gcc -o conftest -g3 -O0 -fno-omit-frame-pointer   conftest.c  >&5
 configure:19994: $? = 0
 configure:19994: result: yes
 configure:19994: checking for argz_next
-configure:19994: gcc -o conftest -g -O2   conftest.c  >&5
+configure:19994: gcc -o conftest -g3 -O0 -fno-omit-frame-pointer   conftest.c  >&5
 configure:19994: $? = 0
 configure:19994: result: yes
 configure:19994: checking for argz_stringify
-configure:19994: gcc -o conftest -g -O2   conftest.c  >&5
+configure:19994: gcc -o conftest -g3 -O0 -fno-omit-frame-pointer   conftest.c  >&5
 configure:19994: $? = 0
 configure:19994: result: yes
 configure:20013: checking if argz actually works
@@ -917,15 +918,15 @@ configure:20046: result: yes
 configure:20065: checking whether libtool supports -dlopen/-dlpreopen
 configure:20079: result: yes
 configure:20109: checking for ltdl.h
-configure:20109: gcc -c -g -O2  conftest.c >&5
+configure:20109: gcc -c -g3 -O0 -fno-omit-frame-pointer  conftest.c >&5
 configure:20109: $? = 0
 configure:20109: result: yes
 configure:20114: checking whether lt_dlinterface_register is declared
-configure:20114: gcc -c -g -O2   conftest.c >&5
+configure:20114: gcc -c -g3 -O0 -fno-omit-frame-pointer   conftest.c >&5
 configure:20114: $? = 0
 configure:20114: result: yes
 configure:20119: checking for lt_dladvise_preload in -lltdl
-configure:20148: gcc -o conftest -g -O2   conftest.c -lltdl   >&5
+configure:20148: gcc -o conftest -g3 -O0 -fno-omit-frame-pointer   conftest.c -lltdl   >&5
 configure:20148: $? = 0
 configure:20160: result: yes
 configure:20259: checking where to find libltdl headers
@@ -935,7 +936,7 @@ configure:20265: result: -lltdl
 configure:20311: checking for unistd.h
 configure:20311: result: yes
 configure:20318: checking for dl.h
-configure:20318: gcc -c -g -O2  conftest.c >&5
+configure:20318: gcc -c -g3 -O0 -fno-omit-frame-pointer  conftest.c >&5
 conftest.c:69:10: fatal error: dl.h: No such file or directory
    69 | #include <dl.h>
       |          ^~~~~~
@@ -1013,7 +1014,7 @@ configure: failed program was:
 | #include <dl.h>
 configure:20318: result: no
 configure:20325: checking for sys/dl.h
-configure:20325: gcc -c -g -O2  conftest.c >&5
+configure:20325: gcc -c -g3 -O0 -fno-omit-frame-pointer  conftest.c >&5
 conftest.c:69:10: fatal error: sys/dl.h: No such file or directory
    69 | #include <sys/dl.h>
       |          ^~~~~~~~~~
@@ -1091,7 +1092,7 @@ configure: failed program was:
 | #include <sys/dl.h>
 configure:20325: result: no
 configure:20332: checking for dld.h
-configure:20332: gcc -c -g -O2  conftest.c >&5
+configure:20332: gcc -c -g3 -O0 -fno-omit-frame-pointer  conftest.c >&5
 conftest.c:69:10: fatal error: dld.h: No such file or directory
    69 | #include <dld.h>
       |          ^~~~~~~
@@ -1169,7 +1170,7 @@ configure: failed program was:
 | #include <dld.h>
 configure:20332: result: no
 configure:20339: checking for mach-o/dyld.h
-configure:20339: gcc -c -g -O2  conftest.c >&5
+configure:20339: gcc -c -g3 -O0 -fno-omit-frame-pointer  conftest.c >&5
 conftest.c:69:10: fatal error: mach-o/dyld.h: No such file or directory
    69 | #include <mach-o/dyld.h>
       |          ^~~~~~~~~~~~~~~
@@ -1247,24 +1248,24 @@ configure: failed program was:
 | #include <mach-o/dyld.h>
 configure:20339: result: no
 configure:20346: checking for dirent.h
-configure:20346: gcc -c -g -O2  conftest.c >&5
+configure:20346: gcc -c -g3 -O0 -fno-omit-frame-pointer  conftest.c >&5
 configure:20346: $? = 0
 configure:20346: result: yes
 configure:20359: checking for closedir
-configure:20359: gcc -o conftest -g -O2   conftest.c  >&5
+configure:20359: gcc -o conftest -g3 -O0 -fno-omit-frame-pointer   conftest.c  >&5
 configure:20359: $? = 0
 configure:20359: result: yes
 configure:20359: checking for opendir
-configure:20359: gcc -o conftest -g -O2   conftest.c  >&5
+configure:20359: gcc -o conftest -g3 -O0 -fno-omit-frame-pointer   conftest.c  >&5
 configure:20359: $? = 0
 configure:20359: result: yes
 configure:20359: checking for readdir
-configure:20359: gcc -o conftest -g -O2   conftest.c  >&5
+configure:20359: gcc -o conftest -g3 -O0 -fno-omit-frame-pointer   conftest.c  >&5
 configure:20359: $? = 0
 configure:20359: result: yes
 configure:20379: checking for strlcat
-configure:20379: gcc -o conftest -g -O2   conftest.c  >&5
-/usr/bin/ld: /tmp/ccvzU3PS.o: in function `main':
+configure:20379: gcc -o conftest -g3 -O0 -fno-omit-frame-pointer   conftest.c  >&5
+/usr/bin/ld: /tmp/ccMaGWto.o: in function `main':
 /home/gera/torus-allreduce/scratch/src/sst-elements/conftest.c:71: undefined reference to `strlcat'
 collect2: error: ld returned 1 exit status
 configure:20379: $? = 1
@@ -1345,8 +1346,8 @@ configure: failed program was:
 | }
 configure:20379: result: no
 configure:20379: checking for strlcpy
-configure:20379: gcc -o conftest -g -O2   conftest.c  >&5
-/usr/bin/ld: /tmp/ccjNWHX3.o: in function `main':
+configure:20379: gcc -o conftest -g3 -O0 -fno-omit-frame-pointer   conftest.c  >&5
+/usr/bin/ld: /tmp/ccEjl65X.o: in function `main':
 /home/gera/torus-allreduce/scratch/src/sst-elements/conftest.c:71: undefined reference to `strlcpy'
 collect2: error: ld returned 1 exit status
 configure:20379: $? = 1
@@ -1446,7 +1447,7 @@ configure:21537: result: found /home/gera/torus-allreduce/local/sstcore-15.0.0/b
 configure:21599: checking for Mac OSX
 configure:21629: result: no
 configure:21708: checking for NVDIMM.h
-configure:21708: g++ -std=c++17 -c -g -O2  conftest.cpp >&5
+configure:21708: g++ -std=c++17 -c -g3 -O0 -fno-omit-frame-pointer  conftest.cpp >&5
 conftest.cpp:74:10: fatal error: NVDIMM.h: No such file or directory
    74 | #include <NVDIMM.h>
       |          ^~~~~~~~~~
@@ -1529,7 +1530,7 @@ configure: failed program was:
 | #include <NVDIMM.h>
 configure:21708: result: no
 configure:21719: checking for main in -lnvdsim
-configure:21741: g++ -std=c++17 -o conftest -g -O2   conftest.cpp -lnvdsim    >&5
+configure:21741: g++ -std=c++17 -o conftest -g3 -O0 -fno-omit-frame-pointer   conftest.cpp -lnvdsim    >&5
 /usr/bin/ld: cannot find -lnvdsim: No such file or directory
 collect2: error: ld returned 1 exit status
 configure:21741: $? = 1
@@ -1602,7 +1603,7 @@ configure:22025: result: no
 configure:22060: checking PIN Tool
 configure:22062: result: no
 configure:22103: checking for C++ compiler vendor
-configure:22162: g++ -std=c++17 -c -g -O2  conftest.cpp >&5
+configure:22162: g++ -std=c++17 -c -g3 -O0 -fno-omit-frame-pointer  conftest.cpp >&5
 conftest.cpp: In function 'int main()':
 conftest.cpp:54:7: error: 'thisisanerror' was not declared in this scope
    54 |       thisisanerror;
@@ -1668,7 +1669,7 @@ configure: failed program was:
 |   ;
 |   return 0;
 | }
-configure:22162: g++ -std=c++17 -c -g -O2  conftest.cpp >&5
+configure:22162: g++ -std=c++17 -c -g3 -O0 -fno-omit-frame-pointer  conftest.cpp >&5
 conftest.cpp: In function 'int main()':
 conftest.cpp:54:7: error: 'thisisanerror' was not declared in this scope
    54 |       thisisanerror;
@@ -1734,7 +1735,7 @@ configure: failed program was:
 |   ;
 |   return 0;
 | }
-configure:22162: g++ -std=c++17 -c -g -O2  conftest.cpp >&5
+configure:22162: g++ -std=c++17 -c -g3 -O0 -fno-omit-frame-pointer  conftest.cpp >&5
 conftest.cpp: In function 'int main()':
 conftest.cpp:54:7: error: 'thisisanerror' was not declared in this scope
    54 |       thisisanerror;
@@ -1800,7 +1801,7 @@ configure: failed program was:
 |   ;
 |   return 0;
 | }
-configure:22162: g++ -std=c++17 -c -g -O2  conftest.cpp >&5
+configure:22162: g++ -std=c++17 -c -g3 -O0 -fno-omit-frame-pointer  conftest.cpp >&5
 conftest.cpp: In function 'int main()':
 conftest.cpp:54:7: error: 'thisisanerror' was not declared in this scope
    54 |       thisisanerror;
@@ -1866,7 +1867,7 @@ configure: failed program was:
 |   ;
 |   return 0;
 | }
-configure:22162: g++ -std=c++17 -c -g -O2  conftest.cpp >&5
+configure:22162: g++ -std=c++17 -c -g3 -O0 -fno-omit-frame-pointer  conftest.cpp >&5
 conftest.cpp: In function 'int main()':
 conftest.cpp:54:7: error: 'thisisanerror' was not declared in this scope
    54 |       thisisanerror;
@@ -1932,7 +1933,7 @@ configure: failed program was:
 |   ;
 |   return 0;
 | }
-configure:22162: g++ -std=c++17 -c -g -O2  conftest.cpp >&5
+configure:22162: g++ -std=c++17 -c -g3 -O0 -fno-omit-frame-pointer  conftest.cpp >&5
 conftest.cpp: In function 'int main()':
 conftest.cpp:54:7: error: 'thisisanerror' was not declared in this scope
    54 |       thisisanerror;
@@ -1998,7 +1999,7 @@ configure: failed program was:
 |   ;
 |   return 0;
 | }
-configure:22162: g++ -std=c++17 -c -g -O2  conftest.cpp >&5
+configure:22162: g++ -std=c++17 -c -g3 -O0 -fno-omit-frame-pointer  conftest.cpp >&5
 conftest.cpp: In function 'int main()':
 conftest.cpp:54:7: error: 'thisisanerror' was not declared in this scope
    54 |       thisisanerror;
@@ -2064,7 +2065,7 @@ configure: failed program was:
 |   ;
 |   return 0;
 | }
-configure:22162: g++ -std=c++17 -c -g -O2  conftest.cpp >&5
+configure:22162: g++ -std=c++17 -c -g3 -O0 -fno-omit-frame-pointer  conftest.cpp >&5
 conftest.cpp: In function 'int main()':
 conftest.cpp:54:7: error: 'thisisanerror' was not declared in this scope
    54 |       thisisanerror;
@@ -2130,7 +2131,7 @@ configure: failed program was:
 |   ;
 |   return 0;
 | }
-configure:22162: g++ -std=c++17 -c -g -O2  conftest.cpp >&5
+configure:22162: g++ -std=c++17 -c -g3 -O0 -fno-omit-frame-pointer  conftest.cpp >&5
 conftest.cpp: In function 'int main()':
 conftest.cpp:54:7: error: 'thisisanerror' was not declared in this scope
    54 |       thisisanerror;
@@ -2196,7 +2197,7 @@ configure: failed program was:
 |   ;
 |   return 0;
 | }
-configure:22162: g++ -std=c++17 -c -g -O2  conftest.cpp >&5
+configure:22162: g++ -std=c++17 -c -g3 -O0 -fno-omit-frame-pointer  conftest.cpp >&5
 conftest.cpp: In function 'int main()':
 conftest.cpp:54:7: error: 'thisisanerror' was not declared in this scope
    54 |       thisisanerror;
@@ -2262,29 +2263,29 @@ configure: failed program was:
 |   ;
 |   return 0;
 | }
-configure:22162: g++ -std=c++17 -c -g -O2  conftest.cpp >&5
+configure:22162: g++ -std=c++17 -c -g3 -O0 -fno-omit-frame-pointer  conftest.cpp >&5
 configure:22162: $? = 0
 configure:22173: result: gnu
-configure:22227: g++ -std=c++17 -c -g -O2  conftest.cpp >&5
+configure:22227: g++ -std=c++17 -c -g3 -O0 -fno-omit-frame-pointer  conftest.cpp >&5
 configure:22227: $? = 0
 configure:22265: checking for for PR_SET_PTRACER
 configure:22267: result: yes
 configure:22280: checking for library containing shm_open
-configure:22316: gcc -o conftest -g -O2   conftest.c   >&5
+configure:22316: gcc -o conftest -g3 -O0 -fno-omit-frame-pointer   conftest.c   >&5
 configure:22316: $? = 0
 configure:22338: result: none required
 configure:22426: checking for zlib.h
-configure:22426: g++ -std=c++17 -c -g -O2  conftest.cpp >&5
+configure:22426: g++ -std=c++17 -c -g3 -O0 -fno-omit-frame-pointer  conftest.cpp >&5
 configure:22426: $? = 0
 configure:22426: result: yes
 configure:22442: checking for gzopen in -lz
-configure:22471: gcc -o conftest -g -O2   conftest.c -lz    >&5
+configure:22471: gcc -o conftest -g3 -O0 -fno-omit-frame-pointer   conftest.c -lz    >&5
 configure:22471: $? = 0
 configure:22483: result: yes
 configure:22517: checking for libz compression library
 configure:22519: result: yes
 configure:22597: checking CUDA version is acceptable for SST
-configure:22623: g++ -std=c++17 -c -g -O2  conftest.cpp >&5
+configure:22623: g++ -std=c++17 -c -g3 -O0 -fno-omit-frame-pointer  conftest.cpp >&5
 conftest.cpp:50:10: fatal error: cuda.h: No such file or directory
    50 | #include "cuda.h"
       |          ^~~~~~~~
@@ -2367,7 +2368,7 @@ configure:22979: result: no
 configure:23060: checking for NumPy
 configure:23066: result: yes
 configure:23205: checking for Gem5Wrapper.h
-configure:23205: g++ -std=c++17 -c -g -O2  conftest.cpp >&5
+configure:23205: g++ -std=c++17 -c -g3 -O0 -fno-omit-frame-pointer  conftest.cpp >&5
 conftest.cpp:78:10: fatal error: Gem5Wrapper.h: No such file or directory
    78 | #include <Gem5Wrapper.h>
       |          ^~~~~~~~~~~~~~~
@@ -2454,7 +2455,7 @@ configure: failed program was:
 | #include <Gem5Wrapper.h>
 configure:23205: result: no
 configure:23216: checking for libramulator_is_present in -lramulator
-configure:23238: g++ -std=c++17 -o conftest -g -O2   conftest.cpp -lramulator    >&5
+configure:23238: g++ -std=c++17 -o conftest -g3 -O0 -fno-omit-frame-pointer   conftest.cpp -lramulator    >&5
 /usr/bin/ld: cannot find -lramulator: No such file or directory
 collect2: error: ld returned 1 exit status
 configure:23238: $? = 1
@@ -2521,7 +2522,7 @@ configure: failed program was:
 | }
 configure:23250: result: no
 configure:23345: checking for base/base.h
-configure:23345: g++ -std=c++17 -c -g -O2  conftest.cpp >&5
+configure:23345: g++ -std=c++17 -c -g3 -O0 -fno-omit-frame-pointer  conftest.cpp >&5
 conftest.cpp:79:10: fatal error: base/base.h: No such file or directory
    79 | #include <base/base.h>
       |          ^~~~~~~~~~~~~
@@ -2611,7 +2612,7 @@ configure:23345: result: no
 configure:23357: checking for /libramulator.so
 configure:23373: result: no
 configure:23472: checking for DRAMSim.h
-configure:23472: g++ -std=c++17 -c -g -O2  conftest.cpp >&5
+configure:23472: g++ -std=c++17 -c -g3 -O0 -fno-omit-frame-pointer  conftest.cpp >&5
 conftest.cpp:80:10: fatal error: DRAMSim.h: No such file or directory
    80 | #include <DRAMSim.h>
       |          ^~~~~~~~~~~
@@ -2700,7 +2701,7 @@ configure: failed program was:
 | #include <DRAMSim.h>
 configure:23472: result: no
 configure:23483: checking for libdramsim_is_present in -ldramsim
-configure:23505: g++ -std=c++17 -o conftest -g -O2   conftest.cpp -ldramsim    >&5
+configure:23505: g++ -std=c++17 -o conftest -g3 -O0 -fno-omit-frame-pointer   conftest.cpp -ldramsim    >&5
 /usr/bin/ld: cannot find -ldramsim: No such file or directory
 collect2: error: ld returned 1 exit status
 configure:23505: $? = 1
@@ -2769,7 +2770,7 @@ configure: failed program was:
 | }
 configure:23517: result: no
 configure:23612: checking for dramsim3.h
-configure:23612: g++ -std=c++17 -c -g -O2  conftest.cpp >&5
+configure:23612: g++ -std=c++17 -c -g3 -O0 -fno-omit-frame-pointer  conftest.cpp >&5
 conftest.cpp:81:10: fatal error: dramsim3.h: No such file or directory
    81 | #include <dramsim3.h>
       |          ^~~~~~~~~~~~
@@ -2859,7 +2860,7 @@ configure: failed program was:
 | #include <dramsim3.h>
 configure:23612: result: no
 configure:23623: checking for libdramsim3_is_present in -ldramsim3
-configure:23645: g++ -std=c++17 -o conftest -g -O2   conftest.cpp -ldramsim3    >&5
+configure:23645: g++ -std=c++17 -o conftest -g3 -O0 -fno-omit-frame-pointer   conftest.cpp -ldramsim3    >&5
 /usr/bin/ld: cannot find -ldramsim3: No such file or directory
 collect2: error: ld returned 1 exit status
 configure:23645: $? = 1
@@ -2929,7 +2930,7 @@ configure: failed program was:
 | }
 configure:23657: result: no
 configure:23751: checking for HBMDRAMSim.h
-configure:23751: g++ -std=c++17 -c -g -O2  conftest.cpp >&5
+configure:23751: g++ -std=c++17 -c -g3 -O0 -fno-omit-frame-pointer  conftest.cpp >&5
 conftest.cpp:82:10: fatal error: HBMDRAMSim.h: No such file or directory
    82 | #include <HBMDRAMSim.h>
       |          ^~~~~~~~~~~~~~
@@ -3020,7 +3021,7 @@ configure: failed program was:
 | #include <HBMDRAMSim.h>
 configure:23751: result: no
 configure:23762: checking for libhbmdramsim_is_present in -lhbmdramsim
-configure:23784: g++ -std=c++17 -o conftest -g -O2   conftest.cpp -lhbmdramsim    >&5
+configure:23784: g++ -std=c++17 -o conftest -g3 -O0 -fno-omit-frame-pointer   conftest.cpp -lhbmdramsim    >&5
 /usr/bin/ld: cannot find -lhbmdramsim: No such file or directory
 collect2: error: ld returned 1 exit status
 configure:23784: $? = 1
@@ -3091,7 +3092,7 @@ configure: failed program was:
 | }
 configure:23796: result: no
 configure:23890: checking for HybridSim.h
-configure:23890: g++ -std=c++17 -c -g -O2  conftest.cpp >&5
+configure:23890: g++ -std=c++17 -c -g3 -O0 -fno-omit-frame-pointer  conftest.cpp >&5
 conftest.cpp:83:10: fatal error: HybridSim.h: No such file or directory
    83 | #include <HybridSim.h>
       |          ^~~~~~~~~~~~~
@@ -3183,7 +3184,7 @@ configure: failed program was:
 | #include <HybridSim.h>
 configure:23890: result: no
 configure:23901: checking for libhybridsim_is_present in -lhybridsim
-configure:23923: g++ -std=c++17 -o conftest -g -O2   conftest.cpp -lhybridsim    >&5
+configure:23923: g++ -std=c++17 -o conftest -g3 -O0 -fno-omit-frame-pointer   conftest.cpp -lhybridsim    >&5
 /usr/bin/ld: cannot find -lhybridsim: No such file or directory
 collect2: error: ld returned 1 exit status
 configure:23923: $? = 1
@@ -3255,7 +3256,7 @@ configure: failed program was:
 | }
 configure:23935: result: no
 configure:24053: checking for hmc_sim.h
-configure:24053: g++ -std=c++17 -c -g -O2  conftest.cpp >&5
+configure:24053: g++ -std=c++17 -c -g3 -O0 -fno-omit-frame-pointer  conftest.cpp >&5
 conftest.cpp:84:10: fatal error: hmc_sim.h: No such file or directory
    84 | #include <hmc_sim.h>
       |          ^~~~~~~~~~~
@@ -3348,7 +3349,7 @@ configure: failed program was:
 | #include <hmc_sim.h>
 configure:24053: result: no
 configure:24069: checking for hmcsim_clock in -lhmcsim
-configure:24098: gcc -o conftest -g -O2   conftest.c -lhmcsim    >&5
+configure:24098: gcc -o conftest -g3 -O0 -fno-omit-frame-pointer   conftest.c -lhmcsim    >&5
 /usr/bin/ld: cannot find -lhmcsim: No such file or directory
 collect2: error: ld returned 1 exit status
 configure:24098: $? = 1
@@ -3434,7 +3435,7 @@ configure:24207: result: no
 configure:24218: checking for main in -lnvdsim
 configure:24252: result: no
 configure:24349: checking for FlashDIMM.h
-configure:24349: g++ -std=c++17 -c -g -O2  conftest.cpp >&5
+configure:24349: g++ -std=c++17 -c -g3 -O0 -fno-omit-frame-pointer  conftest.cpp >&5
 conftest.cpp:86:10: fatal error: FlashDIMM.h: No such file or directory
    86 | #include <FlashDIMM.h>
       |          ^~~~~~~~~~~~~
@@ -3529,7 +3530,7 @@ configure: failed program was:
 | #include <FlashDIMM.h>
 configure:24349: result: no
 configure:24360: checking for main in -lfdsim
-configure:24382: g++ -std=c++17 -o conftest -g -O2   conftest.cpp -lfdsim    >&5
+configure:24382: g++ -std=c++17 -o conftest -g3 -O0 -fno-omit-frame-pointer   conftest.cpp -lfdsim    >&5
 /usr/bin/ld: cannot find -lfdsim: No such file or directory
 collect2: error: ld returned 1 exit status
 configure:24382: $? = 1
@@ -3610,7 +3611,7 @@ configure:24549: result: yes
 configure:24583: checking for libz compression library
 configure:24585: result: yes
 configure:24722: checking for sim.h
-configure:24722: g++ -std=c++17 -c -g -O2  conftest.cpp >&5
+configure:24722: g++ -std=c++17 -c -g3 -O0 -fno-omit-frame-pointer  conftest.cpp >&5
 conftest.cpp:88:10: fatal error: sim.h: No such file or directory
    88 | #include <sim.h>
       |          ^~~~~~~
@@ -3707,7 +3708,7 @@ configure: failed program was:
 | #include <sim.h>
 configure:24722: result: no
 configure:24738: checking for _ZN5sim_t3runEv in -lriscv
-configure:24767: gcc -o conftest -g -O2   conftest.c -lriscv -lfesvr -lsoftfloat   >&5
+configure:24767: gcc -o conftest -g3 -O0 -fno-omit-frame-pointer   conftest.c -lriscv -lfesvr -lsoftfloat   >&5
 /usr/bin/ld: cannot find -lriscv: No such file or directory
 /usr/bin/ld: cannot find -lfesvr: No such file or directory
 /usr/bin/ld: cannot find -lsoftfloat: No such file or directory
@@ -3819,7 +3820,7 @@ configure:25677: result: no
 configure:25713: checking for OTF library
 configure:25715: result: no
 configure:25774: checking for dumpi/libundumpi/libundumpi.h
-configure:25774: g++ -std=c++17 -c -g -O2  conftest.cpp >&5
+configure:25774: g++ -std=c++17 -c -g3 -O0 -fno-omit-frame-pointer  conftest.cpp >&5
 conftest.cpp:92:10: fatal error: dumpi/libundumpi/libundumpi.h: No such file or directory
    92 | #include <dumpi/libundumpi/libundumpi.h>
       |          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -3920,7 +3921,7 @@ configure: failed program was:
 | #include <dumpi/libundumpi/libundumpi.h>
 configure:25774: result: no
 configure:25790: checking for undumpi_open in -lundumpi
-configure:25819: gcc -o conftest -g -O2   conftest.c -lundumpi    >&5
+configure:25819: gcc -o conftest -g3 -O0 -fno-omit-frame-pointer   conftest.c -lundumpi    >&5
 /usr/bin/ld: cannot find -lundumpi: No such file or directory
 collect2: error: ld returned 1 exit status
 configure:25819: $? = 1
@@ -4015,7 +4016,7 @@ configure:26046: checking for SST-Elements Git Branch, Head SHA and Commit Count
 configure:26060: result: N/A
 configure:26063: result: 15.0.0
 configure:26066: result: 0
-configure:26116: g++ -std=c++17 -c -g -O2  conftest.cpp >&5
+configure:26116: g++ -std=c++17 -c -g3 -O0 -fno-omit-frame-pointer  conftest.cpp >&5
 configure:26116: $? = 0
 configure:26154: checking for for PR_SET_PTRACER
 configure:26156: result: yes
@@ -4196,16 +4197,16 @@ ac_cv_env_CCC_set=
 ac_cv_env_CCC_value=
 ac_cv_env_CC_set=
 ac_cv_env_CC_value=
-ac_cv_env_CFLAGS_set=
-ac_cv_env_CFLAGS_value=
+ac_cv_env_CFLAGS_set=set
+ac_cv_env_CFLAGS_value='-g3 -O0 -fno-omit-frame-pointer'
 ac_cv_env_CPPFLAGS_set=
 ac_cv_env_CPPFLAGS_value=
 ac_cv_env_CPP_set=
 ac_cv_env_CPP_value=
 ac_cv_env_CXXCPP_set=
 ac_cv_env_CXXCPP_value=
-ac_cv_env_CXXFLAGS_set=
-ac_cv_env_CXXFLAGS_value=
+ac_cv_env_CXXFLAGS_set=set
+ac_cv_env_CXXFLAGS_value='-g3 -O0 -fno-omit-frame-pointer'
 ac_cv_env_CXX_set=
 ac_cv_env_CXX_value=
 ac_cv_env_LDFLAGS_set=
@@ -4411,10 +4412,10 @@ AWK='mawk'
 CC='gcc'
 CCAS='gcc'
 CCASDEPMODE='depmode=gcc3'
-CCASFLAGS='-g -O2'
+CCASFLAGS='-g3 -O0 -fno-omit-frame-pointer'
 CCDEPMODE='depmode=gcc3'
 CC_VERSION='gcc (Ubuntu 11.4.0-1ubuntu1~22.04) 11.4.0'
-CFLAGS='-g -O2'
+CFLAGS='-g3 -O0 -fno-omit-frame-pointer'
 COMPILE_CLANG_FALSE=''
 COMPILE_CLANG_TRUE='#'
 CONVENIENCE_LTDL_FALSE='#'
@@ -4430,7 +4431,7 @@ CUDA_LIBS=''
 CXX='g++ -std=c++17'
 CXXCPP='g++ -E'
 CXXDEPMODE='depmode=gcc3'
-CXXFLAGS='-g -O2'
+CXXFLAGS='-g3 -O0 -fno-omit-frame-pointer'
 CYGPATH_W='echo'
 DEFS='-DHAVE_CONFIG_H'
 DEPDIR='.deps'
@@ -4583,7 +4584,7 @@ PINTOOL3_RUNTIME=''
 PINTOOL_CPPFLAGS=''
 PINTOOL_DIR=''
 PINTOOL_LDFLAGS=''
-PINTOOL_PATH='/home/gera/torus-allreduce/local/sstelements-15.0.0/bin:/home/gera/torus-allreduce/local/sstcore-15.0.0/bin:/home/gera/torus-allreduce/local/packages/OpenMPI-4.1.6/bin:/home/gera/py_env/bin:/home/gera/.cursor-server/bin/linux-x64/042b3c1a4c53f2c3808067f519fbfc67b72cad80/bin/remote-cli:/home/gera/.local/bin:/home/gera/.cursor-server/bin/linux-x64/042b3c1a4c53f2c3808067f519fbfc67b72cad80/bin/remote-cli:/home/gera/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/usr/local/go/bin:/usr/local/go/bin'
+PINTOOL_PATH='/home/gera/torus-allreduce/local/sstcore-15.0.0/bin:/home/gera/torus-allreduce/local/packages/OpenMPI-4.1.6/bin:/home/gera/py_env/bin:/home/gera/.cursor-server/bin/linux-x64/042b3c1a4c53f2c3808067f519fbfc67b72cad80/bin/remote-cli:/home/gera/.local/bin:/home/gera/.cursor-server/bin/linux-x64/042b3c1a4c53f2c3808067f519fbfc67b72cad80/bin/remote-cli:/home/gera/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/usr/local/go/bin:/usr/local/go/bin'
 PINTOOL_RUNTIME=''
 PIN_CPPFLAGS='-g   -Wall   -Werror   -Wno-unknown-pragmas   -D__PIN__=1 -DPIN_CRT=1   -fno-stack-protector   -fno-exceptions   -funwind-tables   -fasynchronous-unwind-tables   -fomit-frame-pointer   -fno-strict-aliasing   -fno-rtti   -faligned-new   -fpic   -DTARGET_IA32E   -DHOST_IA32E   -DTARGET_LINUX   -DPIN_VERSION_MINOR='
 PIN_CPPFLAGS_COMPILER='-fno-exceptions          -fabi-version=2'

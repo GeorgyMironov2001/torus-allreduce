@@ -1,0 +1,14 @@
+{
+  "clangd.arguments": [
+    "--clang-tidy"
+  ],
+  "C_Cpp.codeAnalysis.clangTidy.enabled": true,
+  "C_Cpp.codeAnalysis.clangTidy.checks.enabled": [
+    "readability-braces-around-statements"
+  ],
+  "[cpp]": {
+    "editor.codeActionsOnSave": {
+      "source.fixAll": "explicit"
+    }
+  }
+}

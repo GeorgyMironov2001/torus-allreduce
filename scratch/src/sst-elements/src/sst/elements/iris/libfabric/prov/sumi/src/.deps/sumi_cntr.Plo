@@ -39,21 +39,15 @@ prov/sumi/src/sumi_cntr.lo: prov/sumi/src/sumi_cntr.cc \
  /usr/include/x86_64-linux-gnu/bits/types/__sigset_t.h \
  /usr/include/x86_64-linux-gnu/bits/types/struct_timeval.h \
  /usr/include/x86_64-linux-gnu/bits/types/struct_timespec.h \
- /usr/include/x86_64-linux-gnu/bits/select2.h \
  /usr/include/x86_64-linux-gnu/bits/pthreadtypes.h \
  /usr/include/x86_64-linux-gnu/bits/thread-shared-types.h \
  /usr/include/x86_64-linux-gnu/bits/pthreadtypes-arch.h \
  /usr/include/x86_64-linux-gnu/bits/atomic_wide_counter.h \
  /usr/include/x86_64-linux-gnu/bits/struct_mutex.h \
  /usr/include/x86_64-linux-gnu/bits/struct_rwlock.h /usr/include/alloca.h \
- /usr/include/x86_64-linux-gnu/bits/stdlib-bsearch.h \
  /usr/include/x86_64-linux-gnu/bits/stdlib-float.h \
- /usr/include/x86_64-linux-gnu/bits/stdlib.h \
  /usr/include/c++/11/bits/std_abs.h /usr/include/string.h \
- /usr/include/strings.h \
- /usr/include/x86_64-linux-gnu/bits/strings_fortified.h \
- /usr/include/x86_64-linux-gnu/bits/string_fortified.h \
- /usr/include/assert.h \
+ /usr/include/strings.h /usr/include/assert.h \
  ../../../../../src/sst/elements/iris/libfabric/prov/sumi/include/sumi_prov.h \
  /usr/lib/gcc/x86_64-linux-gnu/11/include/stdbool.h \
  /usr/include/inttypes.h \
@@ -122,7 +116,6 @@ prov/sumi/src/sumi_cntr.lo: prov/sumi/src/sumi_cntr.cc \
  /usr/include/x86_64-linux-gnu/bits/confname.h \
  /usr/include/x86_64-linux-gnu/bits/getopt_posix.h \
  /usr/include/x86_64-linux-gnu/bits/getopt_core.h \
- /usr/include/x86_64-linux-gnu/bits/unistd.h \
  /usr/include/x86_64-linux-gnu/bits/unistd_ext.h \
  /usr/include/linux/close_range.h \
  /usr/include/x86_64-linux-gnu/bits/ss_flags.h \
@@ -147,7 +140,6 @@ prov/sumi/src/sumi_cntr.lo: prov/sumi/src/sumi_cntr.cc \
  /usr/include/x86_64-linux-gnu/asm/sockios.h \
  /usr/include/asm-generic/sockios.h \
  /usr/include/x86_64-linux-gnu/bits/types/struct_osockaddr.h \
- /usr/include/x86_64-linux-gnu/bits/socket2.h \
  /usr/include/x86_64-linux-gnu/bits/in.h /usr/include/ifaddrs.h \
  ../../../../../src/sst/elements/iris/libfabric/include/ofi_abi.h \
  ../../../../../src/sst/elements/iris/libfabric/include/ofi_osd.h \
@@ -205,7 +197,6 @@ prov/sumi/src/sumi_cntr.lo: prov/sumi/src/sumi_cntr.cc \
  /usr/include/x86_64-linux-gnu/bits/types/__mbstate_t.h \
  /usr/include/x86_64-linux-gnu/bits/types/__FILE.h \
  /usr/include/x86_64-linux-gnu/bits/types/FILE.h \
- /usr/include/x86_64-linux-gnu/bits/wchar2.h \
  /usr/include/c++/11/exception /usr/include/c++/11/bits/exception.h \
  /usr/include/c++/11/bits/exception_ptr.h \
  /usr/include/c++/11/bits/cxxabi_init_exception.h \
@@ -244,9 +235,7 @@ prov/sumi/src/sumi_cntr.lo: prov/sumi/src/sumi_cntr.cc \
  /usr/include/x86_64-linux-gnu/bits/types/struct_FILE.h \
  /usr/include/x86_64-linux-gnu/bits/types/cookie_io_functions_t.h \
  /usr/include/x86_64-linux-gnu/bits/stdio_lim.h \
- /usr/include/x86_64-linux-gnu/bits/stdio.h \
- /usr/include/x86_64-linux-gnu/bits/stdio2.h /usr/include/c++/11/cerrno \
- /usr/include/c++/11/bits/charconv.h \
+ /usr/include/c++/11/cerrno /usr/include/c++/11/bits/charconv.h \
  /usr/include/c++/11/bits/basic_string.tcc \
  /usr/include/c++/11/bits/locale_classes.tcc \
  /usr/include/c++/11/system_error \
@@ -274,7 +263,6 @@ prov/sumi/src/sumi_cntr.lo: prov/sumi/src/sumi_cntr.cc \
  /usr/include/x86_64-linux-gnu/bits/fcntl-linux.h \
  /usr/include/linux/falloc.h /usr/include/x86_64-linux-gnu/bits/stat.h \
  /usr/include/x86_64-linux-gnu/bits/struct_stat.h \
- /usr/include/x86_64-linux-gnu/bits/fcntl2.h \
  ../../../../../src/sst/elements/iris/libfabric/include/ofi_net.h \
  ../../../../../src/sst/elements/iris/libfabric/include/rdma/providers/fi_log.h \
  ../../../../../src/sst/elements/iris/libfabric/include/ofi_atomic.h \
@@ -610,7 +598,6 @@ prov/sumi/src/sumi_cntr.lo: prov/sumi/src/sumi_cntr.cc \
 /usr/include/x86_64-linux-gnu/bits/types/__sigset_t.h:
 /usr/include/x86_64-linux-gnu/bits/types/struct_timeval.h:
 /usr/include/x86_64-linux-gnu/bits/types/struct_timespec.h:
-/usr/include/x86_64-linux-gnu/bits/select2.h:
 /usr/include/x86_64-linux-gnu/bits/pthreadtypes.h:
 /usr/include/x86_64-linux-gnu/bits/thread-shared-types.h:
 /usr/include/x86_64-linux-gnu/bits/pthreadtypes-arch.h:
@@ -618,14 +605,10 @@ prov/sumi/src/sumi_cntr.lo: prov/sumi/src/sumi_cntr.cc \
 /usr/include/x86_64-linux-gnu/bits/struct_mutex.h:
 /usr/include/x86_64-linux-gnu/bits/struct_rwlock.h:
 /usr/include/alloca.h:
-/usr/include/x86_64-linux-gnu/bits/stdlib-bsearch.h:
 /usr/include/x86_64-linux-gnu/bits/stdlib-float.h:
-/usr/include/x86_64-linux-gnu/bits/stdlib.h:
 /usr/include/c++/11/bits/std_abs.h:
 /usr/include/string.h:
 /usr/include/strings.h:
-/usr/include/x86_64-linux-gnu/bits/strings_fortified.h:
-/usr/include/x86_64-linux-gnu/bits/string_fortified.h:
 /usr/include/assert.h:
 ../../../../../src/sst/elements/iris/libfabric/prov/sumi/include/sumi_prov.h:
 /usr/lib/gcc/x86_64-linux-gnu/11/include/stdbool.h:
@@ -704,7 +687,6 @@ prov/sumi/src/sumi_cntr.lo: prov/sumi/src/sumi_cntr.cc \
 /usr/include/x86_64-linux-gnu/bits/confname.h:
 /usr/include/x86_64-linux-gnu/bits/getopt_posix.h:
 /usr/include/x86_64-linux-gnu/bits/getopt_core.h:
-/usr/include/x86_64-linux-gnu/bits/unistd.h:
 /usr/include/x86_64-linux-gnu/bits/unistd_ext.h:
 /usr/include/linux/close_range.h:
 /usr/include/x86_64-linux-gnu/bits/ss_flags.h:
@@ -732,7 +714,6 @@ prov/sumi/src/sumi_cntr.lo: prov/sumi/src/sumi_cntr.cc \
 /usr/include/x86_64-linux-gnu/asm/sockios.h:
 /usr/include/asm-generic/sockios.h:
 /usr/include/x86_64-linux-gnu/bits/types/struct_osockaddr.h:
-/usr/include/x86_64-linux-gnu/bits/socket2.h:
 /usr/include/x86_64-linux-gnu/bits/in.h:
 /usr/include/ifaddrs.h:
 ../../../../../src/sst/elements/iris/libfabric/include/ofi_abi.h:
@@ -804,7 +785,6 @@ prov/sumi/src/sumi_cntr.lo: prov/sumi/src/sumi_cntr.cc \
 /usr/include/x86_64-linux-gnu/bits/types/__mbstate_t.h:
 /usr/include/x86_64-linux-gnu/bits/types/__FILE.h:
 /usr/include/x86_64-linux-gnu/bits/types/FILE.h:
-/usr/include/x86_64-linux-gnu/bits/wchar2.h:
 /usr/include/c++/11/exception:
 /usr/include/c++/11/bits/exception.h:
 /usr/include/c++/11/bits/exception_ptr.h:
@@ -854,8 +834,6 @@ prov/sumi/src/sumi_cntr.lo: prov/sumi/src/sumi_cntr.cc \
 /usr/include/x86_64-linux-gnu/bits/types/struct_FILE.h:
 /usr/include/x86_64-linux-gnu/bits/types/cookie_io_functions_t.h:
 /usr/include/x86_64-linux-gnu/bits/stdio_lim.h:
-/usr/include/x86_64-linux-gnu/bits/stdio.h:
-/usr/include/x86_64-linux-gnu/bits/stdio2.h:
 /usr/include/c++/11/cerrno:
 /usr/include/c++/11/bits/charconv.h:
 /usr/include/c++/11/bits/basic_string.tcc:
@@ -891,7 +869,6 @@ prov/sumi/src/sumi_cntr.lo: prov/sumi/src/sumi_cntr.cc \
 /usr/include/linux/falloc.h:
 /usr/include/x86_64-linux-gnu/bits/stat.h:
 /usr/include/x86_64-linux-gnu/bits/struct_stat.h:
-/usr/include/x86_64-linux-gnu/bits/fcntl2.h:
 ../../../../../src/sst/elements/iris/libfabric/include/ofi_net.h:
 ../../../../../src/sst/elements/iris/libfabric/include/rdma/providers/fi_log.h:
 ../../../../../src/sst/elements/iris/libfabric/include/ofi_atomic.h:

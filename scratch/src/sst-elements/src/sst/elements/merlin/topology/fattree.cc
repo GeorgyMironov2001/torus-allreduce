@@ -153,15 +153,37 @@ topo_fattree::~topo_fattree()
     delete[] vns;
 }
 
+int topo_fattree::getPacketRouteId(internal_router_event* ev) const
+{
+    RtrEvent* encap = ev->getEncapsulatedEvent();
+    if ( encap == nullptr ) {
+        return -1;
+    }
+    return encap->getRoute_id();
+}
+
 void topo_fattree::route_deterministic(int port, int vc, internal_router_event* ev)  {
     int dest = ev->getDest();
     // Down routes
     if ( dest >= low_host && dest <= high_host ) {
         ev->setNextPort((dest - low_host) / down_route_factor);
     }
-    // Up routes
+    // Up routes: Overlay spine-leaf may pin uplink via route_id (== spine index).
     else {
-        ev->setNextPort(down_ports + ((dest/down_route_factor) % up_ports));
+        const int route_id = getPacketRouteId(ev);
+        if ( route_id >= 0 ) {
+            if ( route_id >= up_ports ) {
+                output.fatal(CALL_INFO, -1,
+                             "fattree: route_id=%d out of range for up_ports=%d "
+                             "(router id=%d level=%d dest=%d). "
+                             "For 2-level spine-leaf (S,S:L) route_id must be "
+                             "in [0,S) or -1.\n",
+                             route_id, up_ports, id, rtr_level, dest);
+            }
+            ev->setNextPort(down_ports + route_id);
+        } else {
+            ev->setNextPort(down_ports + ((dest/down_route_factor) % up_ports));
+        }
     }
 }
 
@@ -173,6 +195,10 @@ void topo_fattree::route_packet(int port, int vc, internal_router_event* ev)
     int dest = ev->getDest();
     // Down routes are always deterministic and are already done in route
     if ( dest >= low_host && dest <= high_host ) {
+        return;
+    }
+    // Forced spine uplink: do not let adaptive override the chosen port.
+    if ( getPacketRouteId(ev) >= 0 ) {
         return;
     }
     // Up routes can be adaptive, so things can change from the normal path
@@ -258,6 +284,22 @@ Topology::PortState topo_fattree::getPortState(int port) const
     } else {
         return R2R;
     }
+}
+
+std::string topo_fattree::getPortLogicalGroup(int port) const
+{
+    // Leaf down ports attach to endpoints.
+    if ( rtr_level == 0 && port < down_ports ) {
+        return "host";
+    }
+    // R2R: name the level boundary so both ends of the same physical link
+    // share a group (up at level K == down at level K+1 → networkK).
+    if ( port < down_ports ) {
+        // Toward lower level: boundary (rtr_level-1) ↔ rtr_level
+        return std::string("network") + std::to_string(rtr_level - 1);
+    }
+    // Toward upper level: boundary rtr_level ↔ rtr_level+1
+    return std::string("network") + std::to_string(rtr_level);
 }
 
 void topo_fattree::setOutputBufferCreditArray(int const* array, int vcs) {

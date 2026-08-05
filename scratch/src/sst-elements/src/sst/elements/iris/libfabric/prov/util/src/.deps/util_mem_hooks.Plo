@@ -58,13 +58,8 @@ prov/util/src/util_mem_hooks.lo: prov/util/src/util_mem_hooks.c \
  /usr/include/x86_64-linux-gnu/sys/select.h \
  /usr/include/x86_64-linux-gnu/bits/select.h \
  /usr/include/x86_64-linux-gnu/bits/types/sigset_t.h \
- /usr/include/x86_64-linux-gnu/bits/select2.h /usr/include/alloca.h \
- /usr/include/x86_64-linux-gnu/bits/stdlib-bsearch.h \
- /usr/include/x86_64-linux-gnu/bits/stdlib-float.h \
- /usr/include/x86_64-linux-gnu/bits/stdlib.h /usr/include/string.h \
- /usr/include/strings.h \
- /usr/include/x86_64-linux-gnu/bits/strings_fortified.h \
- /usr/include/x86_64-linux-gnu/bits/string_fortified.h \
+ /usr/include/alloca.h /usr/include/x86_64-linux-gnu/bits/stdlib-float.h \
+ /usr/include/string.h /usr/include/strings.h \
  /usr/lib/gcc/x86_64-linux-gnu/11/include/stdarg.h \
  /usr/include/x86_64-linux-gnu/sys/param.h \
  /usr/lib/gcc/x86_64-linux-gnu/11/include/limits.h \
@@ -97,7 +92,6 @@ prov/util/src/util_mem_hooks.lo: prov/util/src/util_mem_hooks.c \
  /usr/include/x86_64-linux-gnu/bits/confname.h \
  /usr/include/x86_64-linux-gnu/bits/getopt_posix.h \
  /usr/include/x86_64-linux-gnu/bits/getopt_core.h \
- /usr/include/x86_64-linux-gnu/bits/unistd.h \
  /usr/include/x86_64-linux-gnu/bits/unistd_ext.h \
  /usr/include/linux/close_range.h \
  /usr/include/x86_64-linux-gnu/bits/ss_flags.h \
@@ -123,7 +117,6 @@ prov/util/src/util_mem_hooks.lo: prov/util/src/util_mem_hooks.c \
  /usr/include/x86_64-linux-gnu/asm/sockios.h \
  /usr/include/asm-generic/sockios.h \
  /usr/include/x86_64-linux-gnu/bits/types/struct_osockaddr.h \
- /usr/include/x86_64-linux-gnu/bits/socket2.h \
  /usr/include/x86_64-linux-gnu/bits/in.h /usr/include/ifaddrs.h \
  ../../../../../src/sst/elements/iris/libfabric/include/ofi_abi.h \
  ../../../../../src/sst/elements/iris/libfabric/include/ofi_osd.h \
@@ -154,7 +147,6 @@ prov/util/src/util_mem_hooks.lo: prov/util/src/util_mem_hooks.c \
  /usr/include/x86_64-linux-gnu/bits/fcntl-linux.h \
  /usr/include/linux/falloc.h /usr/include/x86_64-linux-gnu/bits/stat.h \
  /usr/include/x86_64-linux-gnu/bits/struct_stat.h \
- /usr/include/x86_64-linux-gnu/bits/fcntl2.h \
  ../../../../../src/sst/elements/iris/libfabric/include/ofi_net.h \
  ../../../../../src/sst/elements/iris/libfabric/include/rdma/providers/fi_prov.h \
  ../../../../../src/sst/elements/iris/libfabric/include/rdma/providers/fi_log.h \
@@ -230,15 +222,10 @@ prov/util/src/util_mem_hooks.lo: prov/util/src/util_mem_hooks.c \
 /usr/include/x86_64-linux-gnu/sys/select.h:
 /usr/include/x86_64-linux-gnu/bits/select.h:
 /usr/include/x86_64-linux-gnu/bits/types/sigset_t.h:
-/usr/include/x86_64-linux-gnu/bits/select2.h:
 /usr/include/alloca.h:
-/usr/include/x86_64-linux-gnu/bits/stdlib-bsearch.h:
 /usr/include/x86_64-linux-gnu/bits/stdlib-float.h:
-/usr/include/x86_64-linux-gnu/bits/stdlib.h:
 /usr/include/string.h:
 /usr/include/strings.h:
-/usr/include/x86_64-linux-gnu/bits/strings_fortified.h:
-/usr/include/x86_64-linux-gnu/bits/string_fortified.h:
 /usr/lib/gcc/x86_64-linux-gnu/11/include/stdarg.h:
 /usr/include/x86_64-linux-gnu/sys/param.h:
 /usr/lib/gcc/x86_64-linux-gnu/11/include/limits.h:
@@ -274,7 +261,6 @@ prov/util/src/util_mem_hooks.lo: prov/util/src/util_mem_hooks.c \
 /usr/include/x86_64-linux-gnu/bits/confname.h:
 /usr/include/x86_64-linux-gnu/bits/getopt_posix.h:
 /usr/include/x86_64-linux-gnu/bits/getopt_core.h:
-/usr/include/x86_64-linux-gnu/bits/unistd.h:
 /usr/include/x86_64-linux-gnu/bits/unistd_ext.h:
 /usr/include/linux/close_range.h:
 /usr/include/x86_64-linux-gnu/bits/ss_flags.h:
@@ -303,7 +289,6 @@ prov/util/src/util_mem_hooks.lo: prov/util/src/util_mem_hooks.c \
 /usr/include/x86_64-linux-gnu/asm/sockios.h:
 /usr/include/asm-generic/sockios.h:
 /usr/include/x86_64-linux-gnu/bits/types/struct_osockaddr.h:
-/usr/include/x86_64-linux-gnu/bits/socket2.h:
 /usr/include/x86_64-linux-gnu/bits/in.h:
 /usr/include/ifaddrs.h:
 ../../../../../src/sst/elements/iris/libfabric/include/ofi_abi.h:
@@ -342,7 +327,6 @@ prov/util/src/util_mem_hooks.lo: prov/util/src/util_mem_hooks.c \
 /usr/include/linux/falloc.h:
 /usr/include/x86_64-linux-gnu/bits/stat.h:
 /usr/include/x86_64-linux-gnu/bits/struct_stat.h:
-/usr/include/x86_64-linux-gnu/bits/fcntl2.h:
 ../../../../../src/sst/elements/iris/libfabric/include/ofi_net.h:
 ../../../../../src/sst/elements/iris/libfabric/include/rdma/providers/fi_prov.h:
 ../../../../../src/sst/elements/iris/libfabric/include/rdma/providers/fi_log.h:

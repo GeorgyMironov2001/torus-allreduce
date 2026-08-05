@@ -6,7 +6,7 @@ BENCH_EVEN="SwingB,SwingL,Bucket"
 EXTRA_LARGE="--env slimfly --nodes 32 --hostfile /home/gera/hosts.cluster --num-threads 32"
 EXTRA_SMALL="--env local --nodes 64 --hostfile /home/gera/hosts.cluster --num-threads 1"
 
-python3 launchAll.py --topo torus --job_size 8x8 --netBW 1000000Gb/s --hostBW 1000000Gb/s --torusBW 400Gb/s --env local --bench Trees --route_table_file /home/gera/torus-allreduce/scratch/src/sst-elements/src/sst/elements/ember/mpi/motifs/emberroutingtables/ember_bdmst_routing_table_8_5.json
+python3 launchAll.py --topo torus --job_size 8x8 --netBW 1000000Gb/s --hostBW 1000000Gb/s --torusBW 400Gb/s --env local --bench Trees --route_table_file /home/gera/torus-allreduce/scratch/src/sst-elements/src/sst/elements/ember/mpi/motifs/emberroutingtables/old_format/ember_bdmst_routing_table_8_5.json
 
 # python3 launchAll.py \
 #   --topo torus \

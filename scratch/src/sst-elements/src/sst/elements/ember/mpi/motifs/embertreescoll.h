@@ -3,9 +3,9 @@
 
 #include "mpi/embermpigen.h"
 #include <algorithm>
+#include <cmath>
 #include <map>
 #include <vector>
-#include <cmath>
 namespace SST {
 namespace Ember {
 
@@ -15,6 +15,7 @@ struct TreeEdge {
   int to;      // приёмник
   int rsStage; // стадия Reduce-Scatter (0..L-1 или -1)
   int agStage; // стадия Allgather     (0..L-1 или -1)
+  int route_class{-1};
 };
 
 struct TreeSpec {
@@ -22,6 +23,7 @@ struct TreeSpec {
   std::vector<TreeEdge> edges;
   int dim_size;
   int dimension;
+  std::vector<uint> dimensions;
   std::vector<std::vector<TreeEdge>> inside_peers;
   std::vector<std::vector<TreeEdge>> outside_peers;
   auto get_peers(int center_id, int rank);
@@ -30,7 +32,22 @@ struct TreeSpec {
       : center(center_), dim_size(dim_size), dimension(D), edges(edges_) {
 
     int m_p = (int)std::pow(dim_size, dimension);
-
+    dimensions.assign(dimension, dim_size);
+    inside_peers.assign(m_p, std::vector<TreeEdge>());
+    outside_peers.assign(m_p, std::vector<TreeEdge>());
+    for (const auto &e : edges) {
+      inside_peers[e.from].push_back(e);
+      outside_peers[e.to].push_back(e);
+    }
+  }
+  explicit TreeSpec(int center_, std::vector<uint> &dimensions_,
+                    const std::vector<TreeEdge> &edges_)
+      : center(center_), dimensions(dimensions_), edges(edges_),
+        dimension(dimensions_.size()), dim_size(-1) {
+    int m_p = 1;
+    for (uint dim : dimensions_) {
+      m_p *= dim;
+    }
     inside_peers.assign(m_p, std::vector<TreeEdge>());
     outside_peers.assign(m_p, std::vector<TreeEdge>());
     for (const auto &e : edges) {
@@ -86,7 +103,9 @@ public:
                           uint32_t count, uint32_t vrank, uint32_t numproc,
                           double aggregation_cost_ns, Communicator comm,
                           bool validate, bool latency_optimal, int port_id,
-                          TreesCollective *runner, std::vector<std::vector<int>> &route_table, std::map<std::pair<int, int>, int> &route_table_map);
+                          TreesCollective *runner,
+                          std::vector<std::vector<int>> &route_table,
+                          std::map<std::pair<int, int>, int> &route_table_map);
     bool progress(std::queue<EmberEvent *> &evQ);
     bool hasPendingRecv();
     bool hasPendingSend();
@@ -109,16 +128,24 @@ public:
     uint32_t getMr() { return m_r; }
     // uint getCenterId() { return m_center_id; }
     ring_allreduce_state_t getState() { return m_state; }
-    std::pair<int, std::vector<int>> getRouteTableId(int from, int to, int center_block_id);
+    std::vector<int> getRouteTablePath(int from, int to, int route_class);
 
-    std::vector<std::map<int, std::vector<int>>> scatter_port_send;
-    std::vector<std::map<int, std::vector<int>>> scatter_port_recv;
-    std::vector<std::map<int, std::vector<int>>> allgather_port_send;
-    std::vector<std::map<int, std::vector<int>>> allgather_port_recv;
-    std::vector<std::map<int, std::vector<int>>> scatter_peers_send;
-    std::vector<std::map<int, std::vector<int>>> allgather_peers_send;
-    std::vector<std::map<int, std::vector<int>>> scatter_peers_recv;
-    std::vector<std::map<int, std::vector<int>>> allgather_peers_recv;
+    std::vector<std::map<std::pair<int, int>, std::vector<int>>>
+        scatter_port_send;
+    std::vector<std::map<std::pair<int, int>, std::vector<int>>>
+        scatter_port_recv;
+    std::vector<std::map<std::pair<int, int>, std::vector<int>>>
+        allgather_port_send;
+    std::vector<std::map<std::pair<int, int>, std::vector<int>>>
+        allgather_port_recv;
+    std::vector<std::map<std::pair<int, int>, std::vector<int>>>
+        scatter_peers_send;
+    std::vector<std::map<std::pair<int, int>, std::vector<int>>>
+        allgather_peers_send;
+    std::vector<std::map<std::pair<int, int>, std::vector<int>>>
+        scatter_peers_recv;
+    std::vector<std::map<std::pair<int, int>, std::vector<int>>>
+        allgather_peers_recv;
 
     std::vector<std::vector<int>> route_table;
     std::map<std::pair<int, int>, int> route_table_map;
@@ -141,6 +168,7 @@ public:
     uint8_t **getBitmaps(int rank);
     uint32_t getBlockOffset(uint32_t block_idx);
     uint32_t getBlockSize(uint32_t block_idx);
+    uint32_t messageTag(CollType coll_type, int route_class) const;
 
   private:
     int m_stages_num;
@@ -246,7 +274,8 @@ public:
                     uint ports, uint32_t count, uint32_t rank,
                     uint32_t comm_size, Communicator comm,
                     std::vector<TreeSpec> tree_specs,
-                    std::vector<std::vector<int>> &route_table, std::map<std::pair<int, int>, int> &route_table_map,
+                    std::vector<std::vector<int>> &route_table,
+                    std::map<std::pair<int, int>, int> &route_table_map,
                     double aggregation_cost_ns = 0, bool nb = false,
                     bool sync = true, CollType coll_type = TREES_ALLREDUCE,
                     float *data = NULL, uint *dimensions = NULL,

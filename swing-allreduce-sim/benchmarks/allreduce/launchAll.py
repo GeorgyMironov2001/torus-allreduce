@@ -48,8 +48,9 @@ def check_if_exist(topo, subpath):
 
 def generate_simulations(args, bench):
 
-    counts = [2**i for i in range(8, 20)]
-    # counts = [2**i for i in range(4, 8)]
+    # counts = [2**i for i in range(8, 20)]
+
+    counts = [2**i for i in range(23, 24)]
 
     dimensions_sizes = ','.join(args.job_size.split("x"))
     dimensions = args.job_size.count("x") + 1
@@ -171,7 +172,7 @@ if __name__ == "__main__":
     parser.add_argument("--topo", type=str, help="Topology to run", default="", choices=[
                         "hx4", "hx2", "fattree", "fattree21", "fattree41", "fattree81", "torus", "dragonfly", "hyperx"])
     parser.add_argument("--num-threads", type=int,
-                        help="Number of threads to use for SST", default=8)
+                        help="Number of threads to use for SST", default=1)
     parser.add_argument("--env", type=str, help="Local or Cluster",
                         default="", choices=["cluster", "daint", "ault", "local", "slimfly"])
     parser.add_argument("--nodes", type=int,

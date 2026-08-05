@@ -1,0 +1,120 @@
+{
+  "version": 1,
+  "n": 8,
+  "mode": "reduce_bcast",
+  "chunking": "equal_by_tree",
+  "spines": 2,
+  "leaves": 4,
+  "trees": [
+    {
+      "id": 0,
+      "root": 0,
+      "edges": [
+        {
+          "from": 1,
+          "to": 2,
+          "rsStage": 2,
+          "agStage": 2,
+          "route_class": 0
+        },
+        {
+          "from": 2,
+          "to": 4,
+          "rsStage": 1,
+          "agStage": 1,
+          "route_class": 0
+        },
+        {
+          "from": 3,
+          "to": 2,
+          "rsStage": 2,
+          "agStage": 2,
+          "route_class": -1
+        },
+        {
+          "from": 4,
+          "to": 0,
+          "rsStage": 0,
+          "agStage": 0,
+          "route_class": 0
+        },
+        {
+          "from": 5,
+          "to": 6,
+          "rsStage": 2,
+          "agStage": 2,
+          "route_class": 0
+        },
+        {
+          "from": 6,
+          "to": 4,
+          "rsStage": 1,
+          "agStage": 1,
+          "route_class": 1
+        },
+        {
+          "from": 7,
+          "to": 6,
+          "rsStage": 2,
+          "agStage": 2,
+          "route_class": -1
+        }
+      ]
+    },
+    {
+      "id": 1,
+      "root": 7,
+      "edges": [
+        {
+          "from": 0,
+          "to": 1,
+          "rsStage": 2,
+          "agStage": 2,
+          "route_class": -1
+        },
+        {
+          "from": 1,
+          "to": 3,
+          "rsStage": 1,
+          "agStage": 1,
+          "route_class": 1
+        },
+        {
+          "from": 2,
+          "to": 1,
+          "rsStage": 2,
+          "agStage": 2,
+          "route_class": 1
+        },
+        {
+          "from": 3,
+          "to": 7,
+          "rsStage": 0,
+          "agStage": 0,
+          "route_class": 0
+        },
+        {
+          "from": 4,
+          "to": 5,
+          "rsStage": 2,
+          "agStage": 2,
+          "route_class": -1
+        },
+        {
+          "from": 5,
+          "to": 3,
+          "rsStage": 1,
+          "agStage": 1,
+          "route_class": 0
+        },
+        {
+          "from": 6,
+          "to": 5,
+          "rsStage": 2,
+          "agStage": 2,
+          "route_class": 1
+        }
+      ]
+    }
+  ]
+}

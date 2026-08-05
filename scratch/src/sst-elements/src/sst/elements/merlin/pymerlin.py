@@ -432,7 +432,8 @@ class topoHyperX(Topo):
         self.topoKeys = ["topology", "debug", "num_ports", "flit_size", "link_bw", "xbar_bw", "hyperx.shape",
                          "hyperx.width", "hyperx.local_ports", "input_latency", "output_latency", "input_buf_size", "output_buf_size"]
         self.topoOptKeys = ["xbar_arb", "num_vns", "vn_remap", "vn_remap_shm", "portcontrol.output_arb",
-                            "portcontrol.arbitration.qos_settings", "portcontrol.arbitration.arb_vns", "portcontrol.arbitration.arb_vcs"]
+                            "portcontrol.arbitration.qos_settings", "portcontrol.arbitration.arb_vns",
+                            "portcontrol.arbitration.arb_vcs", "link_bw:host", "link_bw:hyperx"]
 
     def getName(self):
         return "HyperX"
@@ -575,7 +576,14 @@ class topoFatTree(Topo):
         self.topoKeys = ["topology", "debug", "flit_size", "link_bw", "xbar_bw", "input_latency",
                          "output_latency", "input_buf_size", "output_buf_size", "fattree.shape"]
         self.topoOptKeys = ["xbar_arb", "fattree.routing_alg", "fattree.adaptive_threshold", "num_vns", "vn_remap", "vn_remap_shm",
-                            "portcontrol.output_arb", "portcontrol.arbitration.qos_settings", "portcontrol.arbitration.arb_vns", "portcontrol.arbitration.arb_vcs"]
+                            "portcontrol.output_arb", "portcontrol.arbitration.qos_settings", "portcontrol.arbitration.arb_vns", "portcontrol.arbitration.arb_vcs",
+                            # Per-port classes via topo_fattree::getPortLogicalGroup
+                            "link_bw:host", "link_bw:network0", "link_bw:network1", "link_bw:network2",
+                            "input_latency:host", "input_latency:network0", "input_latency:network1",
+                            "output_latency:host", "output_latency:network0", "output_latency:network1",
+                            "input_buf_size:host", "input_buf_size:network0", "input_buf_size:network1",
+                            "output_buf_size:host", "output_buf_size:network0", "output_buf_size:network1",
+                            "print_port_bw"]
         self.nicKeys = ["link_bw"]
         self.ups = []
         self.downs = []

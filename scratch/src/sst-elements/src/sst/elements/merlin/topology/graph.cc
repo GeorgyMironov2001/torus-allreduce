@@ -1,3 +1,4 @@
+#include <cstdio>
 #include <sst_config.h>
 
 #include "graph.h"
@@ -404,6 +405,19 @@ void topo_graph::initBroadcastTree() {
 void topo_graph::route_packet(int port, int vc, internal_router_event *ev) {
   int dest_router = getRouterID(ev->getDest());
   if (dest_router == router_id) {
+    topo_graph_init_event *graph_ev = static_cast<topo_graph_init_event *>(ev);
+    if (!graph_ev->route_path.empty()) {
+      const auto &path = graph_ev->route_path;
+
+      output.verbose(CALL_INFO, 1, 0,
+                     "graph route_path: router=%d dest_router=%d path[0]=%d "
+                     "path[-1]=%d\n",
+                     router_id, dest_router, path[0], path[path.size()-1]);
+      fflush(stdout);
+      if (path[0]==63 && path[path.size()-1]==3) {
+        int q = 1;
+      }
+    }
     ev->setNextPort(getDestLocalPort(ev->getDest()));
     ev->setVC(0);
     return;
@@ -420,7 +434,7 @@ void topo_graph::route_packet(int port, int vc, internal_router_event *ev) {
   int next_router = path[graph_ev->route_port_id + 1];
   graph_ev->setNextPort(getPortForNeighbor(next_router));
   graph_ev->route_port_id++;
-  graph_ev->setVC(vc);
+  // graph_ev->setVC(vc);
 }
 
 void topo_graph::route_packet_bfs(int port, int vc, internal_router_event *ev) {
@@ -439,7 +453,7 @@ void topo_graph::route_packet_bfs(int port, int vc, internal_router_event *ev) {
 
   ev->setNextPort(route_table[dest_router]);
   // ev->setVC(vc==0?1:0);
-  ev->setVC(vc);
+  // ev->setVC(vc);
 }
 
 internal_router_event *topo_graph::process_input(RtrEvent *ev) {

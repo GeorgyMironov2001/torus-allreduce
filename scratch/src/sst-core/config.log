@@ -29,12 +29,9 @@ uname -v = #38~22.04.1-Ubuntu SMP PREEMPT_DYNAMIC Thu Nov  2 18:01:13 UTC 2
 
 PATH: /home/gera/torus-allreduce/local/packages/OpenMPI-4.1.6/bin/
 PATH: /home/gera/py_env/bin/
-PATH: /home/gera/torus-allreduce/local/sstelements-15.0.0/bin/
-PATH: /home/gera/torus-allreduce/local/sstcore-15.0.0/bin/
-PATH: /home/gera/torus-allreduce/local/packages/OpenMPI-4.1.6/bin/
-PATH: /home/gera/.cursor-server/bin/linux-x64/f736016b0aa20ba1f99b7eec1dda48579fa4c290/bin/remote-cli/
+PATH: /home/gera/.cursor-server/bin/linux-x64/042b3c1a4c53f2c3808067f519fbfc67b72cad80/bin/remote-cli/
 PATH: /home/gera/.local/bin/
-PATH: /home/gera/.cursor-server/bin/linux-x64/f736016b0aa20ba1f99b7eec1dda48579fa4c290/bin/remote-cli/
+PATH: /home/gera/.cursor-server/bin/linux-x64/042b3c1a4c53f2c3808067f519fbfc67b72cad80/bin/remote-cli/
 PATH: /home/gera/.local/bin/
 PATH: /usr/local/sbin/
 PATH: /usr/local/bin/
@@ -47,7 +44,6 @@ PATH: /usr/local/games/
 PATH: /snap/bin/
 PATH: /usr/local/go/bin/
 PATH: /usr/local/go/bin/
-PATH: /home/gera/.cursor-server/extensions/ms-python.debugpy-2025.18.0-linux-x64/bundled/scripts/noConfigScripts/
 
 
 ## ----------- ##
@@ -452,7 +448,7 @@ configure:14390: checking how to hardcode library paths into programs
 configure:14415: result: immediate
 configure:14526: checking for shl_load
 configure:14526: gcc -o conftest -g3 -O0 -fno-omit-frame-pointer   conftest.c  >&5
-/usr/bin/ld: /tmp/ccLC0zZd.o: in function `main':
+/usr/bin/ld: /tmp/cct8zhSO.o: in function `main':
 /home/gera/torus-allreduce/scratch/src/sst-core/conftest.c:48: undefined reference to `shl_load'
 collect2: error: ld returned 1 exit status
 configure:14526: $? = 1
@@ -564,7 +560,7 @@ configure:14849: $? = 0
 configure:14868: result: yes
 configure:14873: checking whether a statically linked program can dlopen itself
 configure:14954: gcc -o conftest -g3 -O0 -fno-omit-frame-pointer  -DHAVE_DLFCN_H  -Wl,--export-dynamic -static conftest.c   >&5
-/usr/bin/ld: /tmp/cc7k9gtT.o: in function `main':
+/usr/bin/ld: /tmp/ccgeUq8b.o: in function `main':
 /home/gera/torus-allreduce/scratch/src/sst-core/configure:14933: warning: Using 'dlopen' in statically linked applications requires at runtime the shared libraries from the glibc version used for linking
 configure:14957: $? = 0
 conftest: undefined symbol: _fnord
@@ -1750,6 +1746,7 @@ config.status:1249: creating src/sst/SST-15.0.0.pc
 config.status:1249: creating src/sst/core/Makefile
 config.status:1249: creating src/sst/core/build_info.h
 config.status:1249: creating src/sst/core/sst_config.h
+config.status:1430: src/sst/core/sst_config.h is unchanged
 config.status:1478: executing depfiles commands
 config.status:1555: cd src/sst/core       && sed -e '/# am--include-marker/d' Makefile         | make -f - am--depfiles
 make: Nothing to be done for 'am--depfiles'.

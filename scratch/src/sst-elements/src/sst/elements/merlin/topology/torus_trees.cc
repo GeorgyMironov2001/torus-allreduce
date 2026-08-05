@@ -28,12 +28,9 @@ void topo_torus_trees::parse_route_table(Params &params) {
   std::ifstream file(route_table_file);
   nlohmann::json j;
   file >> j;
-  int id = 0;
   for (const auto &entry : j) {
-    std::pair<int, int> key = std::make_pair(entry[0][0], entry[0][1]);
-    route_table_map[key] = id++;
     std::vector<int> path;
-    for (int rank : entry[1]) {
+    for (int rank : entry) {
       path.push_back(rank);
     }
     route_table.push_back(path);
@@ -160,11 +157,11 @@ void topo_torus_trees::route_packet(int port, int vc,
     ttt_ev->setVC(new_vc); // Toggle VC
   }
   int reverse_shift_coord = dimensions - shift_coord - 1;
-  if (next_coord[shift_coord] % dim_size[reverse_shift_coord] ==
-      (current_coord[shift_coord] + 1) % dim_size[reverse_shift_coord]) {
-    ttt_ev->setNextPort(port_start[reverse_shift_coord][0]);
+  if (next_coord[shift_coord] % dim_size[shift_coord] ==
+      (current_coord[shift_coord] + 1) % dim_size[shift_coord]) {
+    ttt_ev->setNextPort(port_start[shift_coord][0]);
   } else {
-    ttt_ev->setNextPort(port_start[reverse_shift_coord][1]);
+    ttt_ev->setNextPort(port_start[shift_coord][1]);
   }
   if (!ttt_ev->route_path.empty()) {
     ttt_ev->route_port_id++;
@@ -306,18 +303,18 @@ void topo_torus_trees::idToLocation(int run_id, int *location) const {
       div *= dim_size[j];
     }
     int value = (run_id / div);
-    // location[i] = value;
-    location[dimensions - i - 1] = value;
+    location[i] = value;
+    // location[dimensions - i - 1] = value;
     run_id -= (value * div);
   }
-  // location[0] = run_id;
-  location[dimensions - 1] = run_id;
+  location[0] = run_id;
+  // location[dimensions - 1] = run_id;
 }
 
 int topo_torus_trees::LocationToId(int *location) const {
   int res = 0;
   int factor = 1;
-  for (int i = dimensions - 1; i >= 0; i--) {
+  for (int i = 0; i < dimensions; i++) {
     res += location[i] * factor;
     factor *= dim_size[i];
   }
