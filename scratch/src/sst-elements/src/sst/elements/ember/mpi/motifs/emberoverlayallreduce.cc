@@ -1,4 +1,6 @@
 #include "emberoverlayallreduce.h"
+#include "embershortmsgcheck.h"
+#include <cinttypes>
 #include <sst_config.h>
 
 using namespace SST::Ember;
@@ -22,6 +24,12 @@ EmberOverlayAllreduceGenerator::EmberOverlayAllreduceGenerator(
   }
   if (ports < 1) {
     fatal(CALL_INFO, -1, "OverlayAllreduceMotif: arg.ports must be >= 1\n");
+  }
+
+  // Save valueShort from the same defaultParams.py launchAll patches.
+  setValueShort(emberLoadValueShort());
+  if (rank() == 0) {
+    printf("[OverlayAllreduce] valueShort=%" PRIu64 "\n", valueShort());
   }
 
   // JSON → OverlaySchedule: EmberOverlayCollGenerator::loadSchedule
@@ -78,8 +86,7 @@ bool EmberOverlayAllreduceGenerator::generate(std::queue<EmberEvent *> &evQ) {
     bool valid = true;
     for (int i = 0; i < m_recvcount; i++) {
       if (m_data[i] != m_data_validation_recv[i]) {
-        fprintf(stderr,
-                "Validation error on rank %d at index %d (%f vs. %f)\n",
+        fprintf(stderr, "Validation error on rank %d at index %d (%f vs. %f)\n",
                 rank(), i, m_data[i], m_data_validation_recv[i]);
         valid = false;
       }

@@ -191,8 +191,13 @@ public:
 
   uint32_t getNextTag() { return ++m_tag; }
 
+  // From defaultParams.py valueShort (bytes); loaded at motif construct.
+  uint64_t valueShort() const { return m_value_short; }
+  void setValueShort(uint64_t v) { m_value_short = v; }
+
 private:
   uint32_t m_tag = 0;
+  uint64_t m_value_short = 0;
 };
 
 } // namespace Ember

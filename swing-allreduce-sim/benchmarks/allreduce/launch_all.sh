@@ -1,107 +1,81 @@
 #!/bin/bash
-# BENCHS="RecDoubL,RecDoubB,SwingB,SwingL,RecDoubBM,RecDoubLM"
-BENCHS="Bucket,SwingB"
-BENCH_EVEN="SwingB,SwingL,Bucket"
-# BENCHS="SwingB"
-EXTRA_LARGE="--env slimfly --nodes 32 --hostfile /home/gera/hosts.cluster --num-threads 32"
-EXTRA_SMALL="--env local --nodes 64 --hostfile /home/gera/hosts.cluster --num-threads 1"
+# Bench launcher for Spine-Leaf, HyperX, and Dragonfly Overlay.
+#
+# Spine-Leaf 4s16l: 4 spines, 16 leaves, 64 hosts (Merlin shape 4,4:16)
+#   Ring            -> --bench Rings
+#   NCCL DBTree     -> --bench DBTree
+#   Trees allreduce -> --bench Overlay --overlay_k K
+#     K = N          → overlay_sl_sS_lL_kN.json      (intra0 / split_half)
+#     K = k1xk2      → overlay_sl_sS_lL_k{k1}x{k2}.json  (split: same×k1, cross×k2)
+#                      e.g. --overlay_k 2x1
+#
+# Dragonfly p2a4g9: 72 hosts (Merlin shape 2:4:1:9)
+#   Overlay --overlay_k K
+#     K = N            → overlay_df_pP_aA_gG_kN.json
+#     K = k1xk2xk3     → overlay_df_pP_aA_gG_k{k1}x{k2}x{k3}.json
+#   BW отдельно от остальных топологий:
+#     --hostBW    NIC↔router
+#     --groupBW   intra-group (local)
+#     --globalBW  inter-group
+#
+# HyperX 8x8: 64 hosts
+#   Trees  -> --bench Trees --route_table_file .../ember_bdmst_routing_table_hyperx_8_8_2.json
+#            (C++ trees: bdms_tree_specs_bdms_hyperx_8x8_2_quadruple)
+#   SwingB -> --bench SwingB
+#   Bucket -> --bench Bucket  (RingAllreduceRev)
+#
+# --hostfile нужен только для --env slimfly (mpirun по кластеру).
 
-python3 launchAll.py --topo torus --job_size 8x8 --netBW 1000000Gb/s --hostBW 1000000Gb/s --torusBW 400Gb/s --env local --bench Trees --route_table_file /home/gera/torus-allreduce/scratch/src/sst-elements/src/sst/elements/ember/mpi/motifs/emberroutingtables/old_format/ember_bdmst_routing_table_8_5.json
+# Кластер SlimFly:
+# EXTRA="--env slimfly --nodes 32 --hostfile /home/gera/hosts.cluster --num-threads 32"
 
-# python3 launchAll.py \
-#   --topo torus \
-#   --job_size 8x8 \
-#   --bench Trees \
-#   --env slimfly \
-#   --nodes 32 \
-#   --hostfile /home/gera/hosts.cluster \
-#   --num-threads 32 \
-#   --netBW 1600Gb/s \
-#   --hostBW 1600Gb/s \
-#   --torusBW 400Gb/s
+# Локально:
+#   spineleaf: host↔leaf = netBW = 400Gb/s
+#   dragonfly: host / group / global задаются отдельно (по умолчанию = netBW)
+#   hyperx/torus: host/NIC = 1000000Gb/s, fabric = netBW 400Gb/s
+EXTRA="--env local --num-threads 12 --netBW 400Gb/s"
+EXTRA_SL="${EXTRA} --hostBW 400Gb/s"
+EXTRA_HX="${EXTRA} --hostBW 1000000Gb/s"
+EXTRA_DF="${EXTRA} --hostBW 400Gb/s --groupBW 400Gb/s --globalBW 400Gb/s"
 
+# ---------- Spine-Leaf 4s16l ----------
+JOB_SL="--topo spineleaf --job_size 4s16l"
 
-# python3 launchAll.py --topo torus   --job_size 4x4 ${EXTRA_SMALL} --bench SwingB 
-# python3 launchAll.py --topo torus   --job_size 16x16 ${EXTRA_SMALL} --bench SwingB
-# python3 launchAll.py --topo torus   --job_size 32x32 ${EXTRA_SMALL} --bench SwingB
-# python3 launchAll.py --topo torus   --job_size 64x64 ${EXTRA_SMALL} --bench SwingB
-
-# python3 launchAll.py --topo torus   --job_size 8x8 ${EXTRA_SMALL} --bench Bucket 
-# python3 launchAll.py --topo torus   --job_size 16x16 ${EXTRA_SMALL} --bench Bucket
-# python3 launchAll.py --topo torus   --job_size 32x32 ${EXTRA_SMALL} --bench Bucket
-# python3 launchAll.py --topo torus   --job_size 64x64 ${EXTRA_SMALL} --bench Bucket
-
-# python3 launchAll.py --topo torus   --job_size 9x9 ${EXTRA_SMALL} --bench Torus
-# python3 launchAll.py --topo torus   --job_size 17x17 ${EXTRA_SMALL} --bench Torus
-# python3 launchAll.py --topo torus   --job_size 33x33 ${EXTRA_SMALL} --bench Torus 
-# python3 launchAll.py --topo torus   --job_size 65x65 ${EXTRA_SMALL} --bench Torus 
-
-# python3 launchAll.py --topo torus   --job_size 8x8 ${EXTRA_SMALL} --bench SwingL 
-# python3 launchAll.py --topo torus   --job_size 16x16 ${EXTRA_SMALL} --bench SwingL
-# python3 launchAll.py --topo torus   --job_size 32x32 ${EXTRA_SMALL} --bench SwingL
-
-# python3 launchAll.py --topo torus   --job_size 8x8 ${EXTRA_SMALL} --bench Trees 
-# python3 launchAll.py --topo torus   --job_size 16x16 ${EXTRA_SMALL} --bench Trees 
-
-# python3 launchAll.py --topo torus   --job_size 8x8 ${EXTRA_SMALL} --bench AlltoallL
-
-
-
-# wait
-
-
-# python3 launchAll.py --topo torus   --job_size 9x9 ${EXTRA_SMALL} --bench Torus
-
-# python3 launchAll.py --topo torus   --job_size 5x5 ${EXTRA_SMALL} --bench Torus
-
-# python3 launchAll.py --topo torus   --job_size 4x4 ${EXTRA_SMALL} --bench Bucket
-
-# max_jobs=5
-# running=0
-# for N in 3 4 5 6 7 8 9 10 11 12 13 14 15; do
-#   if (( N % 2 == 0 )); then
-#     BENCH="${BENCH_EVEN}"
-#   else
-#     BENCH="${BENCHS_ODD}"
-#   fi
-#   ( python3 launchAll.py --topo torus --job_size ${N}x${N} ${EXTRA_SMALL} --bench "${BENCH}" ) &
-#   (( ++running >= max_jobs )) && { wait -n; ((running--)); }
+# python3 launchAll.py ${JOB_SL} ${EXTRA_SL} --bench Rings
+# python3 launchAll.py ${JOB_SL} ${EXTRA_SL} --bench DBTree
+# for k in 1 2 3; do
+#   python3 launchAll.py ${JOB_SL} ${EXTRA_SL} --bench Overlay --overlay_k ${k}
 # done
-# wait
+# for k in 48x15; do
+#   python3 launchAll.py ${JOB_SL} ${EXTRA_SL} --bench Overlay --overlay_k ${k}
+# done
 
-## Fat Trees
-# python3 launchAll.py --topo fattree   --job_size 1024 ${EXTRA_LARGE} 
-# python3 launchAll.py --topo fattree21 --job_size 1024 ${EXTRA_LARGE} 
-# python3 launchAll.py --topo fattree41 --job_size 1024 ${EXTRA_LARGE} 
-# python3 launchAll.py --topo fattree81 --job_size 1024 ${EXTRA_LARGE} 
+# ---------- HyperX 8x8 (params as launch.json hyperx Trees) ----------
+JOB_HX="--topo hyperx --job_size 8x8"
+ROUTE_HX="/home/gera/torus-allreduce/scratch/src/sst-elements/src/sst/elements/ember/mpi/motifs/emberroutingtables/ember_bdmst_routing_table_hyperx_8_8_2.json"
 
-# # Square torus
-# python3 launchAll.py --topo torus --job_size 3x3   ${EXTRA_SMALL} --bench ${BENCHS}
-# python3 launchAll.py --topo torus --job_size 5x5   ${EXTRA_SMALL} --bench ${BENCHS}
-# python3 launchAll.py --topo torus --job_size 7x7   ${EXTRA_SMALL} --bench ${BENCHS} 
-# python3 launchAll.py --topo torus --job_size 9x9   ${EXTRA_SMALL} --bench ${BENCHS}
-# python3 launchAll.py --topo torus --job_size 11x11 ${EXTRA_SMALL} --bench ${BENCHS}
-# python3 launchAll.py --topo torus --job_size 13x13 ${EXTRA_SMALL} --bench ${BENCHS}
-# python3 launchAll.py --topo torus --job_size 15x15 ${EXTRA_SMALL} --bench ${BENCHS}
+# python3 launchAll.py ${JOB_HX} ${EXTRA_HX} --bench Trees --route_table_file ${ROUTE_HX}
+# python3 launchAll.py ${JOB_HX} ${EXTRA_HX} --bench SwingB
+# # python3 launchAll.py ${JOB_HX} ${EXTRA_HX} --bench SwingL
+# python3 launchAll.py ${JOB_HX} ${EXTRA_HX} --bench Bucket
 
+# ---------- HyperX 64x64 (params as launch.json hyperx Trees) ----------
+JOB_HX="--topo hyperx --job_size 64x64"
+ROUTE_HX="/home/gera/torus-allreduce/scratch/src/sst-elements/src/sst/elements/ember/mpi/motifs/emberroutingtables/ember_bdmst_routing_table_hyperx_64_64_2.json"
 
+# python3 launchAll.py ${JOB_HX} ${EXTRA_HX} --bench Trees --route_table_file ${ROUTE_HX}
+# python3 launchAll.py ${JOB_HX} ${EXTRA_HX} --bench SwingB
+# # python3 launchAll.py ${JOB_HX} ${EXTRA_HX} --bench SwingL
+# python3 launchAll.py ${JOB_HX} ${EXTRA_HX} --bench Bucket
 
-# python3 launchAll.py --topo torus --job_size 16x16   ${EXTRA_SMALL} --bench ${BENCHS} 
-# python3 launchAll.py --topo torus --job_size 32x32   ${EXTRA_LARGE} --bench ${BENCHS} 
-# python3 launchAll.py --topo torus --job_size 64x64   ${EXTRA_LARGE} --bench ${BENCHS} 
-# python3 launchAll.py --topo torus --job_size 128x128 ${EXTRA_LARGE} --bench ${BENCHS} 
+# ---------- Dragonfly p2 a4 g9 (72 hosts, Merlin shape 2:4:1:9) ----------
+JOB_DF="--topo dragonfly --job_size p2a4g9"
 
-# # Rectangular torus
-# python3 launchAll.py --topo torus --job_size 64x16 ${EXTRA_LARGE} --bench ${BENCHS} 
-# python3 launchAll.py --topo torus --job_size 128x8 ${EXTRA_LARGE} --bench ${BENCHS} 
-# python3 launchAll.py --topo torus --job_size 256x4 ${EXTRA_LARGE} --bench ${BENCHS} 
-
-# # Higher dimensional torus
-# python3 launchAll.py --topo torus --job_size 8x8x8   ${EXTRA_SMALL} --bench ${BENCHS} 
-# python3 launchAll.py --topo torus --job_size 8x8x8x8 ${EXTRA_SMALL} --bench ${BENCHS} 
-
-# # Other topologies
-# python3 launchAll.py --topo hx2    --job_size 64x64 ${EXTRA} --bench ${BENCHS}
-# python3 launchAll.py --topo hx4    --job_size 64x64 ${EXTRA} --bench ${BENCHS}
-# python3 launchAll.py --topo hyperx --job_size 64x64 ${EXTRA} --bench ${BENCHS}
+python3 launchAll.py ${JOB_DF} ${EXTRA_DF} --bench Rings
+# python3 launchAll.py ${JOB_DF} ${EXTRA_DF} --bench Overlay --overlay_k 1x1x1
+# python3 launchAll.py ${JOB_DF} ${EXTRA_DF} --bench Overlay --overlay_k 4x6x1
+# 1x1x1 4x6x1 36x27x8
+# for k in 36x27x8; do
+#   python3 launchAll.py ${JOB_DF} ${EXTRA_DF} --bench Overlay --overlay_k ${k}
+# done
 

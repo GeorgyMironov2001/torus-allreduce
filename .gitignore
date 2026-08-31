@@ -3,5 +3,6 @@
 /local
 /swing-allreduce-sim/benchmarks/allreduce/output
 /swing-allreduce-sim/benchmarks/allreduce/output_old
+/swing-allreduce-sim/benchmarks/allreduce/output_new
 /swing-allreduce-sim/benchmarks/allreduce/loads
 /swing-allreduce-sim/benchmarks/allreduce/logs

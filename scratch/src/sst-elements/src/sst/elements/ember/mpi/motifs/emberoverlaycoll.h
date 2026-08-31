@@ -2,6 +2,7 @@
 #define _H_EMBER_OVERLAYCOLL_MOTIF
 
 #include "mpi/embermpigen.h"
+#include <limits>
 #include <map>
 #include <string>
 #include <vector>
@@ -22,6 +23,9 @@ struct OverlayEdge {
 struct OverlayTree {
   int id = -1;
   int root = -1;
+  // Fraction of the full message carried by this tree. >0; sum over trees == 1.
+  // NaN means "unset" at parse time (filled to 1/K or from top-level shares).
+  double share = std::numeric_limits<double>::quiet_NaN();
   std::vector<OverlayEdge> edges;
   // Indexed by rank: edges with from==v / to==v (RS direction toward root).
   std::vector<std::vector<OverlayEdge>> outgoing;
@@ -150,14 +154,14 @@ public:
     bool collective(std::queue<EmberEvent *> &evQ, CollType coll_type);
     void processReceivedData(std::queue<EmberEvent *> &evQ, CollType coll_type,
                              int chunk_stage, int chunk_id);
-    // Tag axes: phase × route_class × unordered {from,to}.
-    // Same route_class in one stage but different host pairs → different tags.
+    // Tag axes: phase × route_class × ordered (from,to).
+    // A→B ≠ B→A (DBTree opposite edges on same pair in one stage).
     uint32_t messageTag(CollType coll_type, int route_class, int from_rank,
                         int to_rank) const;
-    // Elements / offset for the data share of tree_id (equal_by_tree for now;
-    // later: non-uniform weights via chunk layout).
+    // Elements / offset for the data share of tree_id (from m_tree_size/offset).
     uint32_t getTreeSize(int tree_id) const;
     uint32_t getTreeOffset(int tree_id) const;
+    void buildTreeLayout();
 
     int m_stages_num;
     uint64_t m_prev_time = 0;
@@ -174,6 +178,9 @@ public:
     uint32_t m_r;
     uint32_t m_i;
     uint32_t m_count;
+    // Contiguous layout of m_count across trees from OverlayTree::share.
+    std::vector<uint32_t> m_tree_size;
+    std::vector<uint32_t> m_tree_offset;
     bool m_ready_to_recv;
     bool m_ready_to_send;
     double m_aggregation_cost_ns;
@@ -265,12 +272,17 @@ public:
 
   uint32_t getNextTag() { return m_tag++; }
 
+  // From defaultParams.py valueShort (bytes); set by OverlayAllreduce.
+  uint64_t valueShort() const { return m_value_short; }
+  void setValueShort(uint64_t v) { m_value_short = v; }
+
   static OverlaySchedule loadSchedule(const std::string &path);
   static OverlayMode parseMode(const std::string &mode);
   static void validateSchedule(const OverlaySchedule &sched, int world_size);
 
 private:
   uint32_t m_tag = 0;
+  uint64_t m_value_short = 0;
 };
 
 } // namespace Ember

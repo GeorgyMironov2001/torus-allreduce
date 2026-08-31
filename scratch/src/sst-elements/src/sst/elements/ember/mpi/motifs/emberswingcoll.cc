@@ -1,10 +1,12 @@
 #include "emberswingcoll.h"
+#include "embershortmsgcheck.h"
 #include <cmath>
+#include <cinttypes>
 #include <limits.h>
 #include <sst/core/rng/xorshift.h>
 #include <sst_config.h>
 
-#define DEBUG
+// #define DEBUG
 
 #define NO_PEER -1
 #define MAX_SUPPORTED_DIMENSIONS 8 // We support up to 8D torus
@@ -615,6 +617,9 @@ bool EmberSwingCollGenerator::SwingCollectiveEngine::collective(
     //           << (coll_type == SWING_REDUCE_SCATTER ? "REDUCE_SCATTER"
     //                                                 : "ALL_GATHER")
     //           << " size " << m_send_size << std::endl;
+    emberAssertMsgFitsShort(
+        (uint64_t)m_send_size * m_gen.sizeofDataType(FLOAT), m_gen.valueShort(),
+        "SwingAllreduce isend");
     if (m_validate) {
       m_gen.enQ_isend(evQ, &m_send_tmp[0], m_send_size, FLOAT, peer, tag,
                       m_comm, &m_req_send);
@@ -856,7 +861,10 @@ EmberSwingCollGenerator::EmberSwingCollGenerator(SST::ComponentId_t id,
                                                  Params &params,
                                                  std::string name)
     : EmberMessagePassingGenerator(id, params, name), m_tag(0) {
-  ;
+  setValueShort(emberLoadValueShort());
+  if (rank() == 0) {
+    printf("[Swing] valueShort=%" PRIu64 "\n", valueShort());
+  }
 }
 
 bool EmberSwingCollGenerator::generate(std::queue<EmberEvent *> &evQ) {
@@ -913,6 +921,9 @@ bool EmberSwingCollGenerator::EmberImprovedAlltoall::progress(
 
     for (int i = 1; i <= m_p; i++) {
       if (mod(m_r + i, m_p) != m_r) {
+        emberAssertMsgFitsShort(
+            (uint64_t)m_sendcount * m_gen.sizeofDataType(FLOAT),
+            m_gen.valueShort(), "SwingImprovedAlltoall isend");
         m_gen.enQ_isend(evQ, NULL, m_sendcount, FLOAT, mod(m_r + i, m_p), m_tag,
                         m_comm, &msgRequests[nextMRIndex++]);
       }

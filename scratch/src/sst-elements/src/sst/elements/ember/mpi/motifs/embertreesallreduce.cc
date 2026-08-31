@@ -10,6 +10,7 @@
 #include "embertrees/emberbdmstrees_8_8d7.h"
 #include "embertrees/emberbdmstrees_8_8d8.h"
 #include "embertrees/emberbdmstrees_hyperx_8_8_2.h"
+#include "embertrees/emberbdmstrees_hyperx_64_64_2.h"
 #include "embertrees/embercycleopt_16_16_4.h"
 #include "embertrees/embercycleopt_16_16_6.h"
 #include "embertrees/embercycleopt_16_16_8.h"
@@ -19,6 +20,8 @@
 #include "embertrees/embertrees_8_8_8.h"
 #include "embertrees/embertrees_small_cases.h"
 #include "embertreescoll.h"
+#include "embershortmsgcheck.h"
+#include <cinttypes>
 #include <sst_config.h>
 using namespace SST::Ember;
 
@@ -73,11 +76,11 @@ EmberTreesAllreduceGenerator::EmberTreesAllreduceGenerator(
       dimensions_sizes[index] = std::stoul(tmp);
       ++i;
     }
-    std::cout << "Dimensions: ";
-    for (int i = dimensions - 1; i >= 0; i--) {
-      std::cout << dimensions_sizes[i] << " ";
-    }
-    std::cout << std::endl;
+    // std::cout << "Dimensions: ";
+    // for (int i = dimensions - 1; i >= 0; i--) {
+    //   std::cout << dimensions_sizes[i] << " ";
+    // }
+    // std::cout << std::endl;
   }
 
   m_validate = validate;
@@ -103,6 +106,12 @@ EmberTreesAllreduceGenerator::EmberTreesAllreduceGenerator(
     }
     printf("\n");
     m_validation_reduce_executed = false;
+  }
+
+  // Same as Overlay/Swing: read valueShort that Firefly uses for short path.
+  setValueShort(emberLoadValueShort());
+  if (rank() == 0) {
+    printf("[TreesAllreduce] valueShort=%" PRIu64 "\n", valueShort());
   }
 
   std::string route_table_file =

@@ -1,0 +1,904 @@
+{
+  "version": 1,
+  "n": 64,
+  "mode": "reduce_bcast",
+  "chunking": "equal_by_tree",
+  "spines": 4,
+  "leaves": 16,
+  "trees": [
+    {
+      "id": 0,
+      "root": 0,
+      "edges": [
+        {
+          "from": 1,
+          "to": 2,
+          "rsStage": 0,
+          "agStage": 5,
+          "route_class": -1
+        },
+        {
+          "from": 2,
+          "to": 4,
+          "rsStage": 1,
+          "agStage": 4,
+          "route_class": 0
+        },
+        {
+          "from": 3,
+          "to": 2,
+          "rsStage": 0,
+          "agStage": 5,
+          "route_class": -1
+        },
+        {
+          "from": 4,
+          "to": 8,
+          "rsStage": 2,
+          "agStage": 3,
+          "route_class": 0
+        },
+        {
+          "from": 5,
+          "to": 6,
+          "rsStage": 0,
+          "agStage": 5,
+          "route_class": -1
+        },
+        {
+          "from": 6,
+          "to": 4,
+          "rsStage": 1,
+          "agStage": 4,
+          "route_class": -1
+        },
+        {
+          "from": 7,
+          "to": 6,
+          "rsStage": 0,
+          "agStage": 5,
+          "route_class": -1
+        },
+        {
+          "from": 8,
+          "to": 16,
+          "rsStage": 3,
+          "agStage": 2,
+          "route_class": 0
+        },
+        {
+          "from": 9,
+          "to": 10,
+          "rsStage": 0,
+          "agStage": 5,
+          "route_class": -1
+        },
+        {
+          "from": 10,
+          "to": 12,
+          "rsStage": 1,
+          "agStage": 4,
+          "route_class": 0
+        },
+        {
+          "from": 11,
+          "to": 10,
+          "rsStage": 0,
+          "agStage": 5,
+          "route_class": -1
+        },
+        {
+          "from": 12,
+          "to": 8,
+          "rsStage": 2,
+          "agStage": 3,
+          "route_class": 1
+        },
+        {
+          "from": 13,
+          "to": 14,
+          "rsStage": 0,
+          "agStage": 5,
+          "route_class": -1
+        },
+        {
+          "from": 14,
+          "to": 12,
+          "rsStage": 1,
+          "agStage": 4,
+          "route_class": -1
+        },
+        {
+          "from": 15,
+          "to": 14,
+          "rsStage": 0,
+          "agStage": 5,
+          "route_class": -1
+        },
+        {
+          "from": 16,
+          "to": 32,
+          "rsStage": 4,
+          "agStage": 1,
+          "route_class": 0
+        },
+        {
+          "from": 17,
+          "to": 18,
+          "rsStage": 0,
+          "agStage": 5,
+          "route_class": -1
+        },
+        {
+          "from": 18,
+          "to": 20,
+          "rsStage": 1,
+          "agStage": 4,
+          "route_class": 0
+        },
+        {
+          "from": 19,
+          "to": 18,
+          "rsStage": 0,
+          "agStage": 5,
+          "route_class": -1
+        },
+        {
+          "from": 20,
+          "to": 24,
+          "rsStage": 2,
+          "agStage": 3,
+          "route_class": 0
+        },
+        {
+          "from": 21,
+          "to": 22,
+          "rsStage": 0,
+          "agStage": 5,
+          "route_class": -1
+        },
+        {
+          "from": 22,
+          "to": 20,
+          "rsStage": 1,
+          "agStage": 4,
+          "route_class": -1
+        },
+        {
+          "from": 23,
+          "to": 22,
+          "rsStage": 0,
+          "agStage": 5,
+          "route_class": -1
+        },
+        {
+          "from": 24,
+          "to": 16,
+          "rsStage": 3,
+          "agStage": 2,
+          "route_class": 1
+        },
+        {
+          "from": 25,
+          "to": 26,
+          "rsStage": 0,
+          "agStage": 5,
+          "route_class": -1
+        },
+        {
+          "from": 26,
+          "to": 28,
+          "rsStage": 1,
+          "agStage": 4,
+          "route_class": 0
+        },
+        {
+          "from": 27,
+          "to": 26,
+          "rsStage": 0,
+          "agStage": 5,
+          "route_class": -1
+        },
+        {
+          "from": 28,
+          "to": 24,
+          "rsStage": 2,
+          "agStage": 3,
+          "route_class": 1
+        },
+        {
+          "from": 29,
+          "to": 30,
+          "rsStage": 0,
+          "agStage": 5,
+          "route_class": -1
+        },
+        {
+          "from": 30,
+          "to": 28,
+          "rsStage": 1,
+          "agStage": 4,
+          "route_class": -1
+        },
+        {
+          "from": 31,
+          "to": 30,
+          "rsStage": 0,
+          "agStage": 5,
+          "route_class": -1
+        },
+        {
+          "from": 32,
+          "to": 0,
+          "rsStage": 5,
+          "agStage": 0,
+          "route_class": 0
+        },
+        {
+          "from": 33,
+          "to": 34,
+          "rsStage": 0,
+          "agStage": 5,
+          "route_class": -1
+        },
+        {
+          "from": 34,
+          "to": 36,
+          "rsStage": 1,
+          "agStage": 4,
+          "route_class": 0
+        },
+        {
+          "from": 35,
+          "to": 34,
+          "rsStage": 0,
+          "agStage": 5,
+          "route_class": -1
+        },
+        {
+          "from": 36,
+          "to": 40,
+          "rsStage": 2,
+          "agStage": 3,
+          "route_class": 0
+        },
+        {
+          "from": 37,
+          "to": 38,
+          "rsStage": 0,
+          "agStage": 5,
+          "route_class": -1
+        },
+        {
+          "from": 38,
+          "to": 36,
+          "rsStage": 1,
+          "agStage": 4,
+          "route_class": -1
+        },
+        {
+          "from": 39,
+          "to": 38,
+          "rsStage": 0,
+          "agStage": 5,
+          "route_class": -1
+        },
+        {
+          "from": 40,
+          "to": 48,
+          "rsStage": 3,
+          "agStage": 2,
+          "route_class": 0
+        },
+        {
+          "from": 41,
+          "to": 42,
+          "rsStage": 0,
+          "agStage": 5,
+          "route_class": -1
+        },
+        {
+          "from": 42,
+          "to": 44,
+          "rsStage": 1,
+          "agStage": 4,
+          "route_class": 0
+        },
+        {
+          "from": 43,
+          "to": 42,
+          "rsStage": 0,
+          "agStage": 5,
+          "route_class": -1
+        },
+        {
+          "from": 44,
+          "to": 40,
+          "rsStage": 2,
+          "agStage": 3,
+          "route_class": 1
+        },
+        {
+          "from": 45,
+          "to": 46,
+          "rsStage": 0,
+          "agStage": 5,
+          "route_class": -1
+        },
+        {
+          "from": 46,
+          "to": 44,
+          "rsStage": 1,
+          "agStage": 4,
+          "route_class": -1
+        },
+        {
+          "from": 47,
+          "to": 46,
+          "rsStage": 0,
+          "agStage": 5,
+          "route_class": -1
+        },
+        {
+          "from": 48,
+          "to": 32,
+          "rsStage": 4,
+          "agStage": 1,
+          "route_class": 1
+        },
+        {
+          "from": 49,
+          "to": 50,
+          "rsStage": 0,
+          "agStage": 5,
+          "route_class": -1
+        },
+        {
+          "from": 50,
+          "to": 52,
+          "rsStage": 1,
+          "agStage": 4,
+          "route_class": 0
+        },
+        {
+          "from": 51,
+          "to": 50,
+          "rsStage": 0,
+          "agStage": 5,
+          "route_class": -1
+        },
+        {
+          "from": 52,
+          "to": 56,
+          "rsStage": 2,
+          "agStage": 3,
+          "route_class": 0
+        },
+        {
+          "from": 53,
+          "to": 54,
+          "rsStage": 0,
+          "agStage": 5,
+          "route_class": -1
+        },
+        {
+          "from": 54,
+          "to": 52,
+          "rsStage": 1,
+          "agStage": 4,
+          "route_class": -1
+        },
+        {
+          "from": 55,
+          "to": 54,
+          "rsStage": 0,
+          "agStage": 5,
+          "route_class": -1
+        },
+        {
+          "from": 56,
+          "to": 48,
+          "rsStage": 3,
+          "agStage": 2,
+          "route_class": 1
+        },
+        {
+          "from": 57,
+          "to": 58,
+          "rsStage": 0,
+          "agStage": 5,
+          "route_class": -1
+        },
+        {
+          "from": 58,
+          "to": 60,
+          "rsStage": 1,
+          "agStage": 4,
+          "route_class": 0
+        },
+        {
+          "from": 59,
+          "to": 58,
+          "rsStage": 0,
+          "agStage": 5,
+          "route_class": -1
+        },
+        {
+          "from": 60,
+          "to": 56,
+          "rsStage": 2,
+          "agStage": 3,
+          "route_class": 1
+        },
+        {
+          "from": 61,
+          "to": 62,
+          "rsStage": 0,
+          "agStage": 5,
+          "route_class": -1
+        },
+        {
+          "from": 62,
+          "to": 60,
+          "rsStage": 1,
+          "agStage": 4,
+          "route_class": -1
+        },
+        {
+          "from": 63,
+          "to": 62,
+          "rsStage": 0,
+          "agStage": 5,
+          "route_class": -1
+        }
+      ]
+    },
+    {
+      "id": 1,
+      "root": 63,
+      "edges": [
+        {
+          "from": 0,
+          "to": 1,
+          "rsStage": 0,
+          "agStage": 5,
+          "route_class": -1
+        },
+        {
+          "from": 1,
+          "to": 3,
+          "rsStage": 1,
+          "agStage": 4,
+          "route_class": -1
+        },
+        {
+          "from": 2,
+          "to": 1,
+          "rsStage": 0,
+          "agStage": 5,
+          "route_class": -1
+        },
+        {
+          "from": 3,
+          "to": 7,
+          "rsStage": 2,
+          "agStage": 3,
+          "route_class": 1
+        },
+        {
+          "from": 4,
+          "to": 5,
+          "rsStage": 0,
+          "agStage": 5,
+          "route_class": -1
+        },
+        {
+          "from": 5,
+          "to": 3,
+          "rsStage": 1,
+          "agStage": 4,
+          "route_class": 1
+        },
+        {
+          "from": 6,
+          "to": 5,
+          "rsStage": 0,
+          "agStage": 5,
+          "route_class": -1
+        },
+        {
+          "from": 7,
+          "to": 15,
+          "rsStage": 3,
+          "agStage": 2,
+          "route_class": 0
+        },
+        {
+          "from": 8,
+          "to": 9,
+          "rsStage": 0,
+          "agStage": 5,
+          "route_class": -1
+        },
+        {
+          "from": 9,
+          "to": 11,
+          "rsStage": 1,
+          "agStage": 4,
+          "route_class": -1
+        },
+        {
+          "from": 10,
+          "to": 9,
+          "rsStage": 0,
+          "agStage": 5,
+          "route_class": -1
+        },
+        {
+          "from": 11,
+          "to": 7,
+          "rsStage": 2,
+          "agStage": 3,
+          "route_class": 2
+        },
+        {
+          "from": 12,
+          "to": 13,
+          "rsStage": 0,
+          "agStage": 5,
+          "route_class": -1
+        },
+        {
+          "from": 13,
+          "to": 11,
+          "rsStage": 1,
+          "agStage": 4,
+          "route_class": 1
+        },
+        {
+          "from": 14,
+          "to": 13,
+          "rsStage": 0,
+          "agStage": 5,
+          "route_class": -1
+        },
+        {
+          "from": 15,
+          "to": 31,
+          "rsStage": 4,
+          "agStage": 1,
+          "route_class": 0
+        },
+        {
+          "from": 16,
+          "to": 17,
+          "rsStage": 0,
+          "agStage": 5,
+          "route_class": -1
+        },
+        {
+          "from": 17,
+          "to": 19,
+          "rsStage": 1,
+          "agStage": 4,
+          "route_class": -1
+        },
+        {
+          "from": 18,
+          "to": 17,
+          "rsStage": 0,
+          "agStage": 5,
+          "route_class": -1
+        },
+        {
+          "from": 19,
+          "to": 23,
+          "rsStage": 2,
+          "agStage": 3,
+          "route_class": 1
+        },
+        {
+          "from": 20,
+          "to": 21,
+          "rsStage": 0,
+          "agStage": 5,
+          "route_class": -1
+        },
+        {
+          "from": 21,
+          "to": 19,
+          "rsStage": 1,
+          "agStage": 4,
+          "route_class": 1
+        },
+        {
+          "from": 22,
+          "to": 21,
+          "rsStage": 0,
+          "agStage": 5,
+          "route_class": -1
+        },
+        {
+          "from": 23,
+          "to": 15,
+          "rsStage": 3,
+          "agStage": 2,
+          "route_class": 1
+        },
+        {
+          "from": 24,
+          "to": 25,
+          "rsStage": 0,
+          "agStage": 5,
+          "route_class": -1
+        },
+        {
+          "from": 25,
+          "to": 27,
+          "rsStage": 1,
+          "agStage": 4,
+          "route_class": -1
+        },
+        {
+          "from": 26,
+          "to": 25,
+          "rsStage": 0,
+          "agStage": 5,
+          "route_class": -1
+        },
+        {
+          "from": 27,
+          "to": 23,
+          "rsStage": 2,
+          "agStage": 3,
+          "route_class": 2
+        },
+        {
+          "from": 28,
+          "to": 29,
+          "rsStage": 0,
+          "agStage": 5,
+          "route_class": -1
+        },
+        {
+          "from": 29,
+          "to": 27,
+          "rsStage": 1,
+          "agStage": 4,
+          "route_class": 1
+        },
+        {
+          "from": 30,
+          "to": 29,
+          "rsStage": 0,
+          "agStage": 5,
+          "route_class": -1
+        },
+        {
+          "from": 31,
+          "to": 63,
+          "rsStage": 5,
+          "agStage": 0,
+          "route_class": 0
+        },
+        {
+          "from": 32,
+          "to": 33,
+          "rsStage": 0,
+          "agStage": 5,
+          "route_class": -1
+        },
+        {
+          "from": 33,
+          "to": 35,
+          "rsStage": 1,
+          "agStage": 4,
+          "route_class": -1
+        },
+        {
+          "from": 34,
+          "to": 33,
+          "rsStage": 0,
+          "agStage": 5,
+          "route_class": -1
+        },
+        {
+          "from": 35,
+          "to": 39,
+          "rsStage": 2,
+          "agStage": 3,
+          "route_class": 1
+        },
+        {
+          "from": 36,
+          "to": 37,
+          "rsStage": 0,
+          "agStage": 5,
+          "route_class": -1
+        },
+        {
+          "from": 37,
+          "to": 35,
+          "rsStage": 1,
+          "agStage": 4,
+          "route_class": 1
+        },
+        {
+          "from": 38,
+          "to": 37,
+          "rsStage": 0,
+          "agStage": 5,
+          "route_class": -1
+        },
+        {
+          "from": 39,
+          "to": 47,
+          "rsStage": 3,
+          "agStage": 2,
+          "route_class": 0
+        },
+        {
+          "from": 40,
+          "to": 41,
+          "rsStage": 0,
+          "agStage": 5,
+          "route_class": -1
+        },
+        {
+          "from": 41,
+          "to": 43,
+          "rsStage": 1,
+          "agStage": 4,
+          "route_class": -1
+        },
+        {
+          "from": 42,
+          "to": 41,
+          "rsStage": 0,
+          "agStage": 5,
+          "route_class": -1
+        },
+        {
+          "from": 43,
+          "to": 39,
+          "rsStage": 2,
+          "agStage": 3,
+          "route_class": 2
+        },
+        {
+          "from": 44,
+          "to": 45,
+          "rsStage": 0,
+          "agStage": 5,
+          "route_class": -1
+        },
+        {
+          "from": 45,
+          "to": 43,
+          "rsStage": 1,
+          "agStage": 4,
+          "route_class": 1
+        },
+        {
+          "from": 46,
+          "to": 45,
+          "rsStage": 0,
+          "agStage": 5,
+          "route_class": -1
+        },
+        {
+          "from": 47,
+          "to": 31,
+          "rsStage": 4,
+          "agStage": 1,
+          "route_class": 1
+        },
+        {
+          "from": 48,
+          "to": 49,
+          "rsStage": 0,
+          "agStage": 5,
+          "route_class": -1
+        },
+        {
+          "from": 49,
+          "to": 51,
+          "rsStage": 1,
+          "agStage": 4,
+          "route_class": -1
+        },
+        {
+          "from": 50,
+          "to": 49,
+          "rsStage": 0,
+          "agStage": 5,
+          "route_class": -1
+        },
+        {
+          "from": 51,
+          "to": 55,
+          "rsStage": 2,
+          "agStage": 3,
+          "route_class": 1
+        },
+        {
+          "from": 52,
+          "to": 53,
+          "rsStage": 0,
+          "agStage": 5,
+          "route_class": -1
+        },
+        {
+          "from": 53,
+          "to": 51,
+          "rsStage": 1,
+          "agStage": 4,
+          "route_class": 1
+        },
+        {
+          "from": 54,
+          "to": 53,
+          "rsStage": 0,
+          "agStage": 5,
+          "route_class": -1
+        },
+        {
+          "from": 55,
+          "to": 47,
+          "rsStage": 3,
+          "agStage": 2,
+          "route_class": 1
+        },
+        {
+          "from": 56,
+          "to": 57,
+          "rsStage": 0,
+          "agStage": 5,
+          "route_class": -1
+        },
+        {
+          "from": 57,
+          "to": 59,
+          "rsStage": 1,
+          "agStage": 4,
+          "route_class": -1
+        },
+        {
+          "from": 58,
+          "to": 57,
+          "rsStage": 0,
+          "agStage": 5,
+          "route_class": -1
+        },
+        {
+          "from": 59,
+          "to": 55,
+          "rsStage": 2,
+          "agStage": 3,
+          "route_class": 2
+        },
+        {
+          "from": 60,
+          "to": 61,
+          "rsStage": 0,
+          "agStage": 5,
+          "route_class": -1
+        },
+        {
+          "from": 61,
+          "to": 59,
+          "rsStage": 1,
+          "agStage": 4,
+          "route_class": 1
+        },
+        {
+          "from": 62,
+          "to": 61,
+          "rsStage": 0,
+          "agStage": 5,
+          "route_class": -1
+        }
+      ]
+    }
+  ]
+}

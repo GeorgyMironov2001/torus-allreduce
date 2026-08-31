@@ -1,5 +1,7 @@
 #include "embertreescoll.h"
+#include "embershortmsgcheck.h"
 #include <algorithm>
+#include <cassert>
 #include <cmath>
 #include <cstddef>
 #include <limits.h>
@@ -7,7 +9,7 @@
 #include <sst_config.h>
 #include <tuple>
 #include <utility>
-#define DEBUG
+// #define DEBUG
 
 #define NO_PEER -1
 #define MAX_SUPPORTED_DIMENSIONS 8 // We support up to 8D torus
@@ -1076,8 +1078,8 @@ bool EmberTreesCollGenerator::TreesCollectiveEngine::collective(
           current_time, send_size_time);
   fflush(stdout);
   if (m_i > 0) {
-    // m_gen.enQ_waitall(evQ, m_req_send[global_stage - 1].size(),
-    //                   m_req_send[global_stage - 1].data(), NULL);
+    m_gen.enQ_waitall(evQ, m_req_send[global_stage - 1].size(),
+                      m_req_send[global_stage - 1].data(), NULL);
   }
   if (m_i == 0) {
     // recv//
@@ -1331,10 +1333,9 @@ bool EmberTreesCollGenerator::TreesCollectiveEngine::collective(
             }
           }
         }
-        const int count =
-            m_latency_optimal
-                ? tree_chunk * (int)tree_ids.size()
-                : (int)(send_block_size * next_centers.size());
+        const int count = m_latency_optimal
+                              ? tree_chunk * (int)tree_ids.size()
+                              : (int)(send_block_size * next_centers.size());
         // Without validate m_dst is NULL; send slab only (timing path).
         float *out = m_send_epoch.slab.data() + m_send_size;
 
@@ -1371,6 +1372,9 @@ bool EmberTreesCollGenerator::TreesCollectiveEngine::collective(
         }
         const uint32_t msg_tag = messageTag(coll_type, route_class);
         m_send_epoch.chunks.emplace_back(out, count, next_peer_id);
+        emberAssertMsgFitsShort(
+            (uint64_t)count * m_gen.sizeofDataType(FLOAT), m_gen.valueShort(),
+            "TreesAllreduce isend");
         m_gen.enQ_isend(evQ, out, count, FLOAT, next_peer_id, msg_tag, m_comm,
                         &m_req_send[global_stage][next_peer_counter++],
                         route_id);
@@ -1662,6 +1666,9 @@ bool EmberTreesCollGenerator::TreesCollectiveEngine::collective(
           }
           const uint32_t msg_tag = messageTag(coll_type, route_class);
           m_send_epoch.chunks.emplace_back(out, count, next_peer_id);
+          emberAssertMsgFitsShort(
+              (uint64_t)count * m_gen.sizeofDataType(FLOAT), m_gen.valueShort(),
+              "TreesAllreduce isend");
           m_gen.enQ_isend(evQ, out, count, FLOAT, next_peer_id, msg_tag, m_comm,
                           &m_req_send[global_stage][next_peer_counter++],
                           route_id);

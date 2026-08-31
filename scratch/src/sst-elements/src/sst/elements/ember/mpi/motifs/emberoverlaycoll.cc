@@ -1,7 +1,9 @@
 #include "emberoverlaycoll.h"
+#include "embershortmsgcheck.h"
 #include <algorithm>
 #include <cassert>
 #include <cinttypes>
+#include <cmath>
 #include <cstdio>
 #include <cstring>
 #include <fstream>
@@ -46,10 +48,18 @@ EmberOverlayCollGenerator::loadSchedule(const std::string &path) {
   sched.mode = parseMode(j.value("mode", "reduce_bcast"));
   sched.chunking = j.value("chunking", "equal_by_tree");
 
+  std::vector<double> top_shares;
+  if (j.contains("shares")) {
+    top_shares = j.at("shares").get<std::vector<double>>();
+  }
+
   for (const auto &tj : j.at("trees")) {
     OverlayTree tree;
     tree.id = tj.value("id", static_cast<int>(sched.trees.size()));
     tree.root = tj.at("root").get<int>();
+    if (tj.contains("share")) {
+      tree.share = tj.at("share").get<double>();
+    }
     for (const auto &ej : tj.at("edges")) {
       OverlayEdge e;
       e.from = ej.at("from").get<int>();
@@ -62,6 +72,73 @@ EmberOverlayCollGenerator::loadSchedule(const std::string &path) {
     tree.buildAdjacency(sched.n);
     sched.trees.push_back(std::move(tree));
   }
+
+  const int K = (int)sched.trees.size();
+  if (!top_shares.empty() && (int)top_shares.size() != K) {
+    fprintf(stderr,
+            "Overlay schedule: top-level shares length %zu != trees %d\n",
+            top_shares.size(), K);
+    exit(1);
+  }
+
+  bool any_share = false;
+  bool all_share = true;
+  for (int t = 0; t < K; ++t) {
+    if (std::isnan(sched.trees[t].share)) {
+      all_share = false;
+      if (!top_shares.empty()) {
+        sched.trees[t].share = top_shares[(size_t)t];
+        any_share = true;
+      }
+    } else {
+      any_share = true;
+    }
+  }
+
+  if (!any_share) {
+    // No per-tree or top-level shares: equal_by_tree.
+    const double eq = 1.0 / (double)K;
+    double assigned = 0.0;
+    for (int t = 0; t < K; ++t) {
+      if (t < K - 1) {
+        sched.trees[(size_t)t].share = eq;
+        assigned += eq;
+      } else {
+        sched.trees[(size_t)t].share = 1.0 - assigned;
+      }
+    }
+    if (sched.chunking.empty()) {
+      sched.chunking = "equal_by_tree";
+    }
+  } else {
+    for (int t = 0; t < K; ++t) {
+      if (std::isnan(sched.trees[t].share)) {
+        fprintf(stderr,
+                "Overlay schedule: tree %d missing share while others set "
+                "(or provide top-level shares)\n",
+                sched.trees[t].id);
+        exit(1);
+      }
+    }
+    if (sched.chunking == "equal_by_tree" && !all_share) {
+      // Mixed / top-level shares: mark as weighted for logs.
+      sched.chunking = "weighted";
+    } else if (sched.chunking == "equal_by_tree") {
+      // Explicit equal shares still fine; keep label unless unequal.
+      bool equal = true;
+      const double eq = 1.0 / (double)K;
+      for (const auto &tree : sched.trees) {
+        if (std::fabs(tree.share - eq) > 1e-12) {
+          equal = false;
+          break;
+        }
+      }
+      if (!equal) {
+        sched.chunking = "weighted";
+      }
+    }
+  }
+
   return sched;
 }
 
@@ -77,6 +154,7 @@ void EmberOverlayCollGenerator::validateSchedule(const OverlaySchedule &sched,
     exit(1);
   }
   int stages_num = 0;
+  double share_sum = 0.0;
   for (const auto &tree : sched.trees) {
     if (tree.root < 0 || tree.root >= sched.n) {
       fprintf(stderr, "Tree %d has invalid root %d\n", tree.id, tree.root);
@@ -86,6 +164,12 @@ void EmberOverlayCollGenerator::validateSchedule(const OverlaySchedule &sched,
       fprintf(stderr, "Tree %d has no edges\n", tree.id);
       exit(1);
     }
+    if (std::isnan(tree.share) || !(tree.share > 0.0)) {
+      fprintf(stderr, "Tree %d has invalid share %g (must be > 0)\n", tree.id,
+              tree.share);
+      exit(1);
+    }
+    share_sum += tree.share;
     if ((int)tree.outgoing.size() != sched.n ||
         (int)tree.incoming.size() != sched.n) {
       fprintf(stderr, "Tree %d adjacency not built (call buildAdjacency(n))\n",
@@ -102,6 +186,11 @@ void EmberOverlayCollGenerator::validateSchedule(const OverlaySchedule &sched,
       stages_num = std::max(stages_num, e.rsStage + 1);
       stages_num = std::max(stages_num, e.agStage + 1);
     }
+  }
+  if (std::fabs(share_sum - 1.0) > 1e-9) {
+    fprintf(stderr, "Overlay schedule share sum=%g (expected 1.0)\n",
+            share_sum);
+    exit(1);
   }
   if (stages_num <= 0) {
     fprintf(stderr, "Overlay schedule has no stages (stages_num=%d)\n",
@@ -143,6 +232,8 @@ EmberOverlayCollGenerator::OverlayCollectiveEngine::OverlayCollectiveEngine(
   m_do_allgather =
       (coll_type == OVERLAY_ALLGATHER) || (coll_type == OVERLAY_ALLREDUCE);
 
+  buildTreeLayout();
+
   scatter_peers_send.resize(m_stages_num);
   scatter_peers_recv.resize(m_stages_num);
   allgather_peers_send.resize(m_stages_num);
@@ -181,6 +272,9 @@ EmberOverlayCollGenerator::OverlayCollectiveEngine::OverlayCollectiveEngine(
   sort_tree_ids(allgather_peers_recv);
 
   reset();
+  if (m_r == 0) {
+    int q = 1;
+  }
 }
 
 void EmberOverlayCollGenerator::OverlayCollectiveEngine::setEnable(
@@ -207,40 +301,87 @@ float *EmberOverlayCollGenerator::OverlayCollectiveEngine::getBuff() {
 
 uint32_t EmberOverlayCollGenerator::OverlayCollectiveEngine::getTreeSize(
     int tree_id) const {
-  const int K = (int)m_runner->allreduce_trees.size();
-  assert(K > 0);
-  assert(tree_id >= 0 && tree_id < K);
-  // equal_by_tree: floor division; last tree takes the remainder.
-  const uint32_t base = m_count / (uint32_t)K;
-  if (tree_id < K - 1) {
-    return base;
-  }
-  return m_count - base * (uint32_t)(K - 1);
+  assert(tree_id >= 0 && tree_id < (int)m_tree_size.size());
+  return m_tree_size[(size_t)tree_id];
 }
 
 uint32_t EmberOverlayCollGenerator::OverlayCollectiveEngine::getTreeOffset(
     int tree_id) const {
+  assert(tree_id >= 0 && tree_id < (int)m_tree_offset.size());
+  return m_tree_offset[(size_t)tree_id];
+}
+
+void EmberOverlayCollGenerator::OverlayCollectiveEngine::buildTreeLayout() {
   const int K = (int)m_runner->allreduce_trees.size();
   assert(K > 0);
-  assert(tree_id >= 0 && tree_id < K);
-  const uint32_t base = m_count / (uint32_t)K;
-  return base * (uint32_t)tree_id;
+  m_tree_size.assign((size_t)K, 0);
+  m_tree_offset.assign((size_t)K, 0);
+
+  // Prefix-round layout: off[t] = round(M * sum_{i<t} w_i), off[K] = M.
+  // Guarantees contiguous non-overlapping shares summing to m_count.
+  std::vector<uint32_t> off((size_t)K + 1, 0);
+  double prefix = 0.0;
+  off[0] = 0;
+  for (int t = 0; t < K; ++t) {
+    const double w = m_runner->allreduce_trees[(size_t)t].share;
+    assert(w > 0.0 && !std::isnan(w));
+    prefix += w;
+    if (t + 1 < K) {
+      const double rounded = std::round((double)m_count * prefix);
+      off[(size_t)t + 1] =
+          (uint32_t)std::max(0.0, std::min((double)m_count, rounded));
+    }
+  }
+  off[(size_t)K] = m_count;
+
+  // Enforce non-decreasing offsets (rounding can theoretically stall).
+  for (int t = 1; t <= K; ++t) {
+    if (off[(size_t)t] < off[(size_t)t - 1]) {
+      off[(size_t)t] = off[(size_t)t - 1];
+    }
+  }
+  off[(size_t)K] = m_count;
+
+  uint32_t sum = 0;
+  for (int t = 0; t < K; ++t) {
+    m_tree_offset[(size_t)t] = off[(size_t)t];
+    m_tree_size[(size_t)t] = off[(size_t)t + 1] - off[(size_t)t];
+    sum += m_tree_size[(size_t)t];
+  }
+  assert(sum == m_count);
+
+  if (m_r == 0) {
+    double wsum = 0.0;
+    printf("[Overlay] tree layout count=%u K=%d sizes=[", m_count, K);
+    for (int t = 0; t < K; ++t) {
+      wsum += m_runner->allreduce_trees[(size_t)t].share;
+      printf("%u", m_tree_size[(size_t)t]);
+      if (t + 1 < K)
+        printf(",");
+    }
+    printf("] shares=[");
+    for (int t = 0; t < K; ++t) {
+      printf("%g", m_runner->allreduce_trees[(size_t)t].share);
+      if (t + 1 < K)
+        printf(",");
+    }
+    printf("] share_sum=%g\n", wsum);
+  }
 }
 
 uint32_t EmberOverlayCollGenerator::OverlayCollectiveEngine::messageTag(
     CollType coll_type, int route_class, int from_rank, int to_rank) const {
-  // Layout: [phase | route_class_slot | unordered_pair]
+  // Layout: [phase | route_class_slot | ordered_pair(from,to)]
   //
-  // Unordered pair so A→B and B→A agree on the same pair id; different host
-  // pairs with the same route_class (same stage) get distinct tags.
-  // route_class stays in the tag so one pair can still use several spines.
+  // Ordered (from,to): A→B and B→A get different tags. Needed when two trees
+  // exchange opposite directions on the same host pair in one stage
+  // (DBTree: 37→38 tree0 and 38→37 tree1). Sender and receiver of one message
+  // both pass the same (from,to) in the edge direction.
   assert(from_rank >= 0 && to_rank >= 0);
   assert((uint32_t)from_rank < m_p && (uint32_t)to_rank < m_p);
   assert(from_rank != to_rank);
 
-  const uint32_t lo = (uint32_t)std::min(from_rank, to_rank);
-  const uint32_t hi = (uint32_t)std::max(from_rank, to_rank);
-  const uint32_t pair = lo * m_p + hi;
+  const uint32_t pair = (uint32_t)from_rank * m_p + (uint32_t)to_rank;
 
   const uint32_t rc_slot = route_class < 0 ? 0u : (uint32_t)route_class + 1u;
   assert(rc_slot < m_num_rc_slots);
@@ -567,6 +708,9 @@ bool EmberOverlayCollGenerator::OverlayCollectiveEngine::collective(
         const uint32_t msg_tag =
             messageTag(coll_type, route_class, (int)m_r, next_peer_id);
         m_send_epoch.chunks.emplace_back(out, count, next_peer_id);
+        emberAssertMsgFitsShort(
+            (uint64_t)count * m_gen.sizeofDataType(FLOAT), m_gen.valueShort(),
+            "OverlayAllreduce isend");
         m_gen.enQ_isend(evQ, out, count, FLOAT, next_peer_id, msg_tag, m_comm,
                         &m_req_send[global_stage][next_peer_counter++],
                         route_class);
@@ -676,6 +820,9 @@ bool EmberOverlayCollGenerator::OverlayCollectiveEngine::collective(
           const uint32_t msg_tag =
               messageTag(coll_type, route_class, (int)m_r, next_peer_id);
           m_send_epoch.chunks.emplace_back(out, count, next_peer_id);
+          emberAssertMsgFitsShort(
+              (uint64_t)count * m_gen.sizeofDataType(FLOAT), m_gen.valueShort(),
+              "OverlayAllreduce isend");
           m_gen.enQ_isend(evQ, out, count, FLOAT, next_peer_id, msg_tag, m_comm,
                           &m_req_send[global_stage][next_peer_counter++],
                           route_class);
@@ -722,6 +869,12 @@ EmberOverlayCollGenerator::OverlayCollectiveRunner::OverlayCollectiveRunner(
 bool EmberOverlayCollGenerator::OverlayCollectiveRunner::progress_phase(
     std::queue<EmberEvent *> &evQ) {
   // Prefer sync path (m_sync=true): one Engine, waitall + notifyRecv.
+  if (m_r == 63) {
+    int q = 1;
+  }
+  if (m_allreduces[0].getStep() == 1) {
+    int q = 1;
+  }
   if (m_sync) {
     m_active_handles.clear();
     m_active_allreduce_ptrs.clear();
@@ -750,6 +903,8 @@ bool EmberOverlayCollGenerator::OverlayCollectiveRunner::progress_phase(
         }
         return 0;
       });
+    } else if (!all_completed) {
+      m_gen.enQ_compute(evQ, 0);
     }
     return all_completed;
   }
@@ -851,9 +1006,11 @@ EmberOverlayCollGenerator::OverlayCollective::OverlayCollective(
       data != nullptr, /*port_id=*/-1, this));
 
   if (m_r == 0) {
-    printf("[Overlay] n=%u trees=%zu stages=%d ports=%u mode=%s sync=%d\n", m_p,
-           allreduce_trees.size(), m_stages_num, m_ports,
-           mode == OverlayMode::RS_AG ? "rs_ag" : "reduce_bcast", (int)m_sync);
+    printf("[Overlay] n=%u trees=%zu stages=%d ports=%u mode=%s chunking=%s "
+           "sync=%d\n",
+           m_p, allreduce_trees.size(), m_stages_num, m_ports,
+           mode == OverlayMode::RS_AG ? "rs_ag" : "reduce_bcast",
+           schedule.chunking.c_str(), (int)m_sync);
   }
 }
 

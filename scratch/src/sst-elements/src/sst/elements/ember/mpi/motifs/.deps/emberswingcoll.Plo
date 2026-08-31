@@ -400,8 +400,25 @@ mpi/motifs/emberswingcoll.lo: mpi/motifs/emberswingcoll.cc \
  libs/mpi/emberCommCreateEv.h libs/mpi/emberCommDestroyEv.h \
  libs/mpi/emberallredev.h libs/mpi/emberbcastev.h \
  libs/mpi/emberscatterev.h libs/mpi/emberscattervev.h \
- libs/mpi/emberredev.h /usr/include/c++/11/cmath /usr/include/math.h \
- /usr/include/x86_64-linux-gnu/bits/math-vector.h \
+ libs/mpi/emberredev.h mpi/motifs/embershortmsgcheck.h \
+ /usr/include/c++/11/fstream \
+ /usr/include/x86_64-linux-gnu/c++/11/bits/basic_file.h \
+ /usr/include/x86_64-linux-gnu/c++/11/bits/c++io.h \
+ /usr/include/c++/11/bits/fstream.tcc /usr/include/c++/11/regex \
+ /usr/include/c++/11/bitset /usr/include/c++/11/iterator \
+ /usr/include/c++/11/bits/stream_iterator.h \
+ /usr/include/c++/11/bits/regex_constants.h \
+ /usr/include/c++/11/bits/regex_error.h \
+ /usr/include/c++/11/bits/regex_automaton.h \
+ /usr/include/c++/11/bits/regex_automaton.tcc \
+ /usr/include/c++/11/bits/regex_scanner.h \
+ /usr/include/c++/11/bits/regex_scanner.tcc \
+ /usr/include/c++/11/bits/regex_compiler.h \
+ /usr/include/c++/11/bits/regex_compiler.tcc \
+ /usr/include/c++/11/bits/regex.h /usr/include/c++/11/bits/regex.tcc \
+ /usr/include/c++/11/bits/regex_executor.h \
+ /usr/include/c++/11/bits/regex_executor.tcc /usr/include/c++/11/cmath \
+ /usr/include/math.h /usr/include/x86_64-linux-gnu/bits/math-vector.h \
  /usr/include/x86_64-linux-gnu/bits/libm-simd-decl-stubs.h \
  /usr/include/x86_64-linux-gnu/bits/flt-eval-method.h \
  /usr/include/x86_64-linux-gnu/bits/fp-logb.h \
@@ -923,6 +940,27 @@ libs/mpi/emberbcastev.h:
 libs/mpi/emberscatterev.h:
 libs/mpi/emberscattervev.h:
 libs/mpi/emberredev.h:
+mpi/motifs/embershortmsgcheck.h:
+/usr/include/c++/11/fstream:
+/usr/include/x86_64-linux-gnu/c++/11/bits/basic_file.h:
+/usr/include/x86_64-linux-gnu/c++/11/bits/c++io.h:
+/usr/include/c++/11/bits/fstream.tcc:
+/usr/include/c++/11/regex:
+/usr/include/c++/11/bitset:
+/usr/include/c++/11/iterator:
+/usr/include/c++/11/bits/stream_iterator.h:
+/usr/include/c++/11/bits/regex_constants.h:
+/usr/include/c++/11/bits/regex_error.h:
+/usr/include/c++/11/bits/regex_automaton.h:
+/usr/include/c++/11/bits/regex_automaton.tcc:
+/usr/include/c++/11/bits/regex_scanner.h:
+/usr/include/c++/11/bits/regex_scanner.tcc:
+/usr/include/c++/11/bits/regex_compiler.h:
+/usr/include/c++/11/bits/regex_compiler.tcc:
+/usr/include/c++/11/bits/regex.h:
+/usr/include/c++/11/bits/regex.tcc:
+/usr/include/c++/11/bits/regex_executor.h:
+/usr/include/c++/11/bits/regex_executor.tcc:
 /usr/include/c++/11/cmath:
 /usr/include/math.h:
 /usr/include/x86_64-linux-gnu/bits/math-vector.h:
