@@ -51,6 +51,8 @@ src/enosys.lo: src/enosys.c /usr/include/stdc-predef.h \
  /usr/include/x86_64-linux-gnu/bits/stdio_lim.h \
  /usr/include/x86_64-linux-gnu/bits/floatn.h \
  /usr/include/x86_64-linux-gnu/bits/floatn-common.h \
+ /usr/include/x86_64-linux-gnu/bits/stdio.h \
+ /usr/include/x86_64-linux-gnu/bits/stdio2.h \
  ../../../../../src/sst/elements/iris/libfabric/include/rdma/fabric.h \
  /usr/lib/gcc/x86_64-linux-gnu/11/include/stdint.h /usr/include/stdint.h \
  /usr/include/x86_64-linux-gnu/bits/wchar.h \
@@ -62,6 +64,7 @@ src/enosys.lo: src/enosys.c /usr/include/stdc-predef.h \
  /usr/include/x86_64-linux-gnu/sys/select.h \
  /usr/include/x86_64-linux-gnu/bits/select.h \
  /usr/include/x86_64-linux-gnu/bits/types/sigset_t.h \
+ /usr/include/x86_64-linux-gnu/bits/select2.h \
  /usr/include/x86_64-linux-gnu/sys/uio.h \
  /usr/include/x86_64-linux-gnu/bits/types/struct_iovec.h \
  /usr/include/x86_64-linux-gnu/bits/uio_lim.h \
@@ -79,7 +82,10 @@ src/enosys.lo: src/enosys.c /usr/include/stdc-predef.h \
  /usr/include/x86_64-linux-gnu/bits/mman-map-flags-generic.h \
  /usr/include/x86_64-linux-gnu/bits/mman-linux.h \
  /usr/include/x86_64-linux-gnu/bits/mman-shared.h /usr/include/string.h \
- /usr/include/strings.h /usr/include/assert.h /usr/include/ifaddrs.h \
+ /usr/include/strings.h \
+ /usr/include/x86_64-linux-gnu/bits/strings_fortified.h \
+ /usr/include/x86_64-linux-gnu/bits/string_fortified.h \
+ /usr/include/assert.h /usr/include/ifaddrs.h \
  /usr/include/x86_64-linux-gnu/sys/socket.h \
  /usr/include/x86_64-linux-gnu/bits/socket.h \
  /usr/include/x86_64-linux-gnu/bits/socket_type.h \
@@ -95,15 +101,19 @@ src/enosys.lo: src/enosys.c /usr/include/stdc-predef.h \
  /usr/include/x86_64-linux-gnu/asm/sockios.h \
  /usr/include/asm-generic/sockios.h \
  /usr/include/x86_64-linux-gnu/bits/types/struct_osockaddr.h \
+ /usr/include/x86_64-linux-gnu/bits/socket2.h \
  ../../../../../src/sst/elements/iris/libfabric/include/unix/osd.h \
  /usr/include/stdlib.h /usr/include/x86_64-linux-gnu/bits/waitflags.h \
  /usr/include/x86_64-linux-gnu/bits/waitstatus.h /usr/include/alloca.h \
- /usr/include/x86_64-linux-gnu/bits/stdlib-float.h /usr/include/unistd.h \
+ /usr/include/x86_64-linux-gnu/bits/stdlib-bsearch.h \
+ /usr/include/x86_64-linux-gnu/bits/stdlib-float.h \
+ /usr/include/x86_64-linux-gnu/bits/stdlib.h /usr/include/unistd.h \
  /usr/include/x86_64-linux-gnu/bits/posix_opt.h \
  /usr/include/x86_64-linux-gnu/bits/environments.h \
  /usr/include/x86_64-linux-gnu/bits/confname.h \
  /usr/include/x86_64-linux-gnu/bits/getopt_posix.h \
  /usr/include/x86_64-linux-gnu/bits/getopt_core.h \
+ /usr/include/x86_64-linux-gnu/bits/unistd.h \
  /usr/include/x86_64-linux-gnu/bits/unistd_ext.h \
  /usr/include/linux/close_range.h /usr/include/complex.h \
  /usr/include/x86_64-linux-gnu/bits/mathdef.h \
@@ -173,6 +183,8 @@ src/enosys.lo: src/enosys.c /usr/include/stdc-predef.h \
 /usr/include/x86_64-linux-gnu/bits/stdio_lim.h:
 /usr/include/x86_64-linux-gnu/bits/floatn.h:
 /usr/include/x86_64-linux-gnu/bits/floatn-common.h:
+/usr/include/x86_64-linux-gnu/bits/stdio.h:
+/usr/include/x86_64-linux-gnu/bits/stdio2.h:
 ../../../../../src/sst/elements/iris/libfabric/include/rdma/fabric.h:
 /usr/lib/gcc/x86_64-linux-gnu/11/include/stdint.h:
 /usr/include/stdint.h:
@@ -186,6 +198,7 @@ src/enosys.lo: src/enosys.c /usr/include/stdc-predef.h \
 /usr/include/x86_64-linux-gnu/sys/select.h:
 /usr/include/x86_64-linux-gnu/bits/select.h:
 /usr/include/x86_64-linux-gnu/bits/types/sigset_t.h:
+/usr/include/x86_64-linux-gnu/bits/select2.h:
 /usr/include/x86_64-linux-gnu/sys/uio.h:
 /usr/include/x86_64-linux-gnu/bits/types/struct_iovec.h:
 /usr/include/x86_64-linux-gnu/bits/uio_lim.h:
@@ -209,6 +222,8 @@ src/enosys.lo: src/enosys.c /usr/include/stdc-predef.h \
 /usr/include/x86_64-linux-gnu/bits/mman-shared.h:
 /usr/include/string.h:
 /usr/include/strings.h:
+/usr/include/x86_64-linux-gnu/bits/strings_fortified.h:
+/usr/include/x86_64-linux-gnu/bits/string_fortified.h:
 /usr/include/assert.h:
 /usr/include/ifaddrs.h:
 /usr/include/x86_64-linux-gnu/sys/socket.h:
@@ -227,18 +242,22 @@ src/enosys.lo: src/enosys.c /usr/include/stdc-predef.h \
 /usr/include/x86_64-linux-gnu/asm/sockios.h:
 /usr/include/asm-generic/sockios.h:
 /usr/include/x86_64-linux-gnu/bits/types/struct_osockaddr.h:
+/usr/include/x86_64-linux-gnu/bits/socket2.h:
 ../../../../../src/sst/elements/iris/libfabric/include/unix/osd.h:
 /usr/include/stdlib.h:
 /usr/include/x86_64-linux-gnu/bits/waitflags.h:
 /usr/include/x86_64-linux-gnu/bits/waitstatus.h:
 /usr/include/alloca.h:
+/usr/include/x86_64-linux-gnu/bits/stdlib-bsearch.h:
 /usr/include/x86_64-linux-gnu/bits/stdlib-float.h:
+/usr/include/x86_64-linux-gnu/bits/stdlib.h:
 /usr/include/unistd.h:
 /usr/include/x86_64-linux-gnu/bits/posix_opt.h:
 /usr/include/x86_64-linux-gnu/bits/environments.h:
 /usr/include/x86_64-linux-gnu/bits/confname.h:
 /usr/include/x86_64-linux-gnu/bits/getopt_posix.h:
 /usr/include/x86_64-linux-gnu/bits/getopt_core.h:
+/usr/include/x86_64-linux-gnu/bits/unistd.h:
 /usr/include/x86_64-linux-gnu/bits/unistd_ext.h:
 /usr/include/linux/close_range.h:
 /usr/include/complex.h:

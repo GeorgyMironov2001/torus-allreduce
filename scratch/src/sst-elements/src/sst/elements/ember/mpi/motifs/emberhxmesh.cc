@@ -1,4 +1,5 @@
 #include "emberhxmesh.h"
+#include "embershortmsgcheck.h"
 #include <cmath>
 #include <limits.h>
 #include <sst/core/rng/xorshift.h>
@@ -199,6 +200,9 @@ bool EmberHxMeshGenerator::RingAllreduce::reduceScatter(
               "send_buff_size: %d; tag: %d;\n",
               m_gen.rank(), m_sendto, send_block_idx, send_buff_offset,
               send_buff_size, m_tag1);
+      emberAssertMsgFitsShort(
+          (uint64_t)send_buff_size * m_gen.sizeofDataType(FLOAT),
+          m_gen.valueShort(), "RingAllreduce reduce-scatter initial isend");
       m_gen.enQ_isend(evQ, &m_dst[send_buff_offset], send_buff_size, FLOAT,
                       m_sendto, m_tag1, m_comm, &m_req_send);
       m_data_sent += send_buff_size * m_gen.sizeofDataType(FLOAT);
@@ -226,6 +230,9 @@ bool EmberHxMeshGenerator::RingAllreduce::reduceScatter(
               "%d; count: %d; tag: %d\n",
               m_gen.rank(), m_sendto, recv_block_idx, recv_block_offset,
               recv_block_size, m_tag1);
+      emberAssertMsgFitsShort(
+          (uint64_t)recv_block_size * m_gen.sizeofDataType(FLOAT),
+          m_gen.valueShort(), "RingAllreduce reduce-scatter isend");
       m_gen.enQ_isend(evQ, &m_dst[recv_block_offset], recv_block_size, FLOAT,
                       m_sendto, m_tag1, m_comm, &m_req_send);
       m_data_sent += recv_block_size * m_gen.sizeofDataType(FLOAT);
@@ -280,6 +287,9 @@ bool EmberHxMeshGenerator::RingAllreduce::allGather(
               "send_block_offset: %d; send_block_size: %d; tag: %d;\n",
               m_gen.rank(), m_sendto, send_block_idx, send_block_offset,
               send_block_size, m_tag2);
+      emberAssertMsgFitsShort(
+          (uint64_t)send_block_size * m_gen.sizeofDataType(FLOAT),
+          m_gen.valueShort(), "RingAllreduce allgather initial isend");
       m_gen.enQ_isend(evQ, &m_dst[send_block_offset], send_block_size, FLOAT,
                       m_sendto, m_tag2, m_comm, &m_req_send);
       m_data_sent += send_block_size * m_gen.sizeofDataType(FLOAT);
@@ -311,6 +321,9 @@ bool EmberHxMeshGenerator::RingAllreduce::allGather(
               "send_block_size: %d; tag: %d;\n",
               m_gen.rank(), m_sendto, send_block_idx, send_block_offset,
               send_block_size, m_tag2);
+      emberAssertMsgFitsShort(
+          (uint64_t)send_block_size * m_gen.sizeofDataType(FLOAT),
+          m_gen.valueShort(), "RingAllreduce allgather isend");
       m_gen.enQ_isend(evQ, &m_dst[send_block_offset], send_block_size, FLOAT,
                       m_sendto, m_tag2, m_comm, &m_req_send);
       m_data_sent += send_block_size * m_gen.sizeofDataType(FLOAT);
@@ -1403,6 +1416,7 @@ EmberHxMeshGenerator::EmberHxMeshGenerator(SST::ComponentId_t id,
 EmberHxMeshGenerator::EmberHxMeshGenerator(SST::ComponentId_t id,
                                            Params &params, std::string name)
     : EmberMessagePassingGenerator(id, params, name), m_tag(UINT_MAX) {
+  setValueShort(emberLoadValueShort());
   // we want to exchange data for real
 #ifdef VALIDATE
   memSetBacked();

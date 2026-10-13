@@ -20,8 +20,13 @@
 #include <sst/core/timeLord.h>
 #include <sst/core/unitAlgebra.h>
 
+#include <cinttypes>
+#include <cstdio>
+#include <cstdlib>
+#include <mutex>
 #include <sstream>
 #include <string>
+#include <unistd.h>
 
 #include <signal.h>
 
@@ -109,6 +114,59 @@ static UnitAlgebra getLogicalGroupParamUA(const Params &params, Topology *topo,
   return ua;
 }
 
+// Optional periodic sim-time log from router id=0.
+//   MERLIN_SIMTIME_HEARTBEAT_NS=<interval in sim nanoseconds>
+//   MERLIN_SIMTIME_HEARTBEAT_LOG=<path>  (default: merlin_simtime.log)
+class MerlinSimTimeHeartbeat {
+public:
+  static void init() {
+    static std::once_flag once;
+    std::call_once(once, []() {
+      const char *iv = std::getenv("MERLIN_SIMTIME_HEARTBEAT_NS");
+      if (!iv || iv[0] == '\0')
+        return;
+      interval_ns = std::strtoull(iv, nullptr, 10);
+      if (interval_ns == 0)
+        return;
+      const char *path = std::getenv("MERLIN_SIMTIME_HEARTBEAT_LOG");
+      if (!path || path[0] == '\0')
+        path = "merlin_simtime.log";
+      fp = std::fopen(path, "a");
+      if (!fp)
+        return;
+      std::fprintf(fp,
+                   "# merlin simtime heartbeat pid=%d interval_ns=%" PRIu64
+                   " path=%s\n",
+                   getpid(), interval_ns, path);
+      std::fflush(fp);
+    });
+  }
+
+  static bool enabled() { return interval_ns > 0 && fp != nullptr; }
+
+  static uint64_t intervalNs() { return interval_ns; }
+
+  static void log(uint64_t sim_ns) {
+    if (!fp)
+      return;
+    std::lock_guard<std::mutex> lock(mu());
+    std::fprintf(fp, "sim_ns=%" PRIu64 "\n", sim_ns);
+    std::fflush(fp);
+  }
+
+private:
+  static std::mutex &mu() {
+    static std::mutex m;
+    return m;
+  }
+
+  static uint64_t interval_ns;
+  static FILE *fp;
+};
+
+uint64_t MerlinSimTimeHeartbeat::interval_ns = 0;
+FILE *MerlinSimTimeHeartbeat::fp = nullptr;
+
 // Start class functions
 hr_router::~hr_router() {
   delete[] in_port_busy;
@@ -125,7 +183,8 @@ hr_router::~hr_router() {
 }
 
 hr_router::hr_router(ComponentId_t cid, Params &params)
-    : Router(cid), num_vcs(-1), output(getSimulationOutput()) {
+    : Router(cid), num_vcs(-1), heartbeat_link(nullptr),
+      output(getSimulationOutput()) {
 
   // Get the options for the router
   id = params.find<int>("id", -1);
@@ -348,6 +407,23 @@ hr_router::hr_router(ComponentId_t cid, Params &params)
   }
 
   init_vcs();
+
+  if (id == 0) {
+    MerlinSimTimeHeartbeat::init();
+    if (MerlinSimTimeHeartbeat::enabled()) {
+      heartbeat_tc = getTimeConverter("1ns");
+      heartbeat_link = configureSelfLink(
+          "simtime_heartbeat", "1ns",
+          new Event::Handler2<hr_router, &hr_router::heartbeatHandler>(this));
+    }
+  }
+}
+
+void hr_router::heartbeatHandler(Event *ev) {
+  delete ev;
+  MerlinSimTimeHeartbeat::log(getCurrentSimTimeNano());
+  heartbeat_link->send(MerlinSimTimeHeartbeat::intervalNs(), heartbeat_tc,
+                       nullptr);
 }
 
 void hr_router::notifyEvent() {
@@ -469,6 +545,10 @@ bool hr_router::clock_handler(Cycle_t cycle) {
 void hr_router::setup() {
   for (int i = 0; i < num_ports; i++) {
     ports[i]->setup();
+  }
+  if (heartbeat_link != nullptr) {
+    heartbeat_link->send(MerlinSimTimeHeartbeat::intervalNs(), heartbeat_tc,
+                         nullptr);
   }
 }
 

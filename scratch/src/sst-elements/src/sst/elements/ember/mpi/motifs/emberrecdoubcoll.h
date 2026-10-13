@@ -158,9 +158,12 @@ public:
   bool generate(std::queue<EmberEvent *> &evQ);
 
   uint32_t getNextTag() { return m_tag--; }
+  uint64_t valueShort() const { return m_value_short; }
+  void setValueShort(uint64_t value) { m_value_short = value; }
 
 private:
   uint32_t m_tag;
+  uint64_t m_value_short = 0;
 };
 
 } // namespace Ember

@@ -7,9 +7,12 @@
 #include <cstdio>
 #include <cstring>
 #include <fstream>
+#include <mutex>
 #include <nlohmann/json.hpp>
 #include <sst_config.h>
 #include <stdexcept>
+#include <unistd.h>
+#include <unordered_map>
 // #define DEBUG
 using namespace SST::Ember;
 
@@ -21,31 +24,14 @@ using namespace SST::Ember;
 
 /******* schedule IO *******/
 
-OverlayMode EmberOverlayCollGenerator::parseMode(const std::string &mode) {
-  if (mode == "rs_ag" || mode == "RS_AG") {
-    return OverlayMode::RS_AG;
-  }
-  if (mode == "reduce_bcast" || mode == "REDUCE_BCAST" || mode.empty()) {
-    return OverlayMode::REDUCE_BCAST;
-  }
-  fprintf(stderr, "Unknown overlay mode '%s'\n", mode.c_str());
-  exit(1);
-  return OverlayMode::REDUCE_BCAST;
-}
+namespace {
 
-OverlaySchedule
-EmberOverlayCollGenerator::loadSchedule(const std::string &path) {
-  std::ifstream file(path);
-  if (!file) {
-    throw std::runtime_error("Cannot open trees_file: " + path);
-  }
-  nlohmann::json j;
-  file >> j;
-
+OverlaySchedule parseScheduleFromJson(const nlohmann::json &j) {
   OverlaySchedule sched;
   sched.version = j.value("version", 1);
   sched.n = j.at("n").get<int>();
-  sched.mode = parseMode(j.value("mode", "reduce_bcast"));
+  sched.mode =
+      EmberOverlayCollGenerator::parseMode(j.value("mode", "reduce_bcast"));
   sched.chunking = j.value("chunking", "equal_by_tree");
 
   std::vector<double> top_shares;
@@ -96,7 +82,6 @@ EmberOverlayCollGenerator::loadSchedule(const std::string &path) {
   }
 
   if (!any_share) {
-    // No per-tree or top-level shares: equal_by_tree.
     const double eq = 1.0 / (double)K;
     double assigned = 0.0;
     for (int t = 0; t < K; ++t) {
@@ -121,10 +106,8 @@ EmberOverlayCollGenerator::loadSchedule(const std::string &path) {
       }
     }
     if (sched.chunking == "equal_by_tree" && !all_share) {
-      // Mixed / top-level shares: mark as weighted for logs.
       sched.chunking = "weighted";
     } else if (sched.chunking == "equal_by_tree") {
-      // Explicit equal shares still fine; keep label unless unequal.
       bool equal = true;
       const double eq = 1.0 / (double)K;
       for (const auto &tree : sched.trees) {
@@ -140,6 +123,100 @@ EmberOverlayCollGenerator::loadSchedule(const std::string &path) {
   }
 
   return sched;
+}
+
+// Per-rank sim-time trace at collective() entry.
+//   OVERLAY_SIMTIME_LOG=/path/to/file  (default: overlay_simtime.log in cwd)
+class OverlaySimTimeLog {
+public:
+  static void logCollective(uint32_t rank, uint64_t sim_ns, uint32_t m_i,
+                            EmberOverlayCollGenerator::CollType coll_type,
+                            int step, int L, int cur_stage, int total_stages) {
+    FILE *fp = file();
+    if (!fp)
+      return;
+    const char *phase =
+        coll_type == EmberOverlayCollGenerator::OVERLAY_REDUCE_SCATTER ? "RS"
+                                                                       : "AG";
+    std::lock_guard<std::mutex> lock(mu());
+    fprintf(fp,
+            "rank=%u sim_ns=%" PRIu64 " m_i=%u phase=%s step=%d/%d "
+            "stage=%d/%d\n",
+            rank, sim_ns, m_i, phase, step, L, cur_stage, total_stages);
+    fflush(fp);
+  }
+
+private:
+  static std::mutex &mu() {
+    static std::mutex m;
+    return m;
+  }
+
+  static FILE *file() {
+    static FILE *fp = nullptr;
+    if (fp)
+      return fp;
+    const char *path = std::getenv("OVERLAY_SIMTIME_LOG");
+    if (!path || path[0] == '\0')
+      path = "overlay_simtime.log";
+    fp = fopen(path, "a");
+    if (!fp)
+      return nullptr;
+    fprintf(fp, "# overlay simtime log pid=%d path=%s\n", getpid(), path);
+    fflush(fp);
+    return fp;
+  }
+};
+
+} // namespace
+
+OverlayMode EmberOverlayCollGenerator::parseMode(const std::string &mode) {
+  if (mode == "rs_ag" || mode == "RS_AG") {
+    return OverlayMode::RS_AG;
+  }
+  if (mode == "reduce_bcast" || mode == "REDUCE_BCAST" || mode.empty()) {
+    return OverlayMode::REDUCE_BCAST;
+  }
+  fprintf(stderr, "Unknown overlay mode '%s'\n", mode.c_str());
+  exit(1);
+  return OverlayMode::REDUCE_BCAST;
+}
+
+OverlaySchedulePtr
+EmberOverlayCollGenerator::loadSchedule(const std::string &path) {
+  static std::mutex cache_mutex;
+  static std::unordered_map<std::string, OverlaySchedulePtr> cache;
+
+  {
+    std::lock_guard<std::mutex> lock(cache_mutex);
+    auto found = cache.find(path);
+    if (found != cache.end()) {
+      return found->second;
+    }
+  }
+
+  std::ifstream file(path);
+  if (!file) {
+    throw std::runtime_error("Cannot open trees_file: " + path);
+  }
+  nlohmann::json j;
+  file >> j;
+  OverlaySchedule sched = parseScheduleFromJson(j);
+  OverlaySchedulePtr shared =
+      std::make_shared<OverlaySchedule>(std::move(sched));
+
+  {
+    std::lock_guard<std::mutex> lock(cache_mutex);
+    auto [it, inserted] = cache.emplace(path, shared);
+    if (!inserted) {
+      return it->second;
+    }
+    fprintf(stderr,
+            "[Overlay] loaded trees_file %s (n=%d, trees=%zu, shared cache)\n",
+            path.c_str(), shared->n, shared->trees.size());
+  }
+
+  return shared;
 }
 
 void EmberOverlayCollGenerator::validateSchedule(const OverlaySchedule &sched,
@@ -580,6 +657,19 @@ void EmberOverlayCollGenerator::OverlayCollectiveEngine::processReceivedData(
 bool EmberOverlayCollGenerator::OverlayCollectiveEngine::collective(
     std::queue<EmberEvent *> &evQ, CollType coll_type) {
   (void)evQ;
+  uint64_t current_time_ns = m_gen.getCurrentSimTimeNano();
+  uint64_t dt_ns = (m_prev_time != 0 && current_time_ns >= m_prev_time)
+                       ? (current_time_ns - m_prev_time)
+                       : 0;
+  const int L = m_stages_num;
+  const int phaseIdx = (coll_type == OVERLAY_REDUCE_SCATTER) ? 0 : 1;
+  ;
+  const int stepInPhase = std::min((int)m_i, L);
+  const int curStage = phaseIdx * L + stepInPhase;
+  const int totalStages = 2 * L;
+  // OverlaySimTimeLog::logCollective(m_r, current_time_ns, m_i, coll_type,
+  //                                  stepInPhase, L, curStage, totalStages);
+
   std::string coll_type_str =
       coll_type == OVERLAY_REDUCE_SCATTER ? "reducescatter" : "allgather";
   auto &send_peers = coll_type == OVERLAY_REDUCE_SCATTER ? scatter_peers_send
@@ -596,17 +686,7 @@ bool EmberOverlayCollGenerator::OverlayCollectiveEngine::collective(
     m_ready_to_recv = true;
     return false;
   }
-  uint64_t current_time_ns = m_gen.getCurrentSimTimeNano();
-  uint64_t dt_ns = (m_prev_time != 0 && current_time_ns >= m_prev_time)
-                       ? (current_time_ns - m_prev_time)
-                       : 0;
   m_prev_time = current_time_ns;
-  const int L = m_stages_num;
-  const int phaseIdx = (coll_type == OVERLAY_REDUCE_SCATTER) ? 0 : 1;
-  ;
-  const int stepInPhase = std::min((int)m_i, L);
-  const int curStage = phaseIdx * L + stepInPhase;
-  const int totalStages = 2 * L;
 
   if (m_r == 0) {
     std::cerr << "[r=0] t=" << current_time_ns << " ns"
@@ -708,9 +788,8 @@ bool EmberOverlayCollGenerator::OverlayCollectiveEngine::collective(
         const uint32_t msg_tag =
             messageTag(coll_type, route_class, (int)m_r, next_peer_id);
         m_send_epoch.chunks.emplace_back(out, count, next_peer_id);
-        emberAssertMsgFitsShort(
-            (uint64_t)count * m_gen.sizeofDataType(FLOAT), m_gen.valueShort(),
-            "OverlayAllreduce isend");
+        emberAssertMsgFitsShort((uint64_t)count * m_gen.sizeofDataType(FLOAT),
+                                m_gen.valueShort(), "OverlayAllreduce isend");
         m_gen.enQ_isend(evQ, out, count, FLOAT, next_peer_id, msg_tag, m_comm,
                         &m_req_send[global_stage][next_peer_counter++],
                         route_class);
@@ -820,9 +899,8 @@ bool EmberOverlayCollGenerator::OverlayCollectiveEngine::collective(
           const uint32_t msg_tag =
               messageTag(coll_type, route_class, (int)m_r, next_peer_id);
           m_send_epoch.chunks.emplace_back(out, count, next_peer_id);
-          emberAssertMsgFitsShort(
-              (uint64_t)count * m_gen.sizeofDataType(FLOAT), m_gen.valueShort(),
-              "OverlayAllreduce isend");
+          emberAssertMsgFitsShort((uint64_t)count * m_gen.sizeofDataType(FLOAT),
+                                  m_gen.valueShort(), "OverlayAllreduce isend");
           m_gen.enQ_isend(evQ, out, count, FLOAT, next_peer_id, msg_tag, m_comm,
                           &m_req_send[global_stage][next_peer_counter++],
                           route_class);
@@ -966,17 +1044,17 @@ void EmberOverlayCollGenerator::OverlayCollectiveRunner::printStats() {
 /******* OverlayCollective *******/
 
 EmberOverlayCollGenerator::OverlayCollective::OverlayCollective(
-    EmberOverlayCollGenerator &gen, OverlaySchedule schedule, uint32_t count,
-    uint32_t rank, uint32_t comm_size, Communicator comm,
-    double aggregation_cost_ns, bool nb, bool sync, uint ports,
-    CollType coll_type, float *data)
+    EmberOverlayCollGenerator &gen, OverlaySchedulePtr schedule,
+    OverlayMode mode, uint32_t count, uint32_t rank, uint32_t comm_size,
+    Communicator comm, double aggregation_cost_ns, bool nb, bool sync,
+    uint ports, CollType coll_type, float *data)
     : OverlayCollectiveRunner(gen, (int)ports, count, rank, comm_size, nb,
                               sync),
-      mode(schedule.mode), m_ports(ports), m_state(INIT),
+      stages_waiting_centers(), allreduce_trees(schedule->trees), mode(mode),
+      m_schedule(std::move(schedule)), m_ports(ports), m_state(INIT),
       m_coll_type(coll_type) {
 
-  validateSchedule(schedule, (int)comm_size);
-  allreduce_trees = std::move(schedule.trees);
+  validateSchedule(*m_schedule, (int)comm_size);
 
   // Multi-port ownership (S uplink engines + optional intra-router engine)
   // is not wired yet. Keep the knob; reject unsupported values early.
@@ -1010,7 +1088,7 @@ EmberOverlayCollGenerator::OverlayCollective::OverlayCollective(
            "sync=%d\n",
            m_p, allreduce_trees.size(), m_stages_num, m_ports,
            mode == OverlayMode::RS_AG ? "rs_ag" : "reduce_bcast",
-           schedule.chunking.c_str(), (int)m_sync);
+           m_schedule->chunking.c_str(), (int)m_sync);
   }
 }
 

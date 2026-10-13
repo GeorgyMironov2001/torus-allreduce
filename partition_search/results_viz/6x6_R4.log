@@ -1,0 +1,58 @@
+torus 6x6, P=36, R=4
+all-to-all (R=1) cost: 3888
+geometry-free packing lower bound for this class, R=1..4: 3888 432 252 216
+digit schemes evaluated: 355, best L = 288
+  round 1: y/2%3
+  round 2: y/1%2
+  round 3: x/2%3
+  round 4: x/1%2
+chain   1 (random start): L = 288
+chain   4 (digit start): L = 288
+chain   3 (random start): L = 288
+chain   7 (random start): L = 288
+chain   6 (digit start): L = 288
+chain   8 (digit start): L = 288
+chain   5 (random start): L = 288
+chain   0 (digit start): L = 288
+chain   9 (random start): L = 288
+chain   2 (digit start): L = 288
+10 chains x 10000000 iters in 28.0 s (3.57 M iters/s)
+
+best L = 288 (chain 1), round costs: 108 60 54 66
+messages: 216, total length 288, Allreduce verification: OK
+
+round 1: cost 108  (packing bound for this split 72)
+    1 x  36 -> {12,12,12}
+  sets after round 1 (row = y, column = x):
+      0   1   1   2   2   0
+      0   1   1   2   2   0
+      0   1   1   2   2   0
+      0   1   1   2   2   0
+      0   1   1   2   2   0
+      0   1   1   2   2   0
+round 2: cost 60  (packing bound for this split 48)
+    1 x  12 -> {4,4,4}
+    2 x  12 -> {6,6}
+  sets after round 2 (row = y, column = x):
+      0   1   1   2   3   4
+      0   5   5   2   3   4
+      0   5   5   2   3   4
+      0   5   5   6   6   4
+      0   1   1   6   6   4
+      0   1   1   2   3   4
+round 3: cost 54  (packing bound for this split 42)
+    3 x  4 -> {2,2}
+    1 x  6 -> {2,2,2}
+    3 x  6 -> {3,3}
+  sets after round 3 (row = y, column = x):
+      0   1   2   3   4   5
+      6   7   8   9  10   5
+      6   7   8   9  10  11
+      6  12  12  13  14  11
+      0   1   2  13  14  11
+      0   1   2   3   4   5
+round 4: cost 66  (packing bound for this split 54)
+    9 x  2 -> {1,1}
+    6 x  3 -> {1,1,1}
+
+written results_viz/6x6_R4.json

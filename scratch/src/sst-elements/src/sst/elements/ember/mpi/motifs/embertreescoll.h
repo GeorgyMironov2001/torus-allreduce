@@ -26,7 +26,8 @@ struct TreeSpec {
   std::vector<uint> dimensions;
   std::vector<std::vector<TreeEdge>> inside_peers;
   std::vector<std::vector<TreeEdge>> outside_peers;
-  auto get_peers(int center_id, int rank);
+  std::pair<std::vector<TreeEdge>, std::vector<TreeEdge>>
+  get_peers(int center_id, int rank) const;
   explicit TreeSpec(int center_, int dim_size,
                     const std::vector<TreeEdge> &edges_, int D = 2)
       : center(center_), dim_size(dim_size), dimension(D), edges(edges_) {
@@ -168,7 +169,8 @@ public:
     uint8_t **getBitmaps(int rank);
     uint32_t getBlockOffset(uint32_t block_idx);
     uint32_t getBlockSize(uint32_t block_idx);
-    uint32_t messageTag(CollType coll_type, int route_class) const;
+    uint32_t messageTag(CollType coll_type, int route_class,
+                        uint32_t stage) const;
 
   private:
     int m_stages_num;
@@ -270,10 +272,13 @@ public:
   // m_count elements.
   class TreesCollective : public TreesCollectiveRunner {
   public:
+    using RankPeers =
+        std::pair<std::vector<TreeEdge>, std::vector<TreeEdge>>;
+
     TreesCollective(EmberTreesCollGenerator &gen, uint dimensions_num,
                     uint ports, uint32_t count, uint32_t rank,
                     uint32_t comm_size, Communicator comm,
-                    std::vector<TreeSpec> tree_specs,
+                    const std::vector<TreeSpec> &tree_specs,
                     std::vector<std::vector<int>> &route_table,
                     std::map<std::pair<int, int>, int> &route_table_map,
                     double aggregation_cost_ns = 0, bool nb = false,
@@ -287,7 +292,9 @@ public:
                            CollType coll_type);
 
     std::vector<std::map<int, int>> stages_waiting_centers;
-    std::vector<TreeSpec> allreduce_trees;
+    // Shared across port-engines; index = center_id * num_trees + tree_id.
+    std::vector<RankPeers> peers_cache;
+    const std::vector<TreeSpec> &allreduce_trees;
 
   private:
     int m_stages_num;

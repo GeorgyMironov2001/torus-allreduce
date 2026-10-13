@@ -1,0 +1,67 @@
+torus 8x8, P=64, R=4
+all-to-all (R=1) cost: 16384
+geometry-free packing lower bound for this class, R=1..4: 16384 1280 576 478
+digit schemes evaluated: 4352, best L = 832
+  round 1: y/2%2 y/4%2
+  round 2: x/4%2
+  round 3: x/2%2
+  round 4: x/1%2 y/1%2
+chain   0 (digit start): L = 768
+chain   3 (random start): L = 768
+chain   2 (digit start): L = 764
+chain   1 (random start): L = 764
+chain   5 (random start): L = 764
+chain   4 (digit start): L = 764
+chain   6 (digit start): L = 770
+chain   7 (random start): L = 764
+chain   8 (digit start): L = 768
+chain   9 (random start): L = 764
+chain  11 (random start): L = 769
+chain  10 (digit start): L = 768
+12 chains x 10000000 iters in 117.2 s (1.02 M iters/s)
+
+best L = 764 (chain 2), round costs: 240 178 202 144
+messages: 480, total length 764, Allreduce verification: OK
+
+round 1: cost 240  (packing bound for this split 128)
+    1 x  64 -> {24,24,16}
+  sets after round 1 (row = y, column = x):
+      0   0   0   0   0   0   0   0
+      0   0   0   0   0   0   0   0
+      1   1   1   1   1   1   1   1
+      1   1   1   1   1   1   1   1
+      1   1   1   1   1   1   1   1
+      2   2   2   2   2   2   2   2
+      2   2   2   2   2   2   2   2
+      0   0   0   0   0   0   0   0
+round 2: cost 178  (packing bound for this split 112)
+    1 x  16 -> {8,8}
+    1 x  24 -> {8,8,8}
+    1 x  24 -> {9,9,6}
+  sets after round 2 (row = y, column = x):
+      0   1   1   2   2   2   0   0
+      0   1   1   2   2   2   0   0
+      3   3   3   3   3   3   3   3
+      4   4   4   4   4   4   4   4
+      5   5   5   5   5   5   5   5
+      6   6   6   7   7   7   7   6
+      6   6   6   7   7   7   7   6
+      0   1   1   2   2   2   0   0
+round 3: cost 202  (packing bound for this split 128)
+    1 x  6 -> {2,2,2}
+    5 x  8 -> {3,3,2}
+    2 x  9 -> {3,3,3}
+  sets after round 3 (row = y, column = x):
+      0   1   1   2   2   2   0   0
+      3   4   4   5   5   5   3   3
+      6   6   7   7   8   8   8   6
+      9  10  10  11  11  11   9   9
+     12  12  13  13  13  14  14  14
+     15  15  16  17  17  17  18  15
+     19  19  16  20  20  20  18  19
+     21  22  22  23  23  23  21  21
+round 4: cost 144  (packing bound for this split 112)
+    8 x  2 -> {1,1}
+    16 x  3 -> {1,1,1}
+
+written results2/best_8x8_R4.json

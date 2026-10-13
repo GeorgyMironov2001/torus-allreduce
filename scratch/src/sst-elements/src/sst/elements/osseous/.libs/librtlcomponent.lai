@@ -38,4 +38,4 @@ dlopen=''
 dlpreopen=''
 
 # Directory that this library needs to be installed in:
-libdir='/home/gera/torus-allreduce/local/sstelements-15.0.0/lib/sst-elements-library'
+libdir='/home/mipt-user/torus-allreduce/local/sstelements-15.0.0/lib/sst-elements-library'

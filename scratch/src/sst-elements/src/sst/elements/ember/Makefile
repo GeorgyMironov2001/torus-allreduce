@@ -281,7 +281,13 @@ am__libember_la_SOURCES_DIST = embergen.h embergen.cc embermap.h \
 	mpi/motifs/emberswingallgather.h \
 	mpi/motifs/emberswingallgather.cc \
 	mpi/motifs/emberswingallreduce.h \
-	mpi/motifs/emberswingallreduce.cc mpi/motifs/embertoruscoll.h \
+	mpi/motifs/emberswingallreduce.cc \
+	mpi/motifs/embertrivancecoll.h mpi/motifs/embertrivancecoll.cc \
+	mpi/motifs/embertrivanceallreduce.h \
+	mpi/motifs/embertrivanceallreduce.cc \
+	mpi/motifs/emberbruckcoll.h mpi/motifs/emberbruckcoll.cc \
+	mpi/motifs/emberbruckallreduce.h \
+	mpi/motifs/emberbruckallreduce.cc mpi/motifs/embertoruscoll.h \
 	mpi/motifs/embertoruscoll.cc mpi/motifs/embertorusallreduce.h \
 	mpi/motifs/embertorusallreduce.cc mpi/motifs/embertricount.h \
 	mpi/motifs/embertricount.cc mpi/motifs/emberunstructured.h \
@@ -408,11 +414,14 @@ am_libember_la_OBJECTS = embergen.lo ember.lo emberengine.lo \
 	mpi/motifs/emberrandomgen.lo mpi/motifs/emberswingcoll.lo \
 	mpi/motifs/emberswingreducescatter.lo \
 	mpi/motifs/emberswingallgather.lo \
-	mpi/motifs/emberswingallreduce.lo mpi/motifs/embertoruscoll.lo \
-	mpi/motifs/embertorusallreduce.lo mpi/motifs/embertricount.lo \
-	mpi/motifs/emberunstructured.lo mpi/motifs/emberNtoM.lo \
-	mpi/motifs/emberBFS.lo mpi/motifs/emberhxmesh.lo \
-	mpi/motifs/emberrecdoubcoll.lo \
+	mpi/motifs/emberswingallreduce.lo \
+	mpi/motifs/embertrivancecoll.lo \
+	mpi/motifs/embertrivanceallreduce.lo \
+	mpi/motifs/emberbruckcoll.lo mpi/motifs/emberbruckallreduce.lo \
+	mpi/motifs/embertoruscoll.lo mpi/motifs/embertorusallreduce.lo \
+	mpi/motifs/embertricount.lo mpi/motifs/emberunstructured.lo \
+	mpi/motifs/emberNtoM.lo mpi/motifs/emberBFS.lo \
+	mpi/motifs/emberhxmesh.lo mpi/motifs/emberrecdoubcoll.lo \
 	mpi/motifs/emberrecdouballreduce.lo \
 	mpi/motifs/emberringreducescatter1d.lo \
 	mpi/motifs/emberringallreduce05d.lo \
@@ -427,7 +436,8 @@ am_libember_la_OBJECTS = embergen.lo ember.lo emberengine.lo \
 	mpi/motifs/emberdlrm_swing.lo mpi/motifs/embergpt3_moe.lo \
 	mpi/motifs/embercosmoflow.lo mpi/motifs/emberduplexpp.lo \
 	mpi/motifs/embertreescoll.lo mpi/motifs/embertreesallreduce.lo \
-	mpi/motifs/emberoverlaycoll.lo mpi/motifs/emberoverlayallreduce.lo \
+	mpi/motifs/emberoverlaycoll.lo \
+	mpi/motifs/emberoverlayallreduce.lo \
 	mpi/motifs/emberalltoallallreduce.lo shmem/emberShmemGen.lo \
 	$(am__objects_1) $(am__objects_2)
 libember_la_OBJECTS = $(am_libember_la_OBJECTS)
@@ -488,6 +498,8 @@ am__depfiles_remade = ./$(DEPDIR)/ember.Plo \
 	mpi/motifs/$(DEPDIR)/emberbarrier.Plo \
 	mpi/motifs/$(DEPDIR)/emberbcast.Plo \
 	mpi/motifs/$(DEPDIR)/emberbipingpong.Plo \
+	mpi/motifs/$(DEPDIR)/emberbruckallreduce.Plo \
+	mpi/motifs/$(DEPDIR)/emberbruckcoll.Plo \
 	mpi/motifs/$(DEPDIR)/embercmt1d.Plo \
 	mpi/motifs/$(DEPDIR)/embercmt2d.Plo \
 	mpi/motifs/$(DEPDIR)/embercmt3d.Plo \
@@ -519,6 +531,8 @@ am__depfiles_remade = ./$(DEPDIR)/ember.Plo \
 	mpi/motifs/$(DEPDIR)/embernaslu.Plo \
 	mpi/motifs/$(DEPDIR)/embernull.Plo \
 	mpi/motifs/$(DEPDIR)/emberotf2.Plo \
+	mpi/motifs/$(DEPDIR)/emberoverlayallreduce.Plo \
+	mpi/motifs/$(DEPDIR)/emberoverlaycoll.Plo \
 	mpi/motifs/$(DEPDIR)/emberpingpong.Plo \
 	mpi/motifs/$(DEPDIR)/emberrandalltoall.Plo \
 	mpi/motifs/$(DEPDIR)/emberrandomgen.Plo \
@@ -551,10 +565,10 @@ am__depfiles_remade = ./$(DEPDIR)/ember.Plo \
 	mpi/motifs/$(DEPDIR)/embertoruscoll.Plo \
 	mpi/motifs/$(DEPDIR)/embertreeallreduce.Plo \
 	mpi/motifs/$(DEPDIR)/embertreesallreduce.Plo \
-	mpi/motifs/$(DEPDIR)/emberoverlayallreduce.Plo \
-	mpi/motifs/$(DEPDIR)/emberoverlaycoll.Plo \
 	mpi/motifs/$(DEPDIR)/embertreescoll.Plo \
 	mpi/motifs/$(DEPDIR)/embertricount.Plo \
+	mpi/motifs/$(DEPDIR)/embertrivanceallreduce.Plo \
+	mpi/motifs/$(DEPDIR)/embertrivancecoll.Plo \
 	mpi/motifs/$(DEPDIR)/emberunstructured.Plo \
 	mpi/motifs/$(DEPDIR)/emberwaitany.Plo \
 	mpi/motifs/$(DEPDIR)/hxmesh_dims.Plo \
@@ -629,14 +643,14 @@ am__define_uniq_tagged_files = \
   done | $(am__uniquify_input)`
 am__DIST_COMMON = $(srcdir)/Makefile.in $(top_srcdir)/config/depcomp
 DISTFILES = $(DIST_COMMON) $(DIST_SOURCES) $(TEXINFOS) $(EXTRA_DIST)
-ACLOCAL = ${SHELL} '/home/gera/torus-allreduce/scratch/src/sst-elements/config/missing' aclocal-1.17
+ACLOCAL = ${SHELL} '/home/mipt-user/torus-allreduce/scratch/src/sst-elements/config/missing' aclocal-1.17
 AMTAR = $${TAR-tar}
-AM_CFLAGS =  -fno-omit-frame-pointer 
-AM_CPPFLAGS =  -I/usr/include/python3.10 -I/usr/include/python3.10 -I/home/gera/torus-allreduce/local/sstcore-15.0.0/include/sst/core -I/home/gera/torus-allreduce/local/sstcore-15.0.0/include $(MPI_CPPFLAGS) \
+AM_CFLAGS =  
+AM_CPPFLAGS =  -I/usr/include/python3.10 -I/usr/include/python3.10 -I/home/mipt-user/torus-allreduce/local/sstcore-15.0.0/include/sst/core -I/home/mipt-user/torus-allreduce/local/sstcore-15.0.0/include $(MPI_CPPFLAGS) \
 	-I$(top_srcdir)/src/sst/elements/ember/sirius/include \
 	-I$(top_srcdir)/src -I$(top_srcdir)/src/sst/elements/external \
 	$(OTF2_CPPFLAGS)
-AM_CXXFLAGS =  -fno-omit-frame-pointer -std=c++17 
+AM_CXXFLAGS =  -std=c++17 
 AM_DEFAULT_VERBOSITY = 0
 AM_LDFLAGS =  -L/usr/lib/python3.10/config-3.10-x86_64-linux-gnu -L/usr/lib/x86_64-linux-gnu -lpython3.10 -lcrypt -ldl  -lm -lm 
 AR = ar
@@ -644,17 +658,17 @@ ARIEL_MPICC = mpicc
 ARIEL_MPICXX = mpicxx
 ARIEL_MPI_CFLAGS = 
 ARIEL_MPI_LIBS = 
-AUTOCONF = ${SHELL} '/home/gera/torus-allreduce/scratch/src/sst-elements/config/missing' autoconf
-AUTOHEADER = ${SHELL} '/home/gera/torus-allreduce/scratch/src/sst-elements/config/missing' autoheader
-AUTOMAKE = ${SHELL} '/home/gera/torus-allreduce/scratch/src/sst-elements/config/missing' automake-1.17
-AWK = mawk
+AUTOCONF = ${SHELL} '/home/mipt-user/torus-allreduce/scratch/src/sst-elements/config/missing' autoconf
+AUTOHEADER = ${SHELL} '/home/mipt-user/torus-allreduce/scratch/src/sst-elements/config/missing' autoheader
+AUTOMAKE = ${SHELL} '/home/mipt-user/torus-allreduce/scratch/src/sst-elements/config/missing' automake-1.17
+AWK = gawk
 CC = gcc
 CCAS = gcc
 CCASDEPMODE = depmode=gcc3
-CCASFLAGS = -g3 -O0 -fno-omit-frame-pointer
+CCASFLAGS = -g -O2
 CCDEPMODE = depmode=gcc3
-CC_VERSION = gcc (Ubuntu 11.4.0-1ubuntu1~22.04) 11.4.0
-CFLAGS = -g3 -O0 -fno-omit-frame-pointer
+CC_VERSION = gcc (Ubuntu 11.4.0-1ubuntu1~22.04.3) 11.4.0
+CFLAGS = -g -O2
 CPP = gcc
 CPPFLAGS = 
 CSCOPE = cscope
@@ -666,7 +680,7 @@ CUDA_LIBS =
 CXX = g++ -std=c++17
 CXXCPP = g++ -E
 CXXDEPMODE = depmode=gcc3
-CXXFLAGS = -g3 -O0 -fno-omit-frame-pointer
+CXXFLAGS = -g -O2
 CYGPATH_W = echo
 DEFS = -DHAVE_CONFIG_H
 DEPDIR = .deps
@@ -744,7 +758,7 @@ LT_CONFIG_H = src/sst_element_config.h
 LT_DLLOADERS =  dlopen.la
 LT_DLPREOPEN = -dlpreopen dlopen.la 
 LT_SYS_LIBRARY_PATH = 
-MAKEINFO = ${SHELL} '/home/gera/torus-allreduce/scratch/src/sst-elements/config/missing' makeinfo
+MAKEINFO = ${SHELL} '/home/mipt-user/torus-allreduce/scratch/src/sst-elements/config/missing' makeinfo
 MANIFEST_TOOL = :
 MKDIR_P = /usr/bin/mkdir -p
 MPICC = mpicc
@@ -755,7 +769,7 @@ MPILIBS =
 MPI_CPPFLAGS = 
 NM = /usr/bin/nm -B
 NMEDIT = 
-NUMPY_CPPFLAGS = -I/usr/lib/python3/dist-packages/numpy/core/include -DHAVE_NUMPY
+NUMPY_CPPFLAGS = 
 NVDIMMSIM_CPPFLAGS = 
 NVDIMMSIM_CXXFLAGS = 
 NVDIMMSIM_LDFLAGS = 
@@ -786,7 +800,7 @@ PINTOOL3_RUNTIME =
 PINTOOL_CPPFLAGS = 
 PINTOOL_DIR = 
 PINTOOL_LDFLAGS = 
-PINTOOL_PATH = /home/gera/torus-allreduce/local/sstcore-15.0.0/bin:/home/gera/torus-allreduce/local/packages/OpenMPI-4.1.6/bin:/home/gera/py_env/bin:/home/gera/.cursor-server/bin/linux-x64/042b3c1a4c53f2c3808067f519fbfc67b72cad80/bin/remote-cli:/home/gera/.local/bin:/home/gera/.cursor-server/bin/linux-x64/042b3c1a4c53f2c3808067f519fbfc67b72cad80/bin/remote-cli:/home/gera/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/usr/local/go/bin:/usr/local/go/bin
+PINTOOL_PATH = /home/mipt-user/torus-allreduce/local/sstcore-15.0.0/bin:/home/mipt-user/torus-allreduce/local/packages/OpenMPI-4.1.6/bin:/home/mipt-user/torus-allreduce/local/sstelements-15.0.0/bin:/home/mipt-user/torus-allreduce/local/sstcore-15.0.0/bin:/home/mipt-user/torus-allreduce/local/packages/OpenMPI-4.1.6/bin:/home/mipt-user/py_env/bin:/home/mipt-user/.cursor-server/extensions/vadimcn.vscode-lldb-1.12.2/bin:/home/mipt-user/.cursor-server/bin/linux-x64/2fdd31c9f33f7fbe501f2d57772dc5bf64b63620/bin/remote-cli:/home/mipt-user/.cursor-server/bin/linux-x64/2fdd31c9f33f7fbe501f2d57772dc5bf64b63620/bin/remote-cli:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin
 PINTOOL_RUNTIME = 
 PIN_CPPFLAGS = -g   -Wall   -Werror   -Wno-unknown-pragmas   -D__PIN__=1 -DPIN_CRT=1   -fno-stack-protector   -fno-exceptions   -funwind-tables   -fasynchronous-unwind-tables   -fomit-frame-pointer   -fno-strict-aliasing   -fno-rtti   -faligned-new   -fpic   -DTARGET_IA32E   -DHOST_IA32E   -DTARGET_LINUX   -DPIN_VERSION_MINOR=
 PIN_CPPFLAGS_COMPILER = -fno-exceptions          -fabi-version=2
@@ -807,21 +821,21 @@ SSTELEMENTS_GIT_BRANCH = N/A
 SSTELEMENTS_GIT_COMMITCOUNT = 0
 SSTELEMENTS_GIT_HEADSHA = 15.0.0
 SST_ACTIVE_ELEMENT_LIBRARIES =  ariel cacheTracer cassini cramSim ember firefly gensa golem hermes iris kingsley mask-mpi memHierarchy mercury merlin messier miranda mmu osseous prospero rdmaNic samba shogun simpleElementExample simpleSimulation thornhill vanadis vaultsim zodiac
-SST_CONFIG_TOOL = /home/gera/torus-allreduce/local/sstcore-15.0.0/bin/sst-config
+SST_CONFIG_TOOL = /home/mipt-user/torus-allreduce/local/sstcore-15.0.0/bin/sst-config
 SST_DIST_ELEMENT_LIBRARIES =  ariel balar cacheTracer cassini cramSim ember firefly gensa golem hermes iris kingsley mask-mpi memHierarchy mercury merlin messier miranda mmu osseous prospero rdmaNic samba shogun simpleElementExample simpleSimulation thornhill vanadis vaultsim zodiac
-SST_PREFIX = /home/gera/torus-allreduce/local/sstcore-15.0.0
-SST_REGISTER_TOOL = /home/gera/torus-allreduce/local/sstcore-15.0.0/bin/sst-register
-SST_SNIPPETS_TOOL = /home/gera/torus-allreduce/local/sstcore-15.0.0/bin/sst-snippets.py
+SST_PREFIX = /home/mipt-user/torus-allreduce/local/sstcore-15.0.0
+SST_REGISTER_TOOL = /home/mipt-user/torus-allreduce/local/sstcore-15.0.0/bin/sst-register
+SST_SNIPPETS_TOOL = /home/mipt-user/torus-allreduce/local/sstcore-15.0.0/bin/sst-snippets.py
 STAKE_CPPFLAGS = 
 STAKE_LDFLAGS = 
 STAKE_LIB = 
 STAKE_LIBDIR = 
 STRIP = strip
 VERSION = 15.0.0
-abs_builddir = /home/gera/torus-allreduce/scratch/src/sst-elements/src/sst/elements/ember
-abs_srcdir = /home/gera/torus-allreduce/scratch/src/sst-elements/src/sst/elements/ember
-abs_top_builddir = /home/gera/torus-allreduce/scratch/src/sst-elements
-abs_top_srcdir = /home/gera/torus-allreduce/scratch/src/sst-elements
+abs_builddir = /home/mipt-user/torus-allreduce/scratch/src/sst-elements/src/sst/elements/ember
+abs_srcdir = /home/mipt-user/torus-allreduce/scratch/src/sst-elements/src/sst/elements/ember
+abs_top_builddir = /home/mipt-user/torus-allreduce/scratch/src/sst-elements
+abs_top_srcdir = /home/mipt-user/torus-allreduce/scratch/src/sst-elements
 ac_ct_AR = ar
 ac_ct_CC = gcc
 ac_ct_CXX = g++
@@ -853,7 +867,7 @@ host_vendor = pc
 htmldir = ${docdir}
 includedir = ${prefix}/include
 infodir = ${datarootdir}/info
-install_sh = ${SHELL} /home/gera/torus-allreduce/scratch/src/sst-elements/config/install-sh
+install_sh = ${SHELL} /home/mipt-user/torus-allreduce/scratch/src/sst-elements/config/install-sh
 libdir = ${exec_prefix}/lib
 libexecdir = ${exec_prefix}/libexec
 localedir = ${datarootdir}/locale
@@ -864,14 +878,14 @@ mandir = ${datarootdir}/man
 mkdir_p = $(MKDIR_P)
 oldincludedir = /usr/include
 pdfdir = ${docdir}
-prefix = /home/gera/torus-allreduce/local/sstelements-15.0.0
+prefix = /home/mipt-user/torus-allreduce/local/sstelements-15.0.0
 program_transform_name = s,x,x,
 psdir = ${docdir}
 runstatedir = ${localstatedir}/run
 sbindir = ${exec_prefix}/sbin
 sharedstatedir = ${prefix}/com
 srcdir = .
-sst_check_numpy_happy = yes
+sst_check_numpy_happy = no
 sys_symbol_underscore = no
 sysconfdir = ${prefix}/etc
 target_alias = 
@@ -967,7 +981,13 @@ libember_la_SOURCES = embergen.h embergen.cc embermap.h ember.cc \
 	mpi/motifs/emberswingallgather.h \
 	mpi/motifs/emberswingallgather.cc \
 	mpi/motifs/emberswingallreduce.h \
-	mpi/motifs/emberswingallreduce.cc mpi/motifs/embertoruscoll.h \
+	mpi/motifs/emberswingallreduce.cc \
+	mpi/motifs/embertrivancecoll.h mpi/motifs/embertrivancecoll.cc \
+	mpi/motifs/embertrivanceallreduce.h \
+	mpi/motifs/embertrivanceallreduce.cc \
+	mpi/motifs/emberbruckcoll.h mpi/motifs/emberbruckcoll.cc \
+	mpi/motifs/emberbruckallreduce.h \
+	mpi/motifs/emberbruckallreduce.cc mpi/motifs/embertoruscoll.h \
 	mpi/motifs/embertoruscoll.cc mpi/motifs/embertorusallreduce.h \
 	mpi/motifs/embertorusallreduce.cc mpi/motifs/embertricount.h \
 	mpi/motifs/embertricount.cc mpi/motifs/emberunstructured.h \
@@ -1371,6 +1391,14 @@ mpi/motifs/emberswingallgather.lo: mpi/motifs/$(am__dirstamp) \
 	mpi/motifs/$(DEPDIR)/$(am__dirstamp)
 mpi/motifs/emberswingallreduce.lo: mpi/motifs/$(am__dirstamp) \
 	mpi/motifs/$(DEPDIR)/$(am__dirstamp)
+mpi/motifs/embertrivancecoll.lo: mpi/motifs/$(am__dirstamp) \
+	mpi/motifs/$(DEPDIR)/$(am__dirstamp)
+mpi/motifs/embertrivanceallreduce.lo: mpi/motifs/$(am__dirstamp) \
+	mpi/motifs/$(DEPDIR)/$(am__dirstamp)
+mpi/motifs/emberbruckcoll.lo: mpi/motifs/$(am__dirstamp) \
+	mpi/motifs/$(DEPDIR)/$(am__dirstamp)
+mpi/motifs/emberbruckallreduce.lo: mpi/motifs/$(am__dirstamp) \
+	mpi/motifs/$(DEPDIR)/$(am__dirstamp)
 mpi/motifs/embertoruscoll.lo: mpi/motifs/$(am__dirstamp) \
 	mpi/motifs/$(DEPDIR)/$(am__dirstamp)
 mpi/motifs/embertorusallreduce.lo: mpi/motifs/$(am__dirstamp) \
@@ -1531,6 +1559,8 @@ include mpi/motifs/$(DEPDIR)/emberalltoallv.Plo # am--include-marker
 include mpi/motifs/$(DEPDIR)/emberbarrier.Plo # am--include-marker
 include mpi/motifs/$(DEPDIR)/emberbcast.Plo # am--include-marker
 include mpi/motifs/$(DEPDIR)/emberbipingpong.Plo # am--include-marker
+include mpi/motifs/$(DEPDIR)/emberbruckallreduce.Plo # am--include-marker
+include mpi/motifs/$(DEPDIR)/emberbruckcoll.Plo # am--include-marker
 include mpi/motifs/$(DEPDIR)/embercmt1d.Plo # am--include-marker
 include mpi/motifs/$(DEPDIR)/embercmt2d.Plo # am--include-marker
 include mpi/motifs/$(DEPDIR)/embercmt3d.Plo # am--include-marker
@@ -1562,6 +1592,8 @@ include mpi/motifs/$(DEPDIR)/embermsgrate.Plo # am--include-marker
 include mpi/motifs/$(DEPDIR)/embernaslu.Plo # am--include-marker
 include mpi/motifs/$(DEPDIR)/embernull.Plo # am--include-marker
 include mpi/motifs/$(DEPDIR)/emberotf2.Plo # am--include-marker
+include mpi/motifs/$(DEPDIR)/emberoverlayallreduce.Plo # am--include-marker
+include mpi/motifs/$(DEPDIR)/emberoverlaycoll.Plo # am--include-marker
 include mpi/motifs/$(DEPDIR)/emberpingpong.Plo # am--include-marker
 include mpi/motifs/$(DEPDIR)/emberrandalltoall.Plo # am--include-marker
 include mpi/motifs/$(DEPDIR)/emberrandomgen.Plo # am--include-marker
@@ -1594,10 +1626,10 @@ include mpi/motifs/$(DEPDIR)/embertorusallreduce.Plo # am--include-marker
 include mpi/motifs/$(DEPDIR)/embertoruscoll.Plo # am--include-marker
 include mpi/motifs/$(DEPDIR)/embertreeallreduce.Plo # am--include-marker
 include mpi/motifs/$(DEPDIR)/embertreesallreduce.Plo # am--include-marker
-include mpi/motifs/$(DEPDIR)/emberoverlayallreduce.Plo # am--include-marker
-include mpi/motifs/$(DEPDIR)/emberoverlaycoll.Plo # am--include-marker
 include mpi/motifs/$(DEPDIR)/embertreescoll.Plo # am--include-marker
 include mpi/motifs/$(DEPDIR)/embertricount.Plo # am--include-marker
+include mpi/motifs/$(DEPDIR)/embertrivanceallreduce.Plo # am--include-marker
+include mpi/motifs/$(DEPDIR)/embertrivancecoll.Plo # am--include-marker
 include mpi/motifs/$(DEPDIR)/emberunstructured.Plo # am--include-marker
 include mpi/motifs/$(DEPDIR)/emberwaitany.Plo # am--include-marker
 include mpi/motifs/$(DEPDIR)/hxmesh_dims.Plo # am--include-marker
@@ -1845,6 +1877,8 @@ distclean: distclean-am
 	-rm -f mpi/motifs/$(DEPDIR)/emberbarrier.Plo
 	-rm -f mpi/motifs/$(DEPDIR)/emberbcast.Plo
 	-rm -f mpi/motifs/$(DEPDIR)/emberbipingpong.Plo
+	-rm -f mpi/motifs/$(DEPDIR)/emberbruckallreduce.Plo
+	-rm -f mpi/motifs/$(DEPDIR)/emberbruckcoll.Plo
 	-rm -f mpi/motifs/$(DEPDIR)/embercmt1d.Plo
 	-rm -f mpi/motifs/$(DEPDIR)/embercmt2d.Plo
 	-rm -f mpi/motifs/$(DEPDIR)/embercmt3d.Plo
@@ -1876,6 +1910,8 @@ distclean: distclean-am
 	-rm -f mpi/motifs/$(DEPDIR)/embernaslu.Plo
 	-rm -f mpi/motifs/$(DEPDIR)/embernull.Plo
 	-rm -f mpi/motifs/$(DEPDIR)/emberotf2.Plo
+	-rm -f mpi/motifs/$(DEPDIR)/emberoverlayallreduce.Plo
+	-rm -f mpi/motifs/$(DEPDIR)/emberoverlaycoll.Plo
 	-rm -f mpi/motifs/$(DEPDIR)/emberpingpong.Plo
 	-rm -f mpi/motifs/$(DEPDIR)/emberrandalltoall.Plo
 	-rm -f mpi/motifs/$(DEPDIR)/emberrandomgen.Plo
@@ -1908,10 +1944,10 @@ distclean: distclean-am
 	-rm -f mpi/motifs/$(DEPDIR)/embertoruscoll.Plo
 	-rm -f mpi/motifs/$(DEPDIR)/embertreeallreduce.Plo
 	-rm -f mpi/motifs/$(DEPDIR)/embertreesallreduce.Plo
-	-rm -f mpi/motifs/$(DEPDIR)/emberoverlayallreduce.Plo
-	-rm -f mpi/motifs/$(DEPDIR)/emberoverlaycoll.Plo
 	-rm -f mpi/motifs/$(DEPDIR)/embertreescoll.Plo
 	-rm -f mpi/motifs/$(DEPDIR)/embertricount.Plo
+	-rm -f mpi/motifs/$(DEPDIR)/embertrivanceallreduce.Plo
+	-rm -f mpi/motifs/$(DEPDIR)/embertrivancecoll.Plo
 	-rm -f mpi/motifs/$(DEPDIR)/emberunstructured.Plo
 	-rm -f mpi/motifs/$(DEPDIR)/emberwaitany.Plo
 	-rm -f mpi/motifs/$(DEPDIR)/hxmesh_dims.Plo
@@ -1994,6 +2030,8 @@ maintainer-clean: maintainer-clean-am
 	-rm -f mpi/motifs/$(DEPDIR)/emberbarrier.Plo
 	-rm -f mpi/motifs/$(DEPDIR)/emberbcast.Plo
 	-rm -f mpi/motifs/$(DEPDIR)/emberbipingpong.Plo
+	-rm -f mpi/motifs/$(DEPDIR)/emberbruckallreduce.Plo
+	-rm -f mpi/motifs/$(DEPDIR)/emberbruckcoll.Plo
 	-rm -f mpi/motifs/$(DEPDIR)/embercmt1d.Plo
 	-rm -f mpi/motifs/$(DEPDIR)/embercmt2d.Plo
 	-rm -f mpi/motifs/$(DEPDIR)/embercmt3d.Plo
@@ -2025,6 +2063,8 @@ maintainer-clean: maintainer-clean-am
 	-rm -f mpi/motifs/$(DEPDIR)/embernaslu.Plo
 	-rm -f mpi/motifs/$(DEPDIR)/embernull.Plo
 	-rm -f mpi/motifs/$(DEPDIR)/emberotf2.Plo
+	-rm -f mpi/motifs/$(DEPDIR)/emberoverlayallreduce.Plo
+	-rm -f mpi/motifs/$(DEPDIR)/emberoverlaycoll.Plo
 	-rm -f mpi/motifs/$(DEPDIR)/emberpingpong.Plo
 	-rm -f mpi/motifs/$(DEPDIR)/emberrandalltoall.Plo
 	-rm -f mpi/motifs/$(DEPDIR)/emberrandomgen.Plo
@@ -2057,10 +2097,10 @@ maintainer-clean: maintainer-clean-am
 	-rm -f mpi/motifs/$(DEPDIR)/embertoruscoll.Plo
 	-rm -f mpi/motifs/$(DEPDIR)/embertreeallreduce.Plo
 	-rm -f mpi/motifs/$(DEPDIR)/embertreesallreduce.Plo
-	-rm -f mpi/motifs/$(DEPDIR)/emberoverlayallreduce.Plo
-	-rm -f mpi/motifs/$(DEPDIR)/emberoverlaycoll.Plo
 	-rm -f mpi/motifs/$(DEPDIR)/embertreescoll.Plo
 	-rm -f mpi/motifs/$(DEPDIR)/embertricount.Plo
+	-rm -f mpi/motifs/$(DEPDIR)/embertrivanceallreduce.Plo
+	-rm -f mpi/motifs/$(DEPDIR)/embertrivancecoll.Plo
 	-rm -f mpi/motifs/$(DEPDIR)/emberunstructured.Plo
 	-rm -f mpi/motifs/$(DEPDIR)/emberwaitany.Plo
 	-rm -f mpi/motifs/$(DEPDIR)/hxmesh_dims.Plo

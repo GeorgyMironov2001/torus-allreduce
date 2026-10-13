@@ -1,0 +1,27 @@
+torus 8x8, P=64, R=2
+all-to-all (R=1) cost: 16384
+geometry-free packing lower bound for this class, R=1..2: 16384 1280
+chain   2: L = 2048
+chain   3: L = 2048
+chain   0: L = 2048
+chain   1: L = 2048
+4 chains x 5000000 iters in 20.1 s (1.00 M iters/s)
+
+best L = 2048 (chain 2), round costs: 1152 896
+messages: 896, total length 2048, Allreduce verification: OK
+
+round 1: cost 1152  (packing bound for this split 640)
+    1 x  64 -> {8,8,8,8,8,8,8,8}
+  sets after round 1 (row = y, column = x):
+      0   0   1   1   1   1   0   0
+      2   2   2   3   3   4   4   2
+      2   2   2   3   3   4   4   2
+      5   5   5   3   3   4   4   5
+      5   5   5   3   3   4   4   5
+      6   7   7   7   7   6   6   6
+      6   7   7   7   7   6   6   6
+      0   0   1   1   1   1   0   0
+round 2: cost 896  (packing bound for this split 640)
+    8 x  8 -> {1,1,1,1,1,1,1,1}
+
+written results/best_8x8_R2.json

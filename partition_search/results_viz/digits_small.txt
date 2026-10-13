@@ -1,0 +1,12 @@
+3x3 R=2 best L = 36
+3x3 R=3 best L = 36
+3x3 R=4 best L = 36
+4x3 R=2 best L = 72
+4x3 R=3 best L = 48
+4x3 R=4 best L = 48
+5x3 R=2 best L = 120
+5x3 R=3 best L = 120
+5x3 R=4 best L = 120
+4x4 R=2 best L = 128
+4x4 R=3 best L = 96
+4x4 R=4 best L = 64

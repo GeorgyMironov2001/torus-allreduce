@@ -158,58 +158,78 @@ static int getMainCenterId(uint *dimensions, uint dimensions_num) {
 //   }
 // }
 
-auto TreeSpec::get_peers(int center_id, int rank_id) {
-  int D = this->dimension;
-  std::vector<uint> &dimensions = this->dimensions;
+static void fillCoordFromRank(int rank, const uint *dimensions, int D,
+                              int *coord) {
+  for (int i = D - 1; i > 0; i--) {
+    int div = 1;
+    for (int j = 0; j < i; ++j) {
+      div *= (int)dimensions[j];
+    }
+    int value = rank / div;
+    coord[i] = value;
+    rank -= value * div;
+  }
+  coord[0] = rank;
+}
 
-  auto r_coord = getCoordFromRank(rank_id, dimensions.data(), D);
-  auto C_coord = getCoordFromRank(center_id, dimensions.data(), D);
-  auto O_coord = getCoordFromRank(center, dimensions.data(), D);
-  auto shift = [=](std::vector<int> point) {
-    std::vector<int> new_coord(D);
-    ;
-    for (int i = 0; i < D; i++) {
-      new_coord[i] =
-          (point[i] + C_coord[i] - O_coord[i] + dimensions[i]) % dimensions[i];
-    }
-    return new_coord;
-  };
-  auto shift_back = [=](std::vector<int> point) {
-    std::vector<int> new_coord(D);
-    for (int i = 0; i < D; i++) {
-      new_coord[i] =
-          (point[i] - C_coord[i] + O_coord[i] + dimensions[i]) % dimensions[i];
-    }
-    return new_coord;
-  };
-  auto r_shifted_back_coord = shift_back(r_coord);
-  // int rank = getRankFromCoord(r_shifted_back_coord, dim_size, D);
-  int rank = getRankFromCoord(r_shifted_back_coord, dimensions.data(), D);
-  auto new_inside_peers = inside_peers[rank];
-  auto new_outside_peers = outside_peers[rank];
+static int rankFromCoord(const int *coords, const uint *dimensions, int D) {
+  int res = 0;
+  int factor = 1;
+  for (int i = 0; i < D; i++) {
+    res += coords[i] * factor;
+    factor *= (int)dimensions[i];
+  }
+  return res;
+}
+
+static int shiftRankByDelta(int node, const int *delta, const uint *dimensions,
+                            int D) {
+  int coord[MAX_SUPPORTED_DIMENSIONS];
+  fillCoordFromRank(node, dimensions, D, coord);
+  for (int i = 0; i < D; i++) {
+    coord[i] = (coord[i] + delta[i]) % (int)dimensions[i];
+  }
+  return rankFromCoord(coord, dimensions, D);
+}
+
+std::pair<std::vector<TreeEdge>, std::vector<TreeEdge>>
+TreeSpec::get_peers(int center_id, int rank_id) const {
+  const int D = this->dimension;
+  const uint *dimensions = this->dimensions.data();
+
+  int r_coord[MAX_SUPPORTED_DIMENSIONS];
+  int C_coord[MAX_SUPPORTED_DIMENSIONS];
+  int O_coord[MAX_SUPPORTED_DIMENSIONS];
+  fillCoordFromRank(rank_id, dimensions, D, r_coord);
+  fillCoordFromRank(center_id, dimensions, D, C_coord);
+  fillCoordFromRank(center, dimensions, D, O_coord);
+
+  // shift(x) = x + C - O; shift_back(x) = x - C + O
+  int delta[MAX_SUPPORTED_DIMENSIONS];
+  int delta_back[MAX_SUPPORTED_DIMENSIONS];
+  for (int i = 0; i < D; i++) {
+    const int dim = (int)dimensions[i];
+    delta[i] = (C_coord[i] - O_coord[i] + dim) % dim;
+    delta_back[i] = (O_coord[i] - C_coord[i] + dim) % dim;
+  }
+
+  int shifted_back[MAX_SUPPORTED_DIMENSIONS];
+  for (int i = 0; i < D; i++) {
+    shifted_back[i] = (r_coord[i] + delta_back[i]) % (int)dimensions[i];
+  }
+  const int rank = rankFromCoord(shifted_back, dimensions, D);
+
+  std::vector<TreeEdge> new_inside_peers = inside_peers[rank];
+  std::vector<TreeEdge> new_outside_peers = outside_peers[rank];
   for (auto &e : new_inside_peers) {
-    // e.from = getRankFromCoord(shift(getCoordFromRank(e.from, dim_size, D)),
-    //                           dim_size, D);
-    // e.to = getRankFromCoord(shift(getCoordFromRank(e.to, dim_size, D)),
-    //                         dim_size, D);
-    e.from =
-        getRankFromCoord(shift(getCoordFromRank(e.from, dimensions.data(), D)),
-                         dimensions.data(), D);
-    e.to = getRankFromCoord(shift(getCoordFromRank(e.to, dimensions.data(), D)),
-                            dimensions.data(), D);
+    e.from = shiftRankByDelta(e.from, delta, dimensions, D);
+    e.to = shiftRankByDelta(e.to, delta, dimensions, D);
   }
   for (auto &e : new_outside_peers) {
-    // e.from = getRankFromCoord(shift(getCoordFromRank(e.from, dim_size, D)),
-    //                           dim_size, D);
-    // e.to = getRankFromCoord(shift(getCoordFromRank(e.to, dim_size, D)),
-    //                         dim_size, D);
-    e.from =
-        getRankFromCoord(shift(getCoordFromRank(e.from, dimensions.data(), D)),
-                         dimensions.data(), D);
-    e.to = getRankFromCoord(shift(getCoordFromRank(e.to, dimensions.data(), D)),
-                            dimensions.data(), D);
+    e.from = shiftRankByDelta(e.from, delta, dimensions, D);
+    e.to = shiftRankByDelta(e.to, delta, dimensions, D);
   }
-  return std::make_pair(new_inside_peers, new_outside_peers);
+  return {std::move(new_inside_peers), std::move(new_outside_peers)};
 }
 int sign(int x) { return x > 0 ? 1 : x < 0 ? -1 : 0; }
 
@@ -340,7 +360,7 @@ EmberTreesCollGenerator::TreesCollectiveEngine::TreesCollectiveEngine(
   int n = m_dimensions[0]; // assuming torus (2m+1)X(2m+1)
   // m_stages_num = (n % 2 == 1) ? n - 1 : (n / 2) * D;
   m_stages_num = 0;
-  for (auto edge : m_runner->allreduce_trees[0].edges) {
+  for (const auto &edge : m_runner->allreduce_trees[0].edges) {
     m_stages_num = std::max(m_stages_num, edge.rsStage + 1);
   }
   assert(!m_latency_optimal || m_stages_num == 1);
@@ -371,32 +391,25 @@ EmberTreesCollGenerator::TreesCollectiveEngine::TreesCollectiveEngine(
   allgather_port_send.resize(m_stages_num);
   allgather_port_recv.resize(m_stages_num);
 
-  // std::vector<std::vector<std::map<int, std::vector<int>>>>
-  //     all_steps_scatter_send(
-  //         n * n, std::vector<std::map<int, std::vector<int>>>(n - 1));
-  // std::vector<std::vector<std::map<int, std::vector<int>>>>
-  //     all_steps_allgather_send(
-  //         n * n, std::vector<std::map<int, std::vector<int>>>(n - 1));
+  // Peers are precomputed once per rank in TreesCollective::peers_cache
+  // (independent of port_id) and reused here + in phase-2 loops below.
+  const auto &peers_cache = m_runner->peers_cache;
+  const int num_trees = (int)m_runner->allreduce_trees.size();
 
-  for (int center_id = 0; center_id < m_p; center_id++) {
+  for (int center_id = 0; center_id < (int)m_p; center_id++) {
     if (m_r == 27 && center_id == 27) {
       int q = 1;
     }
-    // int center_id = getRankFromCoord(std::make_pair(Ox, Oy), n);
-    for (int id = 0; id < m_runner->allreduce_trees.size(); id++) {
-      int center_block_id = center_id * m_runner->allreduce_trees.size() + id;
-      auto &allreduce_tree = m_runner->allreduce_trees[id];
-      auto [inside_peers, outside_peers] =
-          allreduce_tree.get_peers(center_id, m_r);
-      for (auto e : inside_peers) {
+    for (int id = 0; id < num_trees; id++) {
+      int center_block_id = center_id * num_trees + id;
+      const auto &inside_peers = peers_cache[center_block_id].first;
+      const auto &outside_peers = peers_cache[center_block_id].second;
+      for (const auto &e : inside_peers) {
         int route_class = e.route_class;
         scatter_peers_send[e.rsStage][std::make_pair(e.to, route_class)]
             .push_back(center_block_id);
         allgather_peers_recv[e.agStage][std::make_pair(e.to, route_class)]
             .push_back(center_block_id);
-        // if (e.to == m_port_id) {
-        //   scatter_port_send[e.rsStage][m_port_id].push_back(center_block_id);
-        // }
 
         int rid = route_class;
         std::vector<int> path_shifted =
@@ -409,24 +422,12 @@ EmberTreesCollGenerator::TreesCollectiveEngine::TreesCollectiveEngine(
               .push_back(center_block_id);
         }
 
-        // if (same_direction(e.from, e.to, m_port_id, n, D)) {
-        //   scatter_port_send[e.rsStage][e.to].push_back(center_block_id);
-        // }
-
-        // if (outside_peers.empty() && e.to == m_port_id) {
-        //   allgather_port_recv[e.agStage][m_port_id].push_back(
-        //       center_block_id);
-        // }
         if (outside_peers.empty() && take) {
           allgather_port_recv[e.agStage][std::make_pair(e.to, route_class)]
               .push_back(center_block_id);
         }
-        // if (outside_peers.empty() &&
-        //     same_direction(e.from, e.to, m_port_id, n, D)) {
-        //   allgather_port_recv[e.agStage][e.to].push_back(center_block_id);
-        // }
       }
-      for (auto e : outside_peers) {
+      for (const auto &e : outside_peers) {
         int route_class = e.route_class;
         scatter_peers_recv[e.rsStage][std::make_pair(e.from, route_class)]
             .push_back(center_block_id);
@@ -436,10 +437,6 @@ EmberTreesCollGenerator::TreesCollectiveEngine::TreesCollectiveEngine(
           scatter_port_recv[e.rsStage][std::make_pair(e.from, route_class)]
               .push_back(center_block_id);
         }
-        // if (e.from == m_port_id) {
-        //   allgather_port_send[e.agStage][m_port_id].push_back(
-        //       center_block_id);
-        // }
 
         int rid = route_class;
         std::vector<int> path_shifted =
@@ -452,36 +449,15 @@ EmberTreesCollGenerator::TreesCollectiveEngine::TreesCollectiveEngine(
           allgather_port_send[e.agStage][std::make_pair(e.from, route_class)]
               .push_back(center_block_id);
         }
-        // if (same_direction(e.to, e.from, m_port_id, n, D)) {
-        //   allgather_port_send[e.agStage][e.from].push_back(center_block_id);
-        // }
       }
     }
   }
 
   for (int stage = 0; stage < m_stages_num - 1; ++stage) {
-    // for (int neighbour_id :
-    //      std::array<int, 4>{getRankFromCoord(left(m_coord, n), n),
-    //                         getRankFromCoord(right(m_coord, n), n),
-    //                         getRankFromCoord(up(m_coord, n), n),
-    //                         getRankFromCoord(down(m_coord, n), n)}) {
-
     for (auto &[neighbour_id, center_block_ids] : scatter_peers_recv[stage]) {
       for (int center_block_id : center_block_ids) {
-        int center_id = center_block_id / m_runner->allreduce_trees.size();
-        int center_tree_id = center_block_id % m_runner->allreduce_trees.size();
-
-        auto [inside_peers, outside_peers] =
-            m_runner->allreduce_trees[center_tree_id].get_peers(center_id, m_r);
-        // assert(inside_peers.size() == 1);
-        // int inside_peer = inside_peers[0].to;
-        for (auto e : inside_peers) {
-          // if (e.to == m_port_id) {
-          //   scatter_port_recv[stage][neighbour_id].push_back(center_block_id);
-          //   break;
-          // }
-          // auto p = getRouteTablePath(e.from, e.to, center_block_id);
-          // int rid = p.first;
+        const auto &inside_peers = peers_cache[center_block_id].first;
+        for (const auto &e : inside_peers) {
           int rid = e.route_class;
           std::vector<int> path_shifted = getRouteTablePath(e.from, e.to, rid);
           const bool take =
@@ -492,35 +468,16 @@ EmberTreesCollGenerator::TreesCollectiveEngine::TreesCollectiveEngine(
             scatter_port_recv[stage][neighbour_id].push_back(center_block_id);
             break;
           }
-          // if (same_direction(e.from, e.to, m_port_id, n, D)) {
-          //   scatter_port_recv[stage][neighbour_id].push_back(center_block_id);
-          //   break;
-          // }
         }
       }
     }
-    // }
   }
 
   for (int stage = 0; stage < m_stages_num - 1; ++stage) {
-    // for (int neighbour_id :
-    //      std::array<int, 4>{getRankFromCoord(left(m_coord, n), n),
-    //                         getRankFromCoord(right(m_coord, n), n),
-    //                         getRankFromCoord(up(m_coord, n), n),
-    //                         getRankFromCoord(down(m_coord, n), n)}) {
-
     for (auto &[neighbour_id, center_block_ids] : allgather_peers_recv[stage]) {
       for (int center_block_id : center_block_ids) {
-        int center_id = center_block_id / m_runner->allreduce_trees.size();
-        int center_tree_id = center_block_id % m_runner->allreduce_trees.size();
-        auto [inside_peers, outside_peers] =
-            m_runner->allreduce_trees[center_tree_id].get_peers(center_id, m_r);
-        for (auto e : outside_peers) {
-          // if (e.from == m_port_id) {
-          //   allgather_port_recv[stage][neighbour_id].push_back(center_block_id);
-          //   break;
-          // }
-          // auto p = getRouteTablePath(e.from, e.to, center_block_id);
+        const auto &outside_peers = peers_cache[center_block_id].second;
+        for (const auto &e : outside_peers) {
           int rid = e.route_class;
           std::vector<int> path_shifted = getRouteTablePath(e.from, e.to, rid);
           const bool take =
@@ -531,15 +488,9 @@ EmberTreesCollGenerator::TreesCollectiveEngine::TreesCollectiveEngine(
             allgather_port_recv[stage][neighbour_id].push_back(center_block_id);
             break;
           }
-
-          // if (same_direction(e.to, e.from, m_port_id, n, D)) {
-          //   allgather_port_recv[stage][neighbour_id].push_back(center_block_id);
-          //   break;
-          // }
         }
       }
     }
-    // }
   }
 
   auto sort_centers = [](auto &port_map) {
@@ -901,15 +852,15 @@ void EmberTreesCollGenerator::TreesCollectiveEngine::processReceivedData(
 }
 
 uint32_t EmberTreesCollGenerator::TreesCollectiveEngine::messageTag(
-    CollType coll_type, int route_class) const {
+    CollType coll_type, int route_class, uint32_t stage) const {
   const uint32_t route_class_tag_stride =
       static_cast<uint32_t>(route_table.size()) + 1u;
   const uint32_t rc_slot =
       route_class < 0 ? 0u : static_cast<uint32_t>(route_class + 1u);
-  if (coll_type == TREES_REDUCE_SCATTER) {
-    return m_tag_reduce + rc_slot;
-  }
-  return m_tag_broadcast + route_class_tag_stride + rc_slot;
+  const uint32_t phase_slot = coll_type == TREES_REDUCE_SCATTER ? 0u : 1u;
+  const uint32_t global_stage =
+      phase_slot * static_cast<uint32_t>(m_stages_num) + stage;
+  return global_stage * route_class_tag_stride + rc_slot;
 }
 
 uint32_t EmberTreesCollGenerator::TreesCollectiveEngine::getBlockOffset(
@@ -1029,6 +980,16 @@ bool EmberTreesCollGenerator::TreesCollectiveEngine::collective(
     m_ready_to_recv = true;
     return false;
   }
+  /************************************ */
+  // Recv payload is only read from notifyRecv, which has already finished
+  // for global_stage-1. Drop that slab before the next stage allocates, or
+  // 32 stages of Trees_budget_b16 at count=2**25 keep about 1 TiB resident.
+  if (global_stage > 0) {
+    auto &done = m_recv_epoch[global_stage - 1];
+    done.chunks.clear();
+    std::vector<float>().swap(done.slab);
+  }
+  /**************************************/
   if (m_i == 5 && coll_type == TREES_ALLGATHER) {
     int q = 1;
   }
@@ -1077,10 +1038,10 @@ bool EmberTreesCollGenerator::TreesCollectiveEngine::collective(
           coll_type == TREES_REDUCE_SCATTER ? "reduce-scatter" : "allgather",
           current_time, send_size_time);
   fflush(stdout);
-  if (m_i > 0) {
-    m_gen.enQ_waitall(evQ, m_req_send[global_stage - 1].size(),
-                      m_req_send[global_stage - 1].data(), NULL);
-  }
+  // if (m_i > 0) {
+  //   m_gen.enQ_waitall(evQ, m_req_send[global_stage - 1].size(),
+  //                     m_req_send[global_stage - 1].data(), NULL);
+  // }
   if (m_i == 0) {
     // recv//
     int total = 0;
@@ -1173,7 +1134,7 @@ bool EmberTreesCollGenerator::TreesCollectiveEngine::collective(
           continue;
         }
 
-        const uint32_t msg_tag = messageTag(coll_type, route_class);
+        const uint32_t msg_tag = messageTag(coll_type, route_class, m_i);
         int count;
         if (m_latency_optimal) {
           const int num_trees = (int)m_runner->allreduce_trees.size();
@@ -1370,11 +1331,10 @@ bool EmberTreesCollGenerator::TreesCollectiveEngine::collective(
         if (route_id != -1 && coll_type == TREES_ALLGATHER) {
           route_id += route_table.size();
         }
-        const uint32_t msg_tag = messageTag(coll_type, route_class);
+        const uint32_t msg_tag = messageTag(coll_type, route_class, m_i);
         m_send_epoch.chunks.emplace_back(out, count, next_peer_id);
-        emberAssertMsgFitsShort(
-            (uint64_t)count * m_gen.sizeofDataType(FLOAT), m_gen.valueShort(),
-            "TreesAllreduce isend");
+        emberAssertMsgFitsShort((uint64_t)count * m_gen.sizeofDataType(FLOAT),
+                                m_gen.valueShort(), "TreesAllreduce isend");
         m_gen.enQ_isend(evQ, out, count, FLOAT, next_peer_id, msg_tag, m_comm,
                         &m_req_send[global_stage][next_peer_counter++],
                         route_id);
@@ -1503,7 +1463,7 @@ bool EmberTreesCollGenerator::TreesCollectiveEngine::collective(
           // m_port_id, n, m_dimensions_num)) {
           //   continue;
           // }
-          const uint32_t msg_tag = messageTag(coll_type, route_class);
+          const uint32_t msg_tag = messageTag(coll_type, route_class, m_i);
           m_recv_epoch[global_stage].chunks.push_back(
               {m_recv_epoch[global_stage].slab.data() + m_recv_size,
                recv_block_size * prev_centers.size(), prev_peer_id});
@@ -1664,11 +1624,10 @@ bool EmberTreesCollGenerator::TreesCollectiveEngine::collective(
           if (route_id != -1 && coll_type == TREES_ALLGATHER) {
             route_id += route_table.size();
           }
-          const uint32_t msg_tag = messageTag(coll_type, route_class);
+          const uint32_t msg_tag = messageTag(coll_type, route_class, m_i);
           m_send_epoch.chunks.emplace_back(out, count, next_peer_id);
-          emberAssertMsgFitsShort(
-              (uint64_t)count * m_gen.sizeofDataType(FLOAT), m_gen.valueShort(),
-              "TreesAllreduce isend");
+          emberAssertMsgFitsShort((uint64_t)count * m_gen.sizeofDataType(FLOAT),
+                                  m_gen.valueShort(), "TreesAllreduce isend");
           m_gen.enQ_isend(evQ, out, count, FLOAT, next_peer_id, msg_tag, m_comm,
                           &m_req_send[global_stage][next_peer_counter++],
                           route_id);
@@ -1760,6 +1719,8 @@ bool EmberTreesCollGenerator::TreesCollectiveRunner::progress_phase(
         }
         return 0;
       });
+    } else if (!all_completed) {
+      m_gen.enQ_compute(evQ, 0);
     }
     return all_completed;
   } else {
@@ -1840,7 +1801,7 @@ void EmberTreesCollGenerator::TreesCollectiveRunner::printStats() {
 EmberTreesCollGenerator::TreesCollective::TreesCollective(
     EmberTreesCollGenerator &gen, uint dimensions_num, uint ports,
     uint32_t count, uint32_t rank, uint32_t comm_size, Communicator comm,
-    std::vector<TreeSpec> tree_specs,
+    const std::vector<TreeSpec> &tree_specs,
     std::vector<std::vector<int>> &route_table,
     std::map<std::pair<int, int>, int> &route_table_map,
     double aggregation_cost_ns, bool nb, bool sync, CollType coll_type,
@@ -1869,6 +1830,7 @@ EmberTreesCollGenerator::TreesCollective::TreesCollective(
       exit(-1);
     }
   }
+  m_dimensions = dimensions;
 
   int max_ports = std::min(count, ports);
   if (m_r == 0) {
@@ -1887,16 +1849,17 @@ EmberTreesCollGenerator::TreesCollective::TreesCollective(
   // auto m_point_coord = getCoordFromRank(m_r, n, D);
   auto m_point_coord = getCoordFromRank(m_r, m_dimensions, D);
 
-  // for (auto port_id : {getRankFromCoord(left(m_point_coord, n), n),
-  //                      getRankFromCoord(right(m_point_coord, n), n),
-  //                      getRankFromCoord(up(m_point_coord, n), n),
-  //                      getRankFromCoord(down(m_point_coord, n), n)}) {
+  // Point 2: get_peers depends only on (center, tree, m_r), not on port_id.
+  // Compute once per rank and share across all port-engines.
+  const int num_trees = (int)allreduce_trees.size();
+  peers_cache.resize((size_t)m_p * (size_t)num_trees);
+  for (int center_id = 0; center_id < (int)m_p; ++center_id) {
+    for (int id = 0; id < num_trees; ++id) {
+      peers_cache[(size_t)center_id * (size_t)num_trees + (size_t)id] =
+          allreduce_trees[id].get_peers(center_id, m_r);
+    }
+  }
 
-  //   m_allreduces.push_back(TreesCollectiveEngine(
-  //       m_gen, coll_type, dimensions, dimensions_num, data, m_count, m_r,
-  //       m_p, aggregation_cost_ns, comm, data != NULL, latency_optimal,
-  //       port_id, this));
-  // }
   for (int i = 0; i < D; ++i) {
     for (int step : {1, -1}) {
       auto port_coord = m_point_coord;

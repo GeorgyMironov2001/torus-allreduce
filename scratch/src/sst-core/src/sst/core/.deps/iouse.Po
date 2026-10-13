@@ -16,9 +16,9 @@ iouse.o: iouse.cc /usr/include/stdc-predef.h sst_config.h \
  /usr/include/x86_64-linux-gnu/bits/stdint-intn.h \
  /usr/include/x86_64-linux-gnu/bits/stdint-uintn.h \
  ../../../src/sst/core/sst_mpi.h ../../../src/sst/core/warnmacros.h \
- /home/gera/torus-allreduce/local/packages/OpenMPI-4.1.6/include/mpi.h \
+ /home/mipt-user/torus-allreduce/local/packages/OpenMPI-4.1.6/include/mpi.h \
  /usr/lib/gcc/x86_64-linux-gnu/11/include/stddef.h \
- /home/gera/torus-allreduce/local/packages/OpenMPI-4.1.6/include/mpi_portable_platform.h \
+ /home/mipt-user/torus-allreduce/local/packages/OpenMPI-4.1.6/include/mpi_portable_platform.h \
  /usr/include/x86_64-linux-gnu/sys/resource.h \
  /usr/include/x86_64-linux-gnu/bits/resource.h \
  /usr/include/x86_64-linux-gnu/bits/types/struct_timeval.h \
@@ -46,9 +46,9 @@ sst_config.h:
 /usr/include/x86_64-linux-gnu/bits/stdint-uintn.h:
 ../../../src/sst/core/sst_mpi.h:
 ../../../src/sst/core/warnmacros.h:
-/home/gera/torus-allreduce/local/packages/OpenMPI-4.1.6/include/mpi.h:
+/home/mipt-user/torus-allreduce/local/packages/OpenMPI-4.1.6/include/mpi.h:
 /usr/lib/gcc/x86_64-linux-gnu/11/include/stddef.h:
-/home/gera/torus-allreduce/local/packages/OpenMPI-4.1.6/include/mpi_portable_platform.h:
+/home/mipt-user/torus-allreduce/local/packages/OpenMPI-4.1.6/include/mpi_portable_platform.h:
 /usr/include/x86_64-linux-gnu/sys/resource.h:
 /usr/include/x86_64-linux-gnu/bits/resource.h:
 /usr/include/x86_64-linux-gnu/bits/types/struct_timeval.h:

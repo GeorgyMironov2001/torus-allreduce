@@ -190,6 +190,14 @@ libember_la_SOURCES = \
 	mpi/motifs/emberswingallgather.cc \
 	mpi/motifs/emberswingallreduce.h \
 	mpi/motifs/emberswingallreduce.cc \
+	mpi/motifs/embertrivancecoll.h \
+	mpi/motifs/embertrivancecoll.cc \
+	mpi/motifs/embertrivanceallreduce.h \
+	mpi/motifs/embertrivanceallreduce.cc \
+	mpi/motifs/emberbruckcoll.h \
+	mpi/motifs/emberbruckcoll.cc \
+	mpi/motifs/emberbruckallreduce.h \
+	mpi/motifs/emberbruckallreduce.cc \
 	mpi/motifs/embertoruscoll.h \
 	mpi/motifs/embertoruscoll.cc \
 	mpi/motifs/embertorusallreduce.h \

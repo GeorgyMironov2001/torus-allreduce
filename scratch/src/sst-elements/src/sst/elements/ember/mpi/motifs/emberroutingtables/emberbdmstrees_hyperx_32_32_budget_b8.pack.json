@@ -1,0 +1,12 @@
+{
+  "n": 32,
+  "ranks": 1024,
+  "trees": 4,
+  "edges_per_tree": 1023,
+  "rs_stages": 16,
+  "stages": 32,
+  "B_send": 8,
+  "model_peak_degree": 8,
+  "max_packed_chunks": 62,
+  "center": 495
+}

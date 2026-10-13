@@ -1,0 +1,65 @@
+torus 6x6, P=36, R=5
+all-to-all (R=1) cost: 3888
+geometry-free packing lower bound for this class, R=1..5: 3888 432 252 216 192
+digit schemes evaluated: 355, best L = 288
+  round 1: y/2%3
+  round 2: y/1%2
+  round 3: x/2%3
+  round 4: x/1%2
+chain   5 (random start): L = 246
+chain   8 (digit start): L = 246
+chain   6 (digit start): L = 246
+chain   4 (digit start): L = 246
+chain   3 (random start): L = 246
+chain   1 (random start): L = 246
+chain   2 (digit start): L = 246
+chain   9 (random start): L = 246
+chain   0 (digit start): L = 246
+chain   7 (random start): L = 246
+10 chains x 10000000 iters in 30.4 s (3.29 M iters/s)
+
+best L = 246 (chain 5), round costs: 48 49 73 40 36
+messages: 192, total length 246, Allreduce verification: OK
+
+round 1: cost 48  (packing bound for this split 36)
+    1 x  36 -> {20,16}
+  sets after round 1 (row = y, column = x):
+      0   0   0   0   0   0
+      0   0   0   0   0   0
+      1   1   0   0   0   0
+      1   1   1   1   1   1
+      1   1   1   1   1   1
+      1   1   1   1   1   1
+round 2: cost 49  (packing bound for this split 36)
+    1 x  16 -> {8,8}
+    1 x  20 -> {12,8}
+  sets after round 2 (row = y, column = x):
+      0   0   1   1   0   0
+      0   0   1   1   0   0
+      2   2   1   1   1   1
+      2   2   2   2   2   2
+      3   3   3   3   3   3
+      3   3   3   3   3   3
+round 3: cost 73  (packing bound for this split 48)
+    1 x  12 -> {4,4,4}
+    3 x  8 -> {4,4}
+  sets after round 3 (row = y, column = x):
+      0   0   1   1   2   2
+      0   0   1   1   2   2
+      3   3   4   4   4   4
+      3   3   5   5   5   5
+      6   6   7   7   8   8
+      6   6   7   7   8   8
+round 4: cost 40  (packing bound for this split 36)
+    9 x  4 -> {2,2}
+  sets after round 4 (row = y, column = x):
+      0   1   2   3   4   4
+      0   1   2   3   5   5
+      6   7   8   8   9   9
+      6   7  10  10  11  11
+     12  13  14  15  16  17
+     12  13  14  15  16  17
+round 5: cost 36  (packing bound for this split 36)
+    18 x  2 -> {1,1}
+
+written results_viz/6x6_R5.json

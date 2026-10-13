@@ -1,0 +1,34 @@
+torus 6x6, P=36, R=2
+all-to-all (R=1) cost: 3888
+geometry-free packing lower bound for this class, R=1..2: 3888 432
+digit schemes evaluated: 91, best L = 648
+  round 1: y/1%2 y/2%3
+  round 2: x/1%2 x/2%3
+chain   8 (digit start): L = 648
+chain   7 (random start): L = 648
+chain   0 (digit start): L = 648
+chain   9 (random start): L = 648
+chain   3 (random start): L = 648
+chain   4 (digit start): L = 648
+chain   2 (digit start): L = 648
+chain   5 (random start): L = 648
+chain   6 (digit start): L = 648
+chain   1 (random start): L = 648
+10 chains x 10000000 iters in 24.4 s (4.09 M iters/s)
+
+best L = 648 (chain 8), round costs: 324 324
+messages: 360, total length 648, Allreduce verification: OK
+
+round 1: cost 324  (packing bound for this split 216)
+    1 x  36 -> {6,6,6,6,6,6}
+  sets after round 1 (row = y, column = x):
+      0   0   0   0   0   0
+      1   1   1   1   1   1
+      2   2   2   2   2   2
+      3   3   3   3   3   3
+      4   4   4   4   4   4
+      5   5   5   5   5   5
+round 2: cost 324  (packing bound for this split 216)
+    6 x  6 -> {1,1,1,1,1,1}
+
+written results_viz/6x6_R2.json

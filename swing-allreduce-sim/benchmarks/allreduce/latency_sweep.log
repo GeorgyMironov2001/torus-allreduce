@@ -1,0 +1,73 @@
+SKIP complete: /home/mipt-user/torus-allreduce/swing-allreduce-sim/benchmarks/allreduce/output/torus_8x8_lat200ns/Rings/256
+hopLat=200ns -> link_lat=50ns input_latency=75ns output_latency=75ns
+8,8
+torus
+torus hop latency link_lat=50ns input_latency=75ns output_latency=75ns
+shortValue=8 (bench=Rings, count=512, ranks=64, trees=1)
+SST_NO_MEM=1 /home/mipt-user/torus-allreduce/local/sstcore-15.0.0/libexec/sstsim.x --num-threads=10 --model-options="--param="nic:module=merlin.reorderlinkcontrol" --param="merlin:torus.shape=8x8" --param="merlin:torus.width=1x1" --param="merlin:torus.local_ports=1" --param="merlin:link_bw:host=1000000Gb/s" --param="merlin:link_bw:torus=400Gb/s" --param="network:link_lat=50ns" --param="network:input_latency=75ns" --param="network:output_latency=75ns"  --topo=torus --shape=8x8 --hostsPerRtr=1  --netBW=400Gb/s --loadFile=/home/mipt-user/torus-allreduce/swing-allreduce-sim/benchmarks/allreduce/loads/torus_8x8_lat200ns/Rings/512" /home/mipt-user/torus-allreduce/scratch/src/sst-elements/src/sst/elements/ember/test/emberLoad.py > /home/mipt-user/torus-allreduce/swing-allreduce-sim/benchmarks/allreduce/output/torus_8x8_lat200ns/Rings/512
+hopLat=200ns -> link_lat=50ns input_latency=75ns output_latency=75ns
+8,8
+torus
+torus hop latency link_lat=50ns input_latency=75ns output_latency=75ns
+shortValue=16 (bench=Rings, count=1024, ranks=64, trees=1)
+SST_NO_MEM=1 /home/mipt-user/torus-allreduce/local/sstcore-15.0.0/libexec/sstsim.x --num-threads=10 --model-options="--param="nic:module=merlin.reorderlinkcontrol" --param="merlin:torus.shape=8x8" --param="merlin:torus.width=1x1" --param="merlin:torus.local_ports=1" --param="merlin:link_bw:host=1000000Gb/s" --param="merlin:link_bw:torus=400Gb/s" --param="network:link_lat=50ns" --param="network:input_latency=75ns" --param="network:output_latency=75ns"  --topo=torus --shape=8x8 --hostsPerRtr=1  --netBW=400Gb/s --loadFile=/home/mipt-user/torus-allreduce/swing-allreduce-sim/benchmarks/allreduce/loads/torus_8x8_lat200ns/Rings/1024" /home/mipt-user/torus-allreduce/scratch/src/sst-elements/src/sst/elements/ember/test/emberLoad.py > /home/mipt-user/torus-allreduce/swing-allreduce-sim/benchmarks/allreduce/output/torus_8x8_lat200ns/Rings/1024
+hopLat=200ns -> link_lat=50ns input_latency=75ns output_latency=75ns
+8,8
+torus
+torus hop latency link_lat=50ns input_latency=75ns output_latency=75ns
+shortValue=32 (bench=Rings, count=2048, ranks=64, trees=1)
+SST_NO_MEM=1 /home/mipt-user/torus-allreduce/local/sstcore-15.0.0/libexec/sstsim.x --num-threads=10 --model-options="--param="nic:module=merlin.reorderlinkcontrol" --param="merlin:torus.shape=8x8" --param="merlin:torus.width=1x1" --param="merlin:torus.local_ports=1" --param="merlin:link_bw:host=1000000Gb/s" --param="merlin:link_bw:torus=400Gb/s" --param="network:link_lat=50ns" --param="network:input_latency=75ns" --param="network:output_latency=75ns"  --topo=torus --shape=8x8 --hostsPerRtr=1  --netBW=400Gb/s --loadFile=/home/mipt-user/torus-allreduce/swing-allreduce-sim/benchmarks/allreduce/loads/torus_8x8_lat200ns/Rings/2048" /home/mipt-user/torus-allreduce/scratch/src/sst-elements/src/sst/elements/ember/test/emberLoad.py > /home/mipt-user/torus-allreduce/swing-allreduce-sim/benchmarks/allreduce/output/torus_8x8_lat200ns/Rings/2048
+hopLat=200ns -> link_lat=50ns input_latency=75ns output_latency=75ns
+8,8
+torus
+torus hop latency link_lat=50ns input_latency=75ns output_latency=75ns
+shortValue=64 (bench=Rings, count=4096, ranks=64, trees=1)
+SST_NO_MEM=1 /home/mipt-user/torus-allreduce/local/sstcore-15.0.0/libexec/sstsim.x --num-threads=10 --model-options="--param="nic:module=merlin.reorderlinkcontrol" --param="merlin:torus.shape=8x8" --param="merlin:torus.width=1x1" --param="merlin:torus.local_ports=1" --param="merlin:link_bw:host=1000000Gb/s" --param="merlin:link_bw:torus=400Gb/s" --param="network:link_lat=50ns" --param="network:input_latency=75ns" --param="network:output_latency=75ns"  --topo=torus --shape=8x8 --hostsPerRtr=1  --netBW=400Gb/s --loadFile=/home/mipt-user/torus-allreduce/swing-allreduce-sim/benchmarks/allreduce/loads/torus_8x8_lat200ns/Rings/4096" /home/mipt-user/torus-allreduce/scratch/src/sst-elements/src/sst/elements/ember/test/emberLoad.py > /home/mipt-user/torus-allreduce/swing-allreduce-sim/benchmarks/allreduce/output/torus_8x8_lat200ns/Rings/4096
+hopLat=200ns -> link_lat=50ns input_latency=75ns output_latency=75ns
+8,8
+torus
+torus hop latency link_lat=50ns input_latency=75ns output_latency=75ns
+shortValue=128 (bench=Rings, count=8192, ranks=64, trees=1)
+SST_NO_MEM=1 /home/mipt-user/torus-allreduce/local/sstcore-15.0.0/libexec/sstsim.x --num-threads=10 --model-options="--param="nic:module=merlin.reorderlinkcontrol" --param="merlin:torus.shape=8x8" --param="merlin:torus.width=1x1" --param="merlin:torus.local_ports=1" --param="merlin:link_bw:host=1000000Gb/s" --param="merlin:link_bw:torus=400Gb/s" --param="network:link_lat=50ns" --param="network:input_latency=75ns" --param="network:output_latency=75ns"  --topo=torus --shape=8x8 --hostsPerRtr=1  --netBW=400Gb/s --loadFile=/home/mipt-user/torus-allreduce/swing-allreduce-sim/benchmarks/allreduce/loads/torus_8x8_lat200ns/Rings/8192" /home/mipt-user/torus-allreduce/scratch/src/sst-elements/src/sst/elements/ember/test/emberLoad.py > /home/mipt-user/torus-allreduce/swing-allreduce-sim/benchmarks/allreduce/output/torus_8x8_lat200ns/Rings/8192
+hopLat=200ns -> link_lat=50ns input_latency=75ns output_latency=75ns
+8,8
+torus
+torus hop latency link_lat=50ns input_latency=75ns output_latency=75ns
+shortValue=256 (bench=Rings, count=16384, ranks=64, trees=1)
+SST_NO_MEM=1 /home/mipt-user/torus-allreduce/local/sstcore-15.0.0/libexec/sstsim.x --num-threads=10 --model-options="--param="nic:module=merlin.reorderlinkcontrol" --param="merlin:torus.shape=8x8" --param="merlin:torus.width=1x1" --param="merlin:torus.local_ports=1" --param="merlin:link_bw:host=1000000Gb/s" --param="merlin:link_bw:torus=400Gb/s" --param="network:link_lat=50ns" --param="network:input_latency=75ns" --param="network:output_latency=75ns"  --topo=torus --shape=8x8 --hostsPerRtr=1  --netBW=400Gb/s --loadFile=/home/mipt-user/torus-allreduce/swing-allreduce-sim/benchmarks/allreduce/loads/torus_8x8_lat200ns/Rings/16384" /home/mipt-user/torus-allreduce/scratch/src/sst-elements/src/sst/elements/ember/test/emberLoad.py > /home/mipt-user/torus-allreduce/swing-allreduce-sim/benchmarks/allreduce/output/torus_8x8_lat200ns/Rings/16384
+hopLat=200ns -> link_lat=50ns input_latency=75ns output_latency=75ns
+8,8
+torus
+torus hop latency link_lat=50ns input_latency=75ns output_latency=75ns
+shortValue=512 (bench=Rings, count=32768, ranks=64, trees=1)
+SST_NO_MEM=1 /home/mipt-user/torus-allreduce/local/sstcore-15.0.0/libexec/sstsim.x --num-threads=10 --model-options="--param="nic:module=merlin.reorderlinkcontrol" --param="merlin:torus.shape=8x8" --param="merlin:torus.width=1x1" --param="merlin:torus.local_ports=1" --param="merlin:link_bw:host=1000000Gb/s" --param="merlin:link_bw:torus=400Gb/s" --param="network:link_lat=50ns" --param="network:input_latency=75ns" --param="network:output_latency=75ns"  --topo=torus --shape=8x8 --hostsPerRtr=1  --netBW=400Gb/s --loadFile=/home/mipt-user/torus-allreduce/swing-allreduce-sim/benchmarks/allreduce/loads/torus_8x8_lat200ns/Rings/32768" /home/mipt-user/torus-allreduce/scratch/src/sst-elements/src/sst/elements/ember/test/emberLoad.py > /home/mipt-user/torus-allreduce/swing-allreduce-sim/benchmarks/allreduce/output/torus_8x8_lat200ns/Rings/32768
+hopLat=200ns -> link_lat=50ns input_latency=75ns output_latency=75ns
+8,8
+torus
+torus hop latency link_lat=50ns input_latency=75ns output_latency=75ns
+shortValue=1024 (bench=Rings, count=65536, ranks=64, trees=1)
+SST_NO_MEM=1 /home/mipt-user/torus-allreduce/local/sstcore-15.0.0/libexec/sstsim.x --num-threads=10 --model-options="--param="nic:module=merlin.reorderlinkcontrol" --param="merlin:torus.shape=8x8" --param="merlin:torus.width=1x1" --param="merlin:torus.local_ports=1" --param="merlin:link_bw:host=1000000Gb/s" --param="merlin:link_bw:torus=400Gb/s" --param="network:link_lat=50ns" --param="network:input_latency=75ns" --param="network:output_latency=75ns"  --topo=torus --shape=8x8 --hostsPerRtr=1  --netBW=400Gb/s --loadFile=/home/mipt-user/torus-allreduce/swing-allreduce-sim/benchmarks/allreduce/loads/torus_8x8_lat200ns/Rings/65536" /home/mipt-user/torus-allreduce/scratch/src/sst-elements/src/sst/elements/ember/test/emberLoad.py > /home/mipt-user/torus-allreduce/swing-allreduce-sim/benchmarks/allreduce/output/torus_8x8_lat200ns/Rings/65536
+hopLat=200ns -> link_lat=50ns input_latency=75ns output_latency=75ns
+8,8
+torus
+torus hop latency link_lat=50ns input_latency=75ns output_latency=75ns
+shortValue=2048 (bench=Rings, count=131072, ranks=64, trees=1)
+SST_NO_MEM=1 /home/mipt-user/torus-allreduce/local/sstcore-15.0.0/libexec/sstsim.x --num-threads=10 --model-options="--param="nic:module=merlin.reorderlinkcontrol" --param="merlin:torus.shape=8x8" --param="merlin:torus.width=1x1" --param="merlin:torus.local_ports=1" --param="merlin:link_bw:host=1000000Gb/s" --param="merlin:link_bw:torus=400Gb/s" --param="network:link_lat=50ns" --param="network:input_latency=75ns" --param="network:output_latency=75ns"  --topo=torus --shape=8x8 --hostsPerRtr=1  --netBW=400Gb/s --loadFile=/home/mipt-user/torus-allreduce/swing-allreduce-sim/benchmarks/allreduce/loads/torus_8x8_lat200ns/Rings/131072" /home/mipt-user/torus-allreduce/scratch/src/sst-elements/src/sst/elements/ember/test/emberLoad.py > /home/mipt-user/torus-allreduce/swing-allreduce-sim/benchmarks/allreduce/output/torus_8x8_lat200ns/Rings/131072
+hopLat=200ns -> link_lat=50ns input_latency=75ns output_latency=75ns
+8,8
+torus
+torus hop latency link_lat=50ns input_latency=75ns output_latency=75ns
+shortValue=4096 (bench=Rings, count=262144, ranks=64, trees=1)
+SST_NO_MEM=1 /home/mipt-user/torus-allreduce/local/sstcore-15.0.0/libexec/sstsim.x --num-threads=10 --model-options="--param="nic:module=merlin.reorderlinkcontrol" --param="merlin:torus.shape=8x8" --param="merlin:torus.width=1x1" --param="merlin:torus.local_ports=1" --param="merlin:link_bw:host=1000000Gb/s" --param="merlin:link_bw:torus=400Gb/s" --param="network:link_lat=50ns" --param="network:input_latency=75ns" --param="network:output_latency=75ns"  --topo=torus --shape=8x8 --hostsPerRtr=1  --netBW=400Gb/s --loadFile=/home/mipt-user/torus-allreduce/swing-allreduce-sim/benchmarks/allreduce/loads/torus_8x8_lat200ns/Rings/262144" /home/mipt-user/torus-allreduce/scratch/src/sst-elements/src/sst/elements/ember/test/emberLoad.py > /home/mipt-user/torus-allreduce/swing-allreduce-sim/benchmarks/allreduce/output/torus_8x8_lat200ns/Rings/262144
+hopLat=200ns -> link_lat=50ns input_latency=75ns output_latency=75ns
+8,8
+torus
+torus hop latency link_lat=50ns input_latency=75ns output_latency=75ns
+shortValue=8192 (bench=Rings, count=524288, ranks=64, trees=1)
+SST_NO_MEM=1 /home/mipt-user/torus-allreduce/local/sstcore-15.0.0/libexec/sstsim.x --num-threads=10 --model-options="--param="nic:module=merlin.reorderlinkcontrol" --param="merlin:torus.shape=8x8" --param="merlin:torus.width=1x1" --param="merlin:torus.local_ports=1" --param="merlin:link_bw:host=1000000Gb/s" --param="merlin:link_bw:torus=400Gb/s" --param="network:link_lat=50ns" --param="network:input_latency=75ns" --param="network:output_latency=75ns"  --topo=torus --shape=8x8 --hostsPerRtr=1  --netBW=400Gb/s --loadFile=/home/mipt-user/torus-allreduce/swing-allreduce-sim/benchmarks/allreduce/loads/torus_8x8_lat200ns/Rings/524288" /home/mipt-user/torus-allreduce/scratch/src/sst-elements/src/sst/elements/ember/test/emberLoad.py > /home/mipt-user/torus-allreduce/swing-allreduce-sim/benchmarks/allreduce/output/torus_8x8_lat200ns/Rings/524288
+hopLat=200ns -> link_lat=50ns input_latency=75ns output_latency=75ns
+8,8
+torus
+torus hop latency link_lat=50ns input_latency=75ns output_latency=75ns
+shortValue=16384 (bench=Rings, count=1048576, ranks=64, trees=1)
+SST_NO_MEM=1 /home/mipt-user/torus-allreduce/local/sstcore-15.0.0/libexec/sstsim.x --num-threads=10 --model-options="--param="nic:module=merlin.reorderlinkcontrol" --param="merlin:torus.shape=8x8" --param="merlin:torus.width=1x1" --param="merlin:torus.local_ports=1" --param="merlin:link_bw:host=1000000Gb/s" --param="merlin:link_bw:torus=400Gb/s" --param="network:link_lat=50ns" --param="network:input_latency=75ns" --param="network:output_latency=75ns"  --topo=torus --shape=8x8 --hostsPerRtr=1  --netBW=400Gb/s --loadFile=/home/mipt-user/torus-allreduce/swing-allreduce-sim/benchmarks/allreduce/loads/torus_8x8_lat200ns/Rings/1048576" /home/mipt-user/torus-allreduce/scratch/src/sst-elements/src/sst/elements/ember/test/emberLoad.py > /home/mipt-user/torus-allreduce/swing-allreduce-sim/benchmarks/allreduce/output/torus_8x8_lat200ns/Rings/1048576

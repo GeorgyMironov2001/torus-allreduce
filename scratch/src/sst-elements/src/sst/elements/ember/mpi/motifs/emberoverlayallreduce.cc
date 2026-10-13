@@ -32,10 +32,11 @@ EmberOverlayAllreduceGenerator::EmberOverlayAllreduceGenerator(
     printf("[OverlayAllreduce] valueShort=%" PRIu64 "\n", valueShort());
   }
 
-  // JSON → OverlaySchedule: EmberOverlayCollGenerator::loadSchedule
-  OverlaySchedule schedule = loadSchedule(trees_file);
+  // Shared schedule: parsed once per trees_file in the sstsim process.
+  OverlaySchedulePtr schedule = loadSchedule(trees_file);
+  OverlayMode mode = schedule->mode;
   if (!mode_override.empty()) {
-    schedule.mode = parseMode(mode_override);
+    mode = parseMode(mode_override);
   }
 
   m_validate = validate;
@@ -59,7 +60,7 @@ EmberOverlayAllreduceGenerator::EmberOverlayAllreduceGenerator(
   }
 
   m_allreduce = new OverlayCollective(
-      *this, std::move(schedule), recvcount, rank(), size(), GroupWorld,
+      *this, schedule, mode, recvcount, rank(), size(), GroupWorld,
       aggregation_cost_ns, !blocking, sync, ports, OVERLAY_ALLREDUCE, m_data);
 }
 

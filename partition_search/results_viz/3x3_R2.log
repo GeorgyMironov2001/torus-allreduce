@@ -1,0 +1,17 @@
+torus 3x3, P=9, R=2
+all-to-all (R=1) cost: 108
+geometry-free packing lower bound for this class, R=1..2: 108 36
+
+best L = 36 (chain -1), round costs: 18 18
+messages: 36, total length 36, Allreduce verification: OK
+
+round 1: cost 18  (packing bound for this split 18)
+    1 x  9 -> {3,3,3}
+  sets after round 1 (row = y, column = x):
+      0   1   2
+      0   1   2
+      0   1   2
+round 2: cost 18  (packing bound for this split 18)
+    3 x  3 -> {1,1,1}
+
+written results_viz/3x3_R2.json

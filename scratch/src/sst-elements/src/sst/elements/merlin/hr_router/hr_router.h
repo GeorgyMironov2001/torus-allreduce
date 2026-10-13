@@ -131,6 +131,10 @@ private:
     bool clock_handler(Cycle_t cycle);
     static void sigHandler(int signal);
 
+    Link *heartbeat_link;
+    TimeConverter heartbeat_tc;
+    void heartbeatHandler(Event *ev);
+
     void init_vcs();
     Statistic<uint64_t>** xbar_stalls;
 

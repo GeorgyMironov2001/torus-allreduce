@@ -112,7 +112,7 @@ hermesParams = {
     #"hermesParams.functionSM.defaultReturnLatency" : 30000,
     "hermesParams.functionSM.defaultEnterLatency" : 1,
     "hermesParams.functionSM.defaultReturnLatency" : 1,
-
+    "hermesParams.ctrlMsg.pqs.maxUnexpectedMsg": 512,
 
 
     #"hermesParams.functionSM.smallCollectiveVN" : 1,

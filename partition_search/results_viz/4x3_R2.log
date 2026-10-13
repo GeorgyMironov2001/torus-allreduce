@@ -1,0 +1,17 @@
+torus 4x3, P=12, R=2
+all-to-all (R=1) cost: 240
+geometry-free packing lower bound for this class, R=1..2: 240 60
+
+best L = 72 (chain -1), round costs: 48 24
+messages: 60, total length 72, Allreduce verification: OK
+
+round 1: cost 48  (packing bound for this split 36)
+    1 x  12 -> {3,3,3,3}
+  sets after round 1 (row = y, column = x):
+      0   1   2   3
+      0   1   2   3
+      0   1   2   3
+round 2: cost 24  (packing bound for this split 24)
+    4 x  3 -> {1,1,1}
+
+written results_viz/4x3_R2.json

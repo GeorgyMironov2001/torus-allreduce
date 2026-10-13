@@ -1,0 +1,50 @@
+{
+  "n": 1024,
+  "trees": 1024,
+  "edges_per_tree": 1023,
+  "stages": 10,
+  "local_radices": [
+    2,
+    2,
+    2,
+    2
+  ],
+  "leaf_radices": [
+    2,
+    2,
+    2,
+    2,
+    2,
+    2
+  ],
+  "max_packed_chunks": 512,
+  "messages_per_phase": 10,
+  "stage_send_messages": [
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1
+  ],
+  "stage_recv_messages": [
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1
+  ],
+  "host_endpoint_load_min": 2046,
+  "host_endpoint_load_max": 2046,
+  "leaf_spine_load_min": 126,
+  "leaf_spine_load_max": 126
+}

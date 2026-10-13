@@ -38,4 +38,4 @@ dlopen=''
 dlpreopen=''
 
 # Directory that this library needs to be installed in:
-libdir='/home/gera/torus-allreduce/local/sstcore-15.0.0/lib/sstcore'
+libdir='/home/mipt-user/torus-allreduce/local/sstcore-15.0.0/lib/sstcore'

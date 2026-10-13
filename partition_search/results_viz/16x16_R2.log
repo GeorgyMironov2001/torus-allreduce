@@ -1,0 +1,46 @@
+torus 16x16, P=256, R=2
+all-to-all (R=1) cost: 524288
+geometry-free packing lower bound for this class, R=1..2: 524288 14848
+digit schemes evaluated: 2852, best L = 31744
+  round 1: x/4%2 x/8%2 y/4%2 y/8%2
+  round 2: x/1%2 x/2%2 y/1%2 y/2%2
+chain   9 (random start): L = 33103
+chain   5 (random start): L = 33094
+chain   1 (random start): L = 33124
+chain   7 (random start): L = 32710
+chain   3 (random start): L = 33142
+chain   2 (digit start): L = 30881
+chain   6 (digit start): L = 30849
+chain   4 (digit start): L = 30801
+chain   0 (digit start): L = 30819
+chain   8 (digit start): L = 30834
+10 chains x 4000000 iters in 96.9 s (0.41 M iters/s)
+
+best L = 30801 (chain 4), round costs: 16487 14314
+messages: 7690, total length 30801, Allreduce verification: OK
+
+round 1: cost 16487  (packing bound for this split 7424)
+    1 x  256 -> {17,17,17,17,17,16,16,16,16,16,16,15,15,15,15,15}
+  sets after round 1 (row = y, column = x):
+      0   0   0   1   2   0   3   3   4   4   4   4   5   5   5   5
+      0   0   0   4   3   3   3   3   4   4   4   4   5   5   5   5
+      0   0   0   0   3   3   3   3   4   4   4   4   0   5   5   5
+      3   0   0   0   3   3   3   3   5   6   7   4   8   5   5   5
+      1   1   1   1   9   9   9   9  10  10  10   9  11   6   6  10
+      1   1   1   1   9   9   9   9  10  10  10  10  12   6   6   6
+      1   1   1   1   9   9   9   9  10  10  10  10   1   6   6   6
+      2  12   0   1   6   9   9   9  10  10  10  10   6   6   6   6
+     13   9  14  14  15  15  15  15  11  11  11  11  12  12  14  15
+     14  14  14  14  15  15  15  15  11  11  11  11  12  12  12   8
+     14  14  14  14  15  15  15  15  11  11  11  11  12  12  12  11
+     12  14  14  14  15  15  15   3  14  10   4  12  12  12  12  14
+      2   2   2   2   7  13  13  13  15   7   7   7   8   8   6   8
+      2   2   2   2  13  13  13  13   7   7   7   7   8   8   8   8
+      2   2   2   2  13  13  13  13   7   7   7   7   8   8   8   8
+      2   2   2   5  13  13  13  13  11   7   7   7   8   8   8   8
+round 2: cost 14314  (packing bound for this split 7454)
+    5 x  15 -> {1,1,1,1,1,1,1,1,1,1,1,1,1,1,1}
+    6 x  16 -> {1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1}
+    5 x  17 -> {1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1}
+
+written results_viz/16x16_R2.json

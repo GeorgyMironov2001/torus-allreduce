@@ -4,6 +4,7 @@
 #include "mpi/embermpigen.h"
 #include <limits>
 #include <map>
+#include <memory>
 #include <string>
 #include <vector>
 
@@ -15,8 +16,8 @@ namespace Ember {
 struct OverlayEdge {
   int from = -1;
   int to = -1;
-  int rsStage = 0;   // Reduce-Scatter / reduce-up stage
-  int agStage = 0;   // Allgather / bcast-down stage
+  int rsStage = 0;      // Reduce-Scatter / reduce-up stage
+  int agStage = 0;      // Allgather / bcast-down stage
   int route_class = -1; // opaque fabric class; Spine-Leaf: spine index
 };
 
@@ -53,6 +54,9 @@ struct OverlaySchedule {
   std::string chunking = "equal_by_tree";
   std::vector<OverlayTree> trees;
 };
+
+// Parsed once per trees_file path inside the sstsim process; shared by all ranks.
+using OverlaySchedulePtr = std::shared_ptr<const OverlaySchedule>;
 
 // Topology-agnostic overlay collective.
 // Mirrors embertreescoll structure: Runner + single Engine + peer maps +
@@ -158,7 +162,8 @@ public:
     // A→B ≠ B→A (DBTree opposite edges on same pair in one stage).
     uint32_t messageTag(CollType coll_type, int route_class, int from_rank,
                         int to_rank) const;
-    // Elements / offset for the data share of tree_id (from m_tree_size/offset).
+    // Elements / offset for the data share of tree_id (from
+    // m_tree_size/offset).
     uint32_t getTreeSize(int tree_id) const;
     uint32_t getTreeOffset(int tree_id) const;
     void buildTreeLayout();
@@ -233,10 +238,11 @@ public:
   // ------------------------------------------------------------------
   class OverlayCollective : public OverlayCollectiveRunner {
   public:
-    OverlayCollective(EmberOverlayCollGenerator &gen, OverlaySchedule schedule,
-                      uint32_t count, uint32_t rank, uint32_t comm_size,
-                      Communicator comm, double aggregation_cost_ns = 0,
-                      bool nb = false, bool sync = true, uint ports = 1,
+    OverlayCollective(EmberOverlayCollGenerator &gen, OverlaySchedulePtr schedule,
+                      OverlayMode mode, uint32_t count, uint32_t rank,
+                      uint32_t comm_size, Communicator comm,
+                      double aggregation_cost_ns = 0, bool nb = false,
+                      bool sync = true, uint ports = 1,
                       CollType coll_type = OVERLAY_ALLREDUCE,
                       float *data = nullptr);
     ~OverlayCollective();
@@ -247,10 +253,11 @@ public:
 
     // global_stage -> (tree_id -> outstanding recv count)
     std::vector<std::map<int, int>> stages_waiting_centers;
-    std::vector<OverlayTree> allreduce_trees;
+    const std::vector<OverlayTree> &allreduce_trees;
     OverlayMode mode = OverlayMode::RS_AG;
 
   private:
+    OverlaySchedulePtr m_schedule;
     int m_stages_num;
     uint m_ports;
     enum allreduce_state_t { INIT, PHASE_1, FINI };
@@ -276,7 +283,7 @@ public:
   uint64_t valueShort() const { return m_value_short; }
   void setValueShort(uint64_t v) { m_value_short = v; }
 
-  static OverlaySchedule loadSchedule(const std::string &path);
+  static OverlaySchedulePtr loadSchedule(const std::string &path);
   static OverlayMode parseMode(const std::string &mode);
   static void validateSchedule(const OverlaySchedule &sched, int world_size);
 

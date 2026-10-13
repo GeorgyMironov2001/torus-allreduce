@@ -1,0 +1,1 @@
+torus 5x3: 4 subgroups R=1: OPT_lattice = 420 R=2: OPT_lattice = 120 R=3: OPT_lattice = 120 R=4: OPT_lattice = 120 

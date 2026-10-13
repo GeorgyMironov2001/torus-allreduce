@@ -2,7 +2,7 @@ if (NOT TARGET SST::SSTCore)
   add_library(SST::SSTCore INTERFACE IMPORTED)
   set_target_properties(SST::SSTCore
     PROPERTIES
-    INTERFACE_INCLUDE_DIRECTORIES /home/gera/torus-allreduce/local/sstcore-15.0.0/include
+    INTERFACE_INCLUDE_DIRECTORIES /home/mipt-user/torus-allreduce/local/sstcore-15.0.0/include
     INTERFACE_COMPILE_FEATURES    cxx_std_11
   )
 endif()
@@ -10,7 +10,7 @@ endif()
 if (NOT TARGET SST::SST)
   add_executable(SST::SST IMPORTED)
   set_target_properties(SST::SST PROPERTIES
-    IMPORTED_LOCATION /home/gera/torus-allreduce/local/sstcore-15.0.0/bin/sst
+    IMPORTED_LOCATION /home/mipt-user/torus-allreduce/local/sstcore-15.0.0/bin/sst
   )
 endif()
 macro(add_sst_library NAME)

@@ -1,0 +1,32 @@
+torus 5x3, P=15, R=4
+all-to-all (R=1) cost: 420
+geometry-free packing lower bound for this class, R=1..4: 420 87 69 59
+
+best L = 67 (chain -1), round costs: 15 18 20 14
+messages: 59, total length 67, Allreduce verification: OK
+
+round 1: cost 15  (packing bound for this split 15)
+    1 x  15 -> {8,7}
+  sets after round 1 (row = y, column = x):
+      0   1   1   0   0
+      1   1   1   1   1
+      0   0   0   0   0
+round 2: cost 18  (packing bound for this split 15)
+    1 x  7 -> {4,3}
+    1 x  8 -> {4,4}
+  sets after round 2 (row = y, column = x):
+      0   1   2   3   0
+      1   1   2   2   1
+      0   3   3   3   0
+round 3: cost 20  (packing bound for this split 15)
+    1 x  3 -> {2,1}
+    3 x  4 -> {2,2}
+  sets after round 3 (row = y, column = x):
+      0   1   2   3   4
+      5   1   2   6   5
+      0   7   7   3   4
+round 4: cost 14  (packing bound for this split 14)
+    1 x  1 -> {1}
+    7 x  2 -> {1,1}
+
+written results_viz/5x3_R4.json

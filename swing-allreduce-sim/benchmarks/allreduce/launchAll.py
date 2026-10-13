@@ -28,6 +28,8 @@ bench_to_motif["Rings"] = "RingAllreduce25D"
 bench_to_motif["Bucket"] = "RingAllreduceRev"
 bench_to_motif["SwingB"] = "SwingAllreduce"
 bench_to_motif["SwingL"] = "SwingAllreduce"
+bench_to_motif["TrivanceB"] = "TrivanceAllreduce"
+bench_to_motif["TrivanceL"] = "TrivanceAllreduce"
 bench_to_motif["RecDoubB"] = "RecDoubAllreduce"
 bench_to_motif["RecDoubL"] = "RecDoubAllreduce"
 bench_to_motif["RecDoubBM"] = "RecDoubAllreduce"
@@ -43,7 +45,8 @@ motif_folder = os.getcwd() + "/loads"
 out_folder = os.getcwd() + "/output"
 
 # Rectangular torus shapes where Trees headers exist today.
-TREES_RECT_SHAPES = {"8x4"}
+# 64x16 / 128x8 / 256x4 → embertrees emberbdmstrees_*d{40,68,130}.h
+TREES_RECT_SHAPES = {"8x4", "64x16", "128x8", "256x4"}
 
 
 def check_if_exist(topo, subpath):
@@ -61,6 +64,29 @@ def tree_sets_for_bench(bench, args, topo):
     if bench != "Trees":
         return [0]
     if topo == "hyperx":
+        # 64x64 packs follow HYPERX_64x64_TREE_SCHEMES from general_bench.py.
+        if args.job_size == "64x64":
+            spec = getattr(args, "tree_sets", "0")
+            if str(spec).strip().lower() == "all":
+                return list(range(len(HYPERX_64x64_TREE_SCHEMES)))
+            return parse_tree_sets(spec)
+        if args.job_size == "32x32":
+            spec = getattr(args, "tree_sets", "0")
+            if str(spec).strip().lower() == "all":
+                return sorted(HYPERX_32x32_BUDGET_TREE_SETS)
+            chosen = parse_tree_sets(spec)
+            missing = [
+                item
+                for item in chosen
+                if item not in HYPERX_32x32_BUDGET_TREE_SETS
+            ]
+            if missing:
+                raise ValueError(
+                    "HyperX 32x32 tree_set must be 5=budget_b4, "
+                    "6=budget_b8, 7=budget_b16, 8=budget_b32, 9=budget_b64; "
+                    f"got {missing}"
+                )
+            return chosen
         return [0]
     if topo == "torus":
         parts = args.job_size.split("x")
@@ -81,13 +107,93 @@ def resolve_tree_pack(topo, job_size):
     return ""
 
 
+def rings_px_and_merlin_shape(job_size):
+    """Align RingAllreduce25D rank layout with Merlin torus coordinates.
+
+    Rings uses k0=px, k1=N/px with row-major ranks (assert k1 % k0 == 0).
+    Merlin idToLocation for shape AxB is (id % A, id / A), so the fabric
+    shape must be px x (N/px). For a rectangular job like 64x16 that means
+    motif px=16 / dimensions_sizes=64,16, but Merlin --shape=16x64.
+
+    Returns (px, dimensions_sizes, merlin_shape) or None if not a 2D torus
+    rectangle that satisfies the Rings assert.
+    """
+    if "x" not in str(job_size):
+        return None
+    parts = [int(x) for x in str(job_size).split("x")]
+    if len(parts) != 2:
+        return None
+    a, b = parts
+    if a == b:
+        return None
+    n = a * b
+    # Prefer the side that can be px: (N/px) % px == 0 and matches {a,b}.
+    candidates = []
+    for px in (a, b):
+        if n % px != 0:
+            continue
+        k1 = n // px
+        if k1 % px == 0 and {px, k1} == {a, b}:
+            candidates.append(px)
+    if not candidates:
+        return None
+    # Prefer smaller px (paper-style tall grid: k1 > k0).
+    px = min(candidates)
+    k1 = n // px
+    return px, f"{k1},{px}", f"{px}x{k1}"
+
+
+def configure_hop_latency(args):
+    """Map one torus-hop alpha onto link_lat + input_latency + output_latency.
+
+    The baseline in defaultParams is 100+150+150 = 400 ns. Any other hop
+    keeps that 1:1.5:1.5 split so host-link and router-link delays scale
+    together. hopLat must be a positive multiple of 8 ns.
+    """
+    hop = (getattr(args, "hopLat", "") or "").strip()
+    args.linkLat = ""
+    args.inputLatency = ""
+    args.outputLatency = ""
+    if not hop:
+        args.hopLat = ""
+        return
+    if hop.endswith("ns"):
+        hop_ns = int(hop[:-2])
+    else:
+        hop_ns = int(hop)
+    if hop_ns <= 0 or hop_ns % 8 != 0:
+        sys.exit(f"hopLat must be a positive multiple of 8 ns, got {hop}")
+    args.hopLat = f"{hop_ns}ns"
+    if hop_ns == 400:
+        return
+    switch_ns = (hop_ns * 3) // 8
+    args.linkLat = f"{hop_ns // 4}ns"
+    args.inputLatency = f"{switch_ns}ns"
+    args.outputLatency = f"{switch_ns}ns"
+    print(
+        f"hopLat={args.hopLat} -> link_lat={args.linkLat} "
+        f"input_latency={args.inputLatency} "
+        f"output_latency={args.outputLatency}"
+    )
+
+
+def hop_latency_suffix(args):
+    hop = getattr(args, "hopLat", "") or ""
+    if not hop or hop == "400ns":
+        return ""
+    return "_lat" + hop
+
+
 def generate_simulations(args, bench):
     counts = parse_counts(getattr(args, "counts", "All"))
     # counts = [2**i for i in range(14, 21)]
     # counts = [2**i for i in range(6, 25)]
     # counts = [2**24]
     # counts = [2**i for i in range(7, 15)]
-    counts = [2**i for i in range(7, 23)]
+    # counts = [2**i for i in range(10, 23)]
+    # counts = [2**i for i in range(12, 25)]
+    # counts = [2**14]
+    # counts = [2**i for i in range(21, 23)]
     # counts = [2**i for i in range(6, 7)]
     for topo in topologies:
         if args.topo != "" and args.topo != topo:
@@ -95,14 +201,18 @@ def generate_simulations(args, bench):
 
         # Spine-leaf comparison set; Overlay/DBTree on spineleaf and dragonfly.
         if topo == "spineleaf" and bench not in (
-            "Overlay", "Rings", "DBTree", "AlltoallB", "AlltoallL"
+            "Overlay", "Rings", "DBTree", "AlltoallB", "AlltoallL",
+            "Bucket", "RecDoubB", "RecDoubL", "SwingB", "SwingL",
+            "TrivanceB", "TrivanceL",
         ):
             continue
         if topo == "dragonfly" and bench not in ("Overlay", "Rings"):
             continue
-        if bench in ("Overlay", "DBTree") and topo not in (
-            "spineleaf", "dragonfly"
+        if bench == "Overlay" and topo not in (
+            "spineleaf", "dragonfly", "torus"
         ):
+            continue
+        if bench == "DBTree" and topo not in ("spineleaf", "dragonfly"):
             continue
 
         for tree_set in tree_sets_for_bench(bench, args, topo):
@@ -201,6 +311,19 @@ def generate_simulations(args, bench):
                             shape = shapes_fattree_81[nnodes]
                         generateNidList = "generateNidListRange(0,{})".format(nnodes)
                     subpath_shape = shape
+                    if topo == "torus" and bench == "Overlay":
+                        run_args.trees_file = resolve_overlay_trees_file(
+                            run_args, topo="torus", job_size=args.job_size
+                        )
+                        if not os.path.isfile(run_args.trees_file):
+                            print(
+                                f"Warning: missing trees_file {run_args.trees_file}, skip"
+                            )
+                            continue
+                        print(
+                            f"torus {args.job_size} overlay "
+                            f"trees={run_args.trees_file}"
+                        )
 
                 if bench == "Trees":
                     if (
@@ -214,10 +337,11 @@ def generate_simulations(args, bench):
                         continue
                     if run_args.tree_pack == "hyperx" and args.job_size not in (
                         "8x8",
+                        "32x32",
                         "64x64",
                     ):
                         print(
-                            f"Warning: HyperX Trees only for 8x8/64x64, "
+                            f"Warning: HyperX Trees only for 8x8/32x32/64x64, "
                             f"got {args.job_size}, skip"
                         )
                         continue
@@ -232,20 +356,30 @@ def generate_simulations(args, bench):
                         )
                     elif run_args.tree_pack == "hyperx":
                         # Motif needs route_table_file (even if JSON is []).
-                        # tree_pack is only an internal launcher hint — not a motif arg.
-                        if args.route_table_file:
+                        # 64x64: tree_set selects a compiled pack and matching JSON.
+                        if args.job_size == "64x64":
+                            run_args.route_table_file = (
+                                resolve_hyperx_64x64_route_table(
+                                    tree_set, args.route_table_file
+                                )
+                            )
+                        elif args.job_size == "32x32":
+                            run_args.route_table_file = (
+                                resolve_hyperx_32x32_route_table(
+                                    tree_set, args.route_table_file
+                                )
+                            )
+                        elif args.route_table_file:
                             run_args.route_table_file = args.route_table_file
                         else:
-                            hx_rt = {
-                                "8x8": "ember_bdmst_routing_table_hyperx_8_8_2.json",
-                                "64x64": "ember_bdmst_routing_table_hyperx_64_64_2.json",
-                            }[args.job_size]
                             run_args.route_table_file = os.path.join(
                                 EMBERTREES_ROUTETABLES,
-                                hx_rt,
+                                "ember_bdmst_routing_table_hyperx_8_8_2.json",
                             )
                         print(
-                            f"Trees hyperx route_table={run_args.route_table_file}"
+                            f"tree_set={tree_set} -> "
+                            f"Trees hyperx {output_bench_name('Trees', run_args)} "
+                            f"route_table={run_args.route_table_file}"
                         )
                     else:
                         run_args.route_table_file = args.route_table_file or ""
@@ -271,6 +405,8 @@ def generate_simulations(args, bench):
                     if extras:
                         bw += "_" + "_".join(extras)
 
+                bw += hop_latency_suffix(args)
+
                 if topo == "spineleaf":
                     topo_label = "fattree_spineleaf"
                 else:
@@ -281,13 +417,20 @@ def generate_simulations(args, bench):
                 check_if_exist(topo, subpath)
                 output = out_folder + "/" + subpath + "/" + str(count)
 
-                if bench in ("SwingL", "RecDoubL", "RecDoubLM"):
+                if bench in ("SwingL", "TrivanceL", "RecDoubL", "RecDoubLM"):
                     latency_optimal = "1"
                 else:
                     latency_optimal = "0"
 
-                if bench in ("RecDoubB", "RecDoubL"):
+                if bench in ("RecDoubB", "RecDoubL", "Overlay", "DBTree"):
                     ports = "1"
+                elif bench in (
+                    "SwingB", "SwingL", "TrivanceB", "TrivanceL",
+                ) and topo == "spineleaf":
+                    # One host uplink, but the ring still has two directions.
+                    # Leaf-contiguous ranks make distance ±1 stay on one leaf.
+                    # Trivance needs the pair: one port makes pairs = 0.
+                    ports = "2"
                 elif topo == "spineleaf" or "fattree" in topo or "dragonfly" in topo:
                     ports = "1"
                 else:
@@ -296,6 +439,24 @@ def generate_simulations(args, bench):
                 motif_name = bench_to_motif[bench]
                 if bench == "Rings" and int(dimensions) == 1:
                     motif_name = "RingAllreduce05D"
+
+                # Rings on rectangular 2D torus: keep output under job_size
+                # (e.g. torus_64x16/), but point Merlin at px x k1 so
+                # Hamiltonian-ring neighbors are single-hop.
+                sst_shape = shape
+                motif_dimensions_sizes = dimensions_sizes
+                motif_px = dimensions_sizes.split(",")[-1]
+                if bench == "Rings" and "torus" in topo:
+                    rings_align = rings_px_and_merlin_shape(args.job_size)
+                    if rings_align is not None:
+                        motif_px_i, motif_dimensions_sizes, sst_shape = rings_align
+                        motif_px = str(motif_px_i)
+                        print(
+                            f"Rings rect align: job_size={args.job_size} "
+                            f"motif dimensions_sizes={motif_dimensions_sizes} "
+                            f"px={motif_px} merlin_shape={sst_shape} "
+                            f"(output stays {subpath_shape})"
+                        )
 
                 if motif_name == "OverlayAllreduce":
                     motif_args = [
@@ -317,20 +478,24 @@ def generate_simulations(args, bench):
                         f"count={count}",
                         f"ports={ports}",
                         f"dimensions={dimensions}",
-                        f"dimensions_sizes={dimensions_sizes}",
-                        f"px={dimensions_sizes.split(',')[-1]}",
+                        f"dimensions_sizes={motif_dimensions_sizes}",
+                        f"px={motif_px}",
                         f"latency_optimal={latency_optimal}",
                         "aggregation_cost_ns=0",
                         "blocking=true",
                         "sync=true",
                     ]
                     if motif_name == "TreesAllreduce":
-                        # Same as old generator: only route_table_file when set.
-                        # Do not emit tree_set/tree_pack — motif ignores them.
                         if run_args.route_table_file:
                             motif_args.append(
                                 f"route_table_file={run_args.route_table_file}"
                             )
+                        motif_args.append(
+                            f"tree_pack={run_args.tree_pack or 'default'}"
+                        )
+                        motif_args.append(f"tree_set={tree_set}")
+                        if getattr(args, "validate", 0):
+                            motif_args.append(f"validate={args.validate}")
 
                 motif_main_args = " ".join(motif_args) + "\n"
                 motif_content = [
@@ -346,11 +511,20 @@ def generate_simulations(args, bench):
                     outfile.writelines(motif_content)
 
                 run_sst(
-                    run_args, topo, count, bench, shape, motif_file, output
+                    run_args,
+                    topo,
+                    count,
+                    bench,
+                    sst_shape,
+                    motif_file,
+                    output,
+                    motif_ports=int(ports),
+                    motif_dimensions_sizes=motif_dimensions_sizes,
                 )
 
 
 def main(args):
+    configure_hop_latency(args)
     benchmarks = [
         "SwingB", "SwingL", "RecDoubB", "RecDoubL", "Rings", "Bucket", "Torus",
     ]
@@ -399,7 +573,7 @@ if __name__ == "__main__":
         "--num-threads",
         type=int,
         help="Number of threads to use for SST",
-        default=1,
+        default=10,
     )
     parser.add_argument(
         "--env",
@@ -452,6 +626,17 @@ if __name__ == "__main__":
         default="",
     )
     parser.add_argument(
+        "--hopLat",
+        type=str,
+        help=(
+            "Torus router-router hop latency alpha "
+            "(link_lat + input_latency + output_latency), e.g. 200ns. "
+            "400ns is the defaultParams baseline and does not change the "
+            "output directory. Other values keep the 100:150:150 split."
+        ),
+        default="",
+    )
+    parser.add_argument(
         "--groupBW",
         type=str,
         help="Dragonfly intra-group (local) router<->router BW, e.g. 400Gb/s",
@@ -472,7 +657,14 @@ if __name__ == "__main__":
     parser.add_argument(
         "--tree_sets",
         type=str,
-        help="Trees tree_set values: '0', '0,2,4', '0-7', '7-0', or 'all'",
+        help=(
+            "Trees tree_set indices: '0', '0,1,2', '0-2', or 'all'. "
+            "HyperX 64x64: 0=depth2, 1=k3, 2=k4, 3=k8, 4=k16, "
+            "5=budget_b4, 6=budget_b8, 7=budget_b16, 8=budget_b32, "
+            "9=budget_b64, 10=cplex_b4_s96. "
+            "HyperX 32x32: 5=budget_b4, 6=budget_b8, 7=budget_b16, "
+            "8=budget_b32, 9=budget_b64"
+        ),
         default="0",
     )
     parser.add_argument(
@@ -484,13 +676,13 @@ if __name__ == "__main__":
     parser.add_argument(
         "--overlay_k",
         type=str,
-        help="Overlay k suffix: N, k1xk2 (spineleaf), or k1xk2xk3 (dragonfly)",
+        help="Overlay k suffix: N, k1xk2 (spineleaf), k1xk2xk3 (dragonfly), or bfs2 (rect torus)",
         default="",
     )
     parser.add_argument(
         "--validate",
         type=int,
-        help="Overlay validate flag (0/1)",
+        help="Overlay/Trees correctness validation flag (0/1)",
         default=0,
     )
     args = parser.parse_args()

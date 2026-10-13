@@ -1,0 +1,1 @@
+torus 6x6: 30 subgroups R=1: OPT_lattice = 3888 R=2: OPT_lattice = 648 R=3: OPT_lattice = 432 R=4: OPT_lattice = 360 R=5: OPT_lattice = 360 R=6: OPT_lattice = 360 

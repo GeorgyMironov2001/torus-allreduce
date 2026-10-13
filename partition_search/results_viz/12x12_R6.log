@@ -1,0 +1,112 @@
+torus 12x12, P=144, R=6
+all-to-all (R=1) cost: 124416
+geometry-free packing lower bound for this class, R=1..6: 124416 5184 1956 1440 1260 1152
+digit enumeration skipped (too many schemes), all chains start from random schemes
+chain   5 (random start): L = 2082
+chain   8 (random start): L = 2076
+chain   1 (random start): L = 2107
+chain   2 (random start): L = 2107
+chain   6 (random start): L = 2083
+chain   7 (random start): L = 2107
+chain   3 (random start): L = 2105
+chain   4 (random start): L = 2076
+chain   9 (random start): L = 2128
+chain   0 (random start): L = 2086
+10 chains x 8000000 iters in 75.9 s (1.05 M iters/s)
+
+best L = 2076 (chain 8), round costs: 606 414 303 237 216 300
+messages: 1156, total length 2076, Allreduce verification: OK
+
+round 1: cost 606  (packing bound for this split 288)
+    1 x  144 -> {52,47,45}
+  sets after round 1 (row = y, column = x):
+      0   0   0   0   0   0   0   1   0   0   0   0
+      0   0   0   0   0   0   0   0   0   0   0   0
+      1   1   1   1   0   0   0   0   0   0   2   2
+      1   1   1   1   1   1   2   2   2   2   2   2
+      1   1   1   1   1   1   2   2   2   2   2   2
+      1   1   1   1   1   1   2   2   2   2   2   2
+      1   1   1   1   1   1   2   2   2   2   2   2
+      1   1   1   1   1   1   2   2   2   2   2   2
+      1   1   1   1   1   1   2   2   2   2   2   2
+      1   1   1   1   1   1   2   2   2   2   2   2
+      0   0   0   0   0   0   0   0   0   0   0   0
+      0   0   0   2   0   0   0   0   0   0   0   0
+round 2: cost 414  (packing bound for this split 196)
+    1 x  45 -> {23,22}
+    1 x  47 -> {24,23}
+    1 x  52 -> {18,17,17}
+  sets after round 2 (row = y, column = x):
+      0   0   0   0   0   0   1   2   0   1   1   0
+      3   3   3   3   3   3   3   3   3   3   3   3
+      2   2   2   2   3   3   3   3   3   3   4   4
+      2   2   2   2   2   2   5   5   5   4   4   4
+      2   2   2   2   2   2   5   5   5   4   4   4
+      2   2   2   2   2   2   5   5   5   4   4   4
+      6   6   6   6   6   6   5   5   5   4   4   4
+      6   6   6   6   6   6   5   5   5   4   4   4
+      6   6   6   6   6   6   5   5   5   4   4   4
+      6   6   6   6   6   6   5   5   5   4   4   4
+      1   0   0   0   0   0   1   1   1   1   1   1
+      1   0   0   5   0   0   1   1   1   1   1   1
+round 3: cost 303  (packing bound for this split 144)
+    2 x  17 -> {9,8}
+    1 x  18 -> {9,9}
+    1 x  22 -> {12,10}
+    2 x  23 -> {12,11}
+    1 x  24 -> {12,12}
+  sets after round 3 (row = y, column = x):
+      0   0   0   1   1   1   2   3   1   4   4   0
+      5   6   6   6   6   6   6   5   5   5   5   5
+      7   7   7   3   6   6   6   5   5   5   8   8
+      7   7   7   3   3   3   9   9   9   8   8   8
+      7   7   7   3   3   3   9   9   9   8   8   8
+      7   7   7   3   3   3   9   9   9   8   8   8
+     10  10  10  11  11  11   9   9   9  12  12  12
+     10  10  10  11  11  11  13  13  13  12  12  12
+     10  10  10  11  11  11  13  13  13  12  12  12
+     10  10  10  11  11  11  13  13  13  12  12  12
+      2   0   0   1   1   1   2   2   2   2   2   2
+      4   0   0  13   1   1   2   4   4   4   4   4
+round 4: cost 237  (packing bound for this split 144)
+    1 x  10 -> {6,4}
+    2 x  11 -> {6,5}
+    5 x  12 -> {6,6}
+    2 x  8 -> {4,4}
+    4 x  9 -> {5,4}
+  sets after round 4 (row = y, column = x):
+      0   0   0   1   1   2   3   4   2   5   6   0
+      7   8   8   8   8   9   9  10  10   7   7   7
+     11  11  11   4   8   9   9  10  10   7  12  12
+     11  11  11   4   4   4  13  13  13  12  12  12
+     14  14  14  15  15  15  13  13  13  16  16  16
+     14  14  14  15  15  15  17  17  17  16  16  16
+     18  18  18  19  19  19  17  17  17  20  20  20
+     18  18  18  19  19  19  21  21  21  20  20  20
+     22  22  22  23  23  23  21  21  21  24  24  24
+     22  22  22  23  23  23  25  25  25  24  24  24
+     26  27  27   1   1   2   3   3  26   3  26  26
+      6  27  27  25   1   2   3   5   5   5   6   6
+round 5: cost 216  (packing bound for this split 162)
+    9 x  4 -> {2,2}
+    6 x  5 -> {3,2}
+    3 x  6 -> {2,2,2}
+    10 x  6 -> {3,3}
+  sets after round 5 (row = y, column = x):
+      0   1   1   2   3   4   5   6   4   7   8   0
+      9  10  10  11  11  12  12  13  13  14   9   9
+     15  16  16  17  11  18  18  19  19  14  20  20
+     15  21  21  17  17   6  22  22  22  23  23  23
+     24  24  24  25  25  25  26  26  26  27  27  27
+     28  28  28  29  29  29  30  30  30  31  31  31
+     32  32  32  33  33  34  35  35  35  36  36  36
+     37  37  37  38  38  34  39  40  40  41  41  41
+     42  42  42  43  43  43  39  44  44  45  45  45
+     46  46  46  47  47  47  48  49  49  50  50  50
+     51  52  52   2   3  53   5  54  55  54  55  51
+     56  57  57  48   3  53   5  58  58   7   8  56
+round 6: cost 300  (packing bound for this split 222)
+    33 x  2 -> {1,1}
+    26 x  3 -> {1,1,1}
+
+written results_viz/12x12_R6.json

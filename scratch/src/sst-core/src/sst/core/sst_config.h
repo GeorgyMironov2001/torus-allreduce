@@ -10,7 +10,7 @@
 #define HAVE_BACKTRACE 1
 
 /* Defines whether we have the curses library */
-#define HAVE_CURSES 1
+/* #undef HAVE_CURSES */
 
 /* define if the compiler supports basic C++17 syntax */
 #define HAVE_CXX17 1
@@ -103,7 +103,7 @@
 #define SST_CC "gcc"
 
 /* Defines the CFLAGS used to build SST */
-#define SST_CFLAGS "-g3 -O0 -fno-omit-frame-pointer -Wall -Wextra -Wvla -Wnon-virtual-dtor -Wsuggest-override"
+#define SST_CFLAGS "-g -O2 -Wall -Wextra -Wvla -Wnon-virtual-dtor -Wsuggest-override"
 
 /* EXPERIMENTAL Tracks clock handler execution time and counters */
 /* #undef SST_CLOCK_PROFILING */
@@ -133,7 +133,7 @@
 #define SST_CXXCPP "g++ -E -std=c++17"
 
 /* Defines the CXXFLAGS used to build SST */
-#define SST_CXXFLAGS "-g3 -O0 -fno-omit-frame-pointer -std=c++17 -Wall -Wextra -Wvla -Wnon-virtual-dtor -Wsuggest-override"
+#define SST_CXXFLAGS "-g -O2 -std=c++17 -Wall -Wextra -Wvla -Wnon-virtual-dtor -Wsuggest-override"
 
 /* Whether to enable preview build */
 /* #undef SST_ENABLE_PREVIEW_BUILD */
@@ -146,7 +146,7 @@
 /* #undef SST_HIGH_RESOLUTION_CLOCK */
 
 /* Defines the location SST will be installed in */
-#define SST_INSTALL_PREFIX "/home/gera/torus-allreduce/local/sstcore-15.0.0"
+#define SST_INSTALL_PREFIX "/home/mipt-user/torus-allreduce/local/sstcore-15.0.0"
 
 /* Defines the linker used to build SST */
 #define SST_LD "/usr/bin/ld -m elf_x86_64"

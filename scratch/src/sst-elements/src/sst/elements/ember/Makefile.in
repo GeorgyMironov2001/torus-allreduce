@@ -281,7 +281,13 @@ am__libember_la_SOURCES_DIST = embergen.h embergen.cc embermap.h \
 	mpi/motifs/emberswingallgather.h \
 	mpi/motifs/emberswingallgather.cc \
 	mpi/motifs/emberswingallreduce.h \
-	mpi/motifs/emberswingallreduce.cc mpi/motifs/embertoruscoll.h \
+	mpi/motifs/emberswingallreduce.cc \
+	mpi/motifs/embertrivancecoll.h mpi/motifs/embertrivancecoll.cc \
+	mpi/motifs/embertrivanceallreduce.h \
+	mpi/motifs/embertrivanceallreduce.cc \
+	mpi/motifs/emberbruckcoll.h mpi/motifs/emberbruckcoll.cc \
+	mpi/motifs/emberbruckallreduce.h \
+	mpi/motifs/emberbruckallreduce.cc mpi/motifs/embertoruscoll.h \
 	mpi/motifs/embertoruscoll.cc mpi/motifs/embertorusallreduce.h \
 	mpi/motifs/embertorusallreduce.cc mpi/motifs/embertricount.h \
 	mpi/motifs/embertricount.cc mpi/motifs/emberunstructured.h \
@@ -408,11 +414,14 @@ am_libember_la_OBJECTS = embergen.lo ember.lo emberengine.lo \
 	mpi/motifs/emberrandomgen.lo mpi/motifs/emberswingcoll.lo \
 	mpi/motifs/emberswingreducescatter.lo \
 	mpi/motifs/emberswingallgather.lo \
-	mpi/motifs/emberswingallreduce.lo mpi/motifs/embertoruscoll.lo \
-	mpi/motifs/embertorusallreduce.lo mpi/motifs/embertricount.lo \
-	mpi/motifs/emberunstructured.lo mpi/motifs/emberNtoM.lo \
-	mpi/motifs/emberBFS.lo mpi/motifs/emberhxmesh.lo \
-	mpi/motifs/emberrecdoubcoll.lo \
+	mpi/motifs/emberswingallreduce.lo \
+	mpi/motifs/embertrivancecoll.lo \
+	mpi/motifs/embertrivanceallreduce.lo \
+	mpi/motifs/emberbruckcoll.lo mpi/motifs/emberbruckallreduce.lo \
+	mpi/motifs/embertoruscoll.lo mpi/motifs/embertorusallreduce.lo \
+	mpi/motifs/embertricount.lo mpi/motifs/emberunstructured.lo \
+	mpi/motifs/emberNtoM.lo mpi/motifs/emberBFS.lo \
+	mpi/motifs/emberhxmesh.lo mpi/motifs/emberrecdoubcoll.lo \
 	mpi/motifs/emberrecdouballreduce.lo \
 	mpi/motifs/emberringreducescatter1d.lo \
 	mpi/motifs/emberringallreduce05d.lo \
@@ -427,7 +436,8 @@ am_libember_la_OBJECTS = embergen.lo ember.lo emberengine.lo \
 	mpi/motifs/emberdlrm_swing.lo mpi/motifs/embergpt3_moe.lo \
 	mpi/motifs/embercosmoflow.lo mpi/motifs/emberduplexpp.lo \
 	mpi/motifs/embertreescoll.lo mpi/motifs/embertreesallreduce.lo \
-	mpi/motifs/emberoverlaycoll.lo mpi/motifs/emberoverlayallreduce.lo \
+	mpi/motifs/emberoverlaycoll.lo \
+	mpi/motifs/emberoverlayallreduce.lo \
 	mpi/motifs/emberalltoallallreduce.lo shmem/emberShmemGen.lo \
 	$(am__objects_1) $(am__objects_2)
 libember_la_OBJECTS = $(am_libember_la_OBJECTS)
@@ -488,6 +498,8 @@ am__depfiles_remade = ./$(DEPDIR)/ember.Plo \
 	mpi/motifs/$(DEPDIR)/emberbarrier.Plo \
 	mpi/motifs/$(DEPDIR)/emberbcast.Plo \
 	mpi/motifs/$(DEPDIR)/emberbipingpong.Plo \
+	mpi/motifs/$(DEPDIR)/emberbruckallreduce.Plo \
+	mpi/motifs/$(DEPDIR)/emberbruckcoll.Plo \
 	mpi/motifs/$(DEPDIR)/embercmt1d.Plo \
 	mpi/motifs/$(DEPDIR)/embercmt2d.Plo \
 	mpi/motifs/$(DEPDIR)/embercmt3d.Plo \
@@ -519,6 +531,8 @@ am__depfiles_remade = ./$(DEPDIR)/ember.Plo \
 	mpi/motifs/$(DEPDIR)/embernaslu.Plo \
 	mpi/motifs/$(DEPDIR)/embernull.Plo \
 	mpi/motifs/$(DEPDIR)/emberotf2.Plo \
+	mpi/motifs/$(DEPDIR)/emberoverlayallreduce.Plo \
+	mpi/motifs/$(DEPDIR)/emberoverlaycoll.Plo \
 	mpi/motifs/$(DEPDIR)/emberpingpong.Plo \
 	mpi/motifs/$(DEPDIR)/emberrandalltoall.Plo \
 	mpi/motifs/$(DEPDIR)/emberrandomgen.Plo \
@@ -551,10 +565,10 @@ am__depfiles_remade = ./$(DEPDIR)/ember.Plo \
 	mpi/motifs/$(DEPDIR)/embertoruscoll.Plo \
 	mpi/motifs/$(DEPDIR)/embertreeallreduce.Plo \
 	mpi/motifs/$(DEPDIR)/embertreesallreduce.Plo \
-	mpi/motifs/$(DEPDIR)/emberoverlayallreduce.Plo \
-	mpi/motifs/$(DEPDIR)/emberoverlaycoll.Plo \
 	mpi/motifs/$(DEPDIR)/embertreescoll.Plo \
 	mpi/motifs/$(DEPDIR)/embertricount.Plo \
+	mpi/motifs/$(DEPDIR)/embertrivanceallreduce.Plo \
+	mpi/motifs/$(DEPDIR)/embertrivancecoll.Plo \
 	mpi/motifs/$(DEPDIR)/emberunstructured.Plo \
 	mpi/motifs/$(DEPDIR)/emberwaitany.Plo \
 	mpi/motifs/$(DEPDIR)/hxmesh_dims.Plo \
@@ -967,7 +981,13 @@ libember_la_SOURCES = embergen.h embergen.cc embermap.h ember.cc \
 	mpi/motifs/emberswingallgather.h \
 	mpi/motifs/emberswingallgather.cc \
 	mpi/motifs/emberswingallreduce.h \
-	mpi/motifs/emberswingallreduce.cc mpi/motifs/embertoruscoll.h \
+	mpi/motifs/emberswingallreduce.cc \
+	mpi/motifs/embertrivancecoll.h mpi/motifs/embertrivancecoll.cc \
+	mpi/motifs/embertrivanceallreduce.h \
+	mpi/motifs/embertrivanceallreduce.cc \
+	mpi/motifs/emberbruckcoll.h mpi/motifs/emberbruckcoll.cc \
+	mpi/motifs/emberbruckallreduce.h \
+	mpi/motifs/emberbruckallreduce.cc mpi/motifs/embertoruscoll.h \
 	mpi/motifs/embertoruscoll.cc mpi/motifs/embertorusallreduce.h \
 	mpi/motifs/embertorusallreduce.cc mpi/motifs/embertricount.h \
 	mpi/motifs/embertricount.cc mpi/motifs/emberunstructured.h \
@@ -1371,6 +1391,14 @@ mpi/motifs/emberswingallgather.lo: mpi/motifs/$(am__dirstamp) \
 	mpi/motifs/$(DEPDIR)/$(am__dirstamp)
 mpi/motifs/emberswingallreduce.lo: mpi/motifs/$(am__dirstamp) \
 	mpi/motifs/$(DEPDIR)/$(am__dirstamp)
+mpi/motifs/embertrivancecoll.lo: mpi/motifs/$(am__dirstamp) \
+	mpi/motifs/$(DEPDIR)/$(am__dirstamp)
+mpi/motifs/embertrivanceallreduce.lo: mpi/motifs/$(am__dirstamp) \
+	mpi/motifs/$(DEPDIR)/$(am__dirstamp)
+mpi/motifs/emberbruckcoll.lo: mpi/motifs/$(am__dirstamp) \
+	mpi/motifs/$(DEPDIR)/$(am__dirstamp)
+mpi/motifs/emberbruckallreduce.lo: mpi/motifs/$(am__dirstamp) \
+	mpi/motifs/$(DEPDIR)/$(am__dirstamp)
 mpi/motifs/embertoruscoll.lo: mpi/motifs/$(am__dirstamp) \
 	mpi/motifs/$(DEPDIR)/$(am__dirstamp)
 mpi/motifs/embertorusallreduce.lo: mpi/motifs/$(am__dirstamp) \
@@ -1531,6 +1559,8 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@mpi/motifs/$(DEPDIR)/emberbarrier.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@mpi/motifs/$(DEPDIR)/emberbcast.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@mpi/motifs/$(DEPDIR)/emberbipingpong.Plo@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@mpi/motifs/$(DEPDIR)/emberbruckallreduce.Plo@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@mpi/motifs/$(DEPDIR)/emberbruckcoll.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@mpi/motifs/$(DEPDIR)/embercmt1d.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@mpi/motifs/$(DEPDIR)/embercmt2d.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@mpi/motifs/$(DEPDIR)/embercmt3d.Plo@am__quote@ # am--include-marker
@@ -1562,6 +1592,8 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@mpi/motifs/$(DEPDIR)/embernaslu.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@mpi/motifs/$(DEPDIR)/embernull.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@mpi/motifs/$(DEPDIR)/emberotf2.Plo@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@mpi/motifs/$(DEPDIR)/emberoverlayallreduce.Plo@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@mpi/motifs/$(DEPDIR)/emberoverlaycoll.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@mpi/motifs/$(DEPDIR)/emberpingpong.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@mpi/motifs/$(DEPDIR)/emberrandalltoall.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@mpi/motifs/$(DEPDIR)/emberrandomgen.Plo@am__quote@ # am--include-marker
@@ -1594,10 +1626,10 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@mpi/motifs/$(DEPDIR)/embertoruscoll.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@mpi/motifs/$(DEPDIR)/embertreeallreduce.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@mpi/motifs/$(DEPDIR)/embertreesallreduce.Plo@am__quote@ # am--include-marker
-@AMDEP_TRUE@@am__include@ @am__quote@mpi/motifs/$(DEPDIR)/emberoverlayallreduce.Plo@am__quote@ # am--include-marker
-@AMDEP_TRUE@@am__include@ @am__quote@mpi/motifs/$(DEPDIR)/emberoverlaycoll.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@mpi/motifs/$(DEPDIR)/embertreescoll.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@mpi/motifs/$(DEPDIR)/embertricount.Plo@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@mpi/motifs/$(DEPDIR)/embertrivanceallreduce.Plo@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@mpi/motifs/$(DEPDIR)/embertrivancecoll.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@mpi/motifs/$(DEPDIR)/emberunstructured.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@mpi/motifs/$(DEPDIR)/emberwaitany.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@mpi/motifs/$(DEPDIR)/hxmesh_dims.Plo@am__quote@ # am--include-marker
@@ -1845,6 +1877,8 @@ distclean: distclean-am
 	-rm -f mpi/motifs/$(DEPDIR)/emberbarrier.Plo
 	-rm -f mpi/motifs/$(DEPDIR)/emberbcast.Plo
 	-rm -f mpi/motifs/$(DEPDIR)/emberbipingpong.Plo
+	-rm -f mpi/motifs/$(DEPDIR)/emberbruckallreduce.Plo
+	-rm -f mpi/motifs/$(DEPDIR)/emberbruckcoll.Plo
 	-rm -f mpi/motifs/$(DEPDIR)/embercmt1d.Plo
 	-rm -f mpi/motifs/$(DEPDIR)/embercmt2d.Plo
 	-rm -f mpi/motifs/$(DEPDIR)/embercmt3d.Plo
@@ -1876,6 +1910,8 @@ distclean: distclean-am
 	-rm -f mpi/motifs/$(DEPDIR)/embernaslu.Plo
 	-rm -f mpi/motifs/$(DEPDIR)/embernull.Plo
 	-rm -f mpi/motifs/$(DEPDIR)/emberotf2.Plo
+	-rm -f mpi/motifs/$(DEPDIR)/emberoverlayallreduce.Plo
+	-rm -f mpi/motifs/$(DEPDIR)/emberoverlaycoll.Plo
 	-rm -f mpi/motifs/$(DEPDIR)/emberpingpong.Plo
 	-rm -f mpi/motifs/$(DEPDIR)/emberrandalltoall.Plo
 	-rm -f mpi/motifs/$(DEPDIR)/emberrandomgen.Plo
@@ -1908,10 +1944,10 @@ distclean: distclean-am
 	-rm -f mpi/motifs/$(DEPDIR)/embertoruscoll.Plo
 	-rm -f mpi/motifs/$(DEPDIR)/embertreeallreduce.Plo
 	-rm -f mpi/motifs/$(DEPDIR)/embertreesallreduce.Plo
-	-rm -f mpi/motifs/$(DEPDIR)/emberoverlayallreduce.Plo
-	-rm -f mpi/motifs/$(DEPDIR)/emberoverlaycoll.Plo
 	-rm -f mpi/motifs/$(DEPDIR)/embertreescoll.Plo
 	-rm -f mpi/motifs/$(DEPDIR)/embertricount.Plo
+	-rm -f mpi/motifs/$(DEPDIR)/embertrivanceallreduce.Plo
+	-rm -f mpi/motifs/$(DEPDIR)/embertrivancecoll.Plo
 	-rm -f mpi/motifs/$(DEPDIR)/emberunstructured.Plo
 	-rm -f mpi/motifs/$(DEPDIR)/emberwaitany.Plo
 	-rm -f mpi/motifs/$(DEPDIR)/hxmesh_dims.Plo
@@ -1994,6 +2030,8 @@ maintainer-clean: maintainer-clean-am
 	-rm -f mpi/motifs/$(DEPDIR)/emberbarrier.Plo
 	-rm -f mpi/motifs/$(DEPDIR)/emberbcast.Plo
 	-rm -f mpi/motifs/$(DEPDIR)/emberbipingpong.Plo
+	-rm -f mpi/motifs/$(DEPDIR)/emberbruckallreduce.Plo
+	-rm -f mpi/motifs/$(DEPDIR)/emberbruckcoll.Plo
 	-rm -f mpi/motifs/$(DEPDIR)/embercmt1d.Plo
 	-rm -f mpi/motifs/$(DEPDIR)/embercmt2d.Plo
 	-rm -f mpi/motifs/$(DEPDIR)/embercmt3d.Plo
@@ -2025,6 +2063,8 @@ maintainer-clean: maintainer-clean-am
 	-rm -f mpi/motifs/$(DEPDIR)/embernaslu.Plo
 	-rm -f mpi/motifs/$(DEPDIR)/embernull.Plo
 	-rm -f mpi/motifs/$(DEPDIR)/emberotf2.Plo
+	-rm -f mpi/motifs/$(DEPDIR)/emberoverlayallreduce.Plo
+	-rm -f mpi/motifs/$(DEPDIR)/emberoverlaycoll.Plo
 	-rm -f mpi/motifs/$(DEPDIR)/emberpingpong.Plo
 	-rm -f mpi/motifs/$(DEPDIR)/emberrandalltoall.Plo
 	-rm -f mpi/motifs/$(DEPDIR)/emberrandomgen.Plo
@@ -2057,10 +2097,10 @@ maintainer-clean: maintainer-clean-am
 	-rm -f mpi/motifs/$(DEPDIR)/embertoruscoll.Plo
 	-rm -f mpi/motifs/$(DEPDIR)/embertreeallreduce.Plo
 	-rm -f mpi/motifs/$(DEPDIR)/embertreesallreduce.Plo
-	-rm -f mpi/motifs/$(DEPDIR)/emberoverlayallreduce.Plo
-	-rm -f mpi/motifs/$(DEPDIR)/emberoverlaycoll.Plo
 	-rm -f mpi/motifs/$(DEPDIR)/embertreescoll.Plo
 	-rm -f mpi/motifs/$(DEPDIR)/embertricount.Plo
+	-rm -f mpi/motifs/$(DEPDIR)/embertrivanceallreduce.Plo
+	-rm -f mpi/motifs/$(DEPDIR)/embertrivancecoll.Plo
 	-rm -f mpi/motifs/$(DEPDIR)/emberunstructured.Plo
 	-rm -f mpi/motifs/$(DEPDIR)/emberwaitany.Plo
 	-rm -f mpi/motifs/$(DEPDIR)/hxmesh_dims.Plo

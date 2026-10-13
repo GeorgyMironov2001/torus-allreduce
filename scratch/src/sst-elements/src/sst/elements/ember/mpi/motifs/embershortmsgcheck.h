@@ -17,7 +17,7 @@ namespace Ember {
 // Patched by launchAll before each sstsim.x run; Firefly shortMsgLength
 // is in bytes (count * dtypeSize).
 inline constexpr const char *kEmberDefaultParamsPath =
-    "/home/gera/torus-allreduce/scratch/src/sst-elements/src/sst/elements/"
+    "/home/mipt-user/torus-allreduce/scratch/src/sst-elements/src/sst/elements/"
     "ember/test/defaultParams.py";
 
 inline uint64_t emberParseValueShortExpr(std::string expr) {

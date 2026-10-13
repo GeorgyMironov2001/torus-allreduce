@@ -31,6 +31,9 @@ nicParams = {
     "useSimpleMemoryModel": 0,
     "numSendMachines": 4,
     "numRecvNicUnits": 4,
+    "maxActiveRecvStreams": 2048,
+    # "numSendMachines": 126,
+    # "numRecvNicUnits": 126,
     # simpleMemoryModel.verboseMask: values
     # define BUS_WIDGET_MASK 1<<1
     # define CACHE_MASK      1<<2
@@ -114,7 +117,7 @@ hermesParams = {
     # "hermesParams.functionSM.defaultReturnLatency" : 30000,
     "hermesParams.functionSM.defaultEnterLatency": 1,
     "hermesParams.functionSM.defaultReturnLatency": 1,
-
+    "hermesParams.ctrlMsg.pqs.maxUnexpectedMsg": 512,
 
 
     # "hermesParams.functionSM.smallCollectiveVN" : 1,

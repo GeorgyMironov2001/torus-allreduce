@@ -35,7 +35,14 @@ public:
        "Comma-separated list of size of each dimension.", ""},
       {"arg.latency_optimal", "If =1, will run the latency optimal version.",
        ""},
-      {"arg.multiplicator", "tree multiplicator", "1"}, )
+      {"arg.multiplicator", "tree multiplicator", "1"},
+      {"arg.route_table_file", "Optional JSON route table (may be empty [])",
+       ""},
+      {"arg.tree_pack", "Compiled tree-pack family: torus, hyperx, or rect",
+       "default"},
+      {"arg.tree_set",
+       "Pack index within the selected tree-pack family",
+       "0"}, )
 
 public:
   EmberTreesAllreduceGenerator(SST::ComponentId_t, Params &params);

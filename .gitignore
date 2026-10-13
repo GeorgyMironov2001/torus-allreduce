@@ -1,6 +1,26 @@
 *.so
+*.so.*
+*.o
+*.a
+*.la
+*.lai
+.libs/
+
 /scratch/src/openmpi-4.1.6
 /local
+/scratch/src/sst-core/src/sst/core/sst
+/scratch/src/sst-core/src/sst/core/sst-info
+/scratch/src/sst-core/src/sst/core/sst-config
+/scratch/src/sst-core/src/sst/core/sst-register
+/scratch/src/sst-core/src/sst/core/sstinfo.x
+/scratch/src/sst-core/src/sst/core/sstsim.x
+
+# Сгенерированные overlay; компактные *.pack.json остаются
+/scratch/src/sst-elements/src/sst/elements/ember/mpi/motifs/embertrees/rect/overlay_rect_*.json
+!/scratch/src/sst-elements/src/sst/elements/ember/mpi/motifs/embertrees/rect/*.pack.json
+/scratch/src/sst-elements/src/sst/elements/ember/mpi/motifs/embertrees/spineleaf/overlay_sl_s16_*.json
+!/scratch/src/sst-elements/src/sst/elements/ember/mpi/motifs/embertrees/spineleaf/*.pack.json
+
 /swing-allreduce-sim/benchmarks/allreduce/output
 /swing-allreduce-sim/benchmarks/allreduce/output_old
 /swing-allreduce-sim/benchmarks/allreduce/output_new

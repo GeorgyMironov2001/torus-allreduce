@@ -1,0 +1,4 @@
+torus 5x3  R=1  OPT = 420   (0.6 s)
+torus 5x3  R=2  OPT = 117   (1.2 s)
+torus 5x3  R=3  OPT = 78   (1.8 s)
+torus 5x3  R=4  OPT = 67   (2.4 s)

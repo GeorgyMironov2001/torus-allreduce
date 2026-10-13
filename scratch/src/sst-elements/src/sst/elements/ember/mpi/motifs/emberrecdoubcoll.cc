@@ -2,6 +2,7 @@
 #include <sst/core/rng/xorshift.h>
 #include <limits.h>
 #include "emberrecdoubcoll.h"
+#include "embershortmsgcheck.h"
 #include <cmath>
 
 //#define DEBUG
@@ -505,6 +506,9 @@ bool EmberRecDoubCollGenerator::RecDoubCollectiveEngine::collective(std::queue<E
         }
         DPRINTF("[%d] Sending %d elements to %d with tag %d on port %d at time %" PRIu64 "\n", m_gen.rank(), m_send_size, peer, tag, m_port, m_gen.getCurrentSimTimeNano());
         // Send
+        emberAssertMsgFitsShort(
+            (uint64_t)m_send_size * m_gen.sizeofDataType(FLOAT),
+            m_gen.valueShort(), "RecDoubAllreduce isend");
         if(m_validate){
             m_gen.enQ_isend(evQ, &m_send_tmp[0], m_send_size, FLOAT, peer, tag, m_comm, &m_req_send);
         }else{
@@ -735,7 +739,7 @@ EmberRecDoubCollGenerator::EmberRecDoubCollGenerator(SST::ComponentId_t id, Para
 EmberRecDoubCollGenerator::EmberRecDoubCollGenerator(SST::ComponentId_t id, Params &params, std::string name) 
 : EmberMessagePassingGenerator(id, params, name), m_tag(UINT_MAX)
 {
-    ;
+    setValueShort(emberLoadValueShort());
 }
 
 bool EmberRecDoubCollGenerator::generate(std::queue<EmberEvent *> &evQ)

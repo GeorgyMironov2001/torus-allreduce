@@ -18,7 +18,8 @@ cputimer.o: cputimer.cc /usr/include/stdc-predef.h sst_config.h \
  /usr/include/x86_64-linux-gnu/bits/types/__sigset_t.h \
  /usr/include/x86_64-linux-gnu/bits/types/struct_timespec.h \
  /usr/include/x86_64-linux-gnu/bits/endian.h \
- /usr/include/x86_64-linux-gnu/bits/endianness.h
+ /usr/include/x86_64-linux-gnu/bits/endianness.h \
+ /usr/include/x86_64-linux-gnu/bits/select2.h
 /usr/include/stdc-predef.h:
 sst_config.h:
 cputimer.h:
@@ -43,3 +44,4 @@ cputimer.h:
 /usr/include/x86_64-linux-gnu/bits/types/struct_timespec.h:
 /usr/include/x86_64-linux-gnu/bits/endian.h:
 /usr/include/x86_64-linux-gnu/bits/endianness.h:
+/usr/include/x86_64-linux-gnu/bits/select2.h:

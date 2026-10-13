@@ -1,0 +1,1 @@
+torus 8x4: 22 subgroups R=1: OPT_lattice = 3072 R=2: OPT_lattice = 640 R=3: OPT_lattice = 384 R=4: OPT_lattice = 352 R=5: OPT_lattice = 320 

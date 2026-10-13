@@ -1,0 +1,50 @@
+torus 8x8, P=64, R=3
+all-to-all (R=1) cost: 16384
+geometry-free packing lower bound for this class, R=1..3: 16384 1280 576
+digit schemes evaluated: 1688, best L = 1024
+  round 1: y/2%2 y/4%2
+  round 2: x/4%2 y/1%2
+  round 3: x/1%2 x/2%2
+chain   3 (random start): L = 1024
+chain   2 (digit start): L = 1024
+chain   1 (random start): L = 1024
+chain   0 (digit start): L = 1024
+chain   5 (random start): L = 1024
+chain   4 (digit start): L = 1024
+chain   6 (digit start): L = 1024
+chain   7 (random start): L = 1024
+chain   8 (digit start): L = 1024
+chain  10 (digit start): L = 1024
+chain   9 (random start): L = 1024
+chain  11 (random start): L = 1024
+12 chains x 10000000 iters in 109.8 s (1.09 M iters/s)
+
+best L = 1024 (chain 3), round costs: 384 320 320
+messages: 576, total length 1024, Allreduce verification: OK
+
+round 1: cost 384  (packing bound for this split 192)
+    1 x  64 -> {16,16,16,16}
+  sets after round 1 (row = y, column = x):
+      0   0   1   1   2   2   3   3
+      0   0   1   1   2   2   3   3
+      0   0   1   1   2   2   3   3
+      0   0   1   1   2   2   3   3
+      0   0   1   1   2   2   3   3
+      0   0   1   1   2   2   3   3
+      0   0   1   1   2   2   3   3
+      0   0   1   1   2   2   3   3
+round 2: cost 320  (packing bound for this split 192)
+    4 x  16 -> {4,4,4,4}
+  sets after round 2 (row = y, column = x):
+      0   1   2   3   4   5   6   7
+      8   9   2  10   4   5   6  11
+      8   9   2  10  12  13   6  11
+      8   9   2  10  12  13   6  11
+      8   9  14  10  12  13  15  11
+      0   1  14   3  12  13  15   7
+      0   1  14   3   4   5  15   7
+      0   1  14   3   4   5  15   7
+round 3: cost 320  (packing bound for this split 192)
+    16 x  4 -> {1,1,1,1}
+
+written results2/best_8x8_R3.json
